@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Overview and Philosophy - The Agentic Systems Series</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">The Agentic Systems Series</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Book 1: Building an Agentic System</li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview-and-philosophy.html" class="active"><strong aria-hidden="true">2.</strong> Overview and Philosophy</a></li><li class="chapter-item expanded "><a href="core-architecture.html"><strong aria-hidden="true">3.</strong> Core Architecture</a></li><li class="chapter-item expanded "><a href="system-architecture-diagram.html"><strong aria-hidden="true">4.</strong> System Architecture Patterns</a></li><li class="chapter-item expanded "><a href="system-prompts-and-model-settings.html"><strong aria-hidden="true">5.</strong> System Prompts and Configuration</a></li><li class="chapter-item expanded "><a href="initialization-process.html"><strong aria-hidden="true">6.</strong> Initialization Patterns</a></li><li class="chapter-item expanded "><a href="ink-yoga-reactive-ui.html"><strong aria-hidden="true">7.</strong> Reactive UI with Ink and Yoga</a></li><li class="chapter-item expanded "><a href="execution-flow-in-detail.html"><strong aria-hidden="true">8.</strong> Execution Flow</a></li><li class="chapter-item expanded "><a href="the-permission-system.html"><strong aria-hidden="true">9.</strong> Permission Systems</a></li><li class="chapter-item expanded "><a href="parallel-tool-execution.html"><strong aria-hidden="true">10.</strong> Parallel Execution</a></li><li class="chapter-item expanded "><a href="feature-flag-integration.html"><strong aria-hidden="true">11.</strong> Feature Management</a></li><li class="chapter-item expanded "><a href="real-world-examples.html"><strong aria-hidden="true">12.</strong> Real-World Patterns</a></li><li class="chapter-item expanded "><a href="lessons-learned-and-implementation-challenges.html"><strong aria-hidden="true">13.</strong> Lessons Learned</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 2: Amping Up an Agentic System</li><li class="chapter-item expanded "><a href="second-edition/index.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-1-from-local-to-collaborative.html"><strong aria-hidden="true">15.</strong> From Local to Collaborative</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html"><strong aria-hidden="true">16.</strong> Collaborative Architecture Overview</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-3-authentication-and-identity.html"><strong aria-hidden="true">17.</strong> Authentication and Identity</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-4-thread-management-at-scale.html"><strong aria-hidden="true">18.</strong> Conversation Management at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html"><strong aria-hidden="true">19.</strong> Real-Time Synchronization</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html"><strong aria-hidden="true">20.</strong> Tool System Evolution</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-7-sharing-and-permissions.html"><strong aria-hidden="true">21.</strong> Sharing and Permissions</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-8-team-workflows.html"><strong aria-hidden="true">22.</strong> Team Workflows</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-9-enterprise-integration.html"><strong aria-hidden="true">23.</strong> Enterprise Integration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html"><strong aria-hidden="true">24.</strong> Multi-Agent Orchestration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html"><strong aria-hidden="true">25.</strong> Performance at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-12-observability-and-monitoring.html"><strong aria-hidden="true">26.</strong> Observability and Monitoring</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 3: Contextualizing an Agentic System</li><li class="chapter-item expanded "><a href="arming-introduction.html"><strong aria-hidden="true">27.</strong> Introduction to Tools and Commands</a></li><li class="chapter-item expanded "><a href="tool-system-deep-dive.html"><strong aria-hidden="true">28.</strong> Tool System Overview</a></li><li class="chapter-item expanded "><a href="command-system-deep-dive.html"><strong aria-hidden="true">29.</strong> Command System Overview</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Agentic Systems Series</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/gerred/building-an-agentic-system" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="overview-and-philosophy"><a class="header" href="#overview-and-philosophy">Overview and Philosophy</a></h2>
+<p>Modern AI coding assistants combine terminal interfaces with language models and carefully designed tool systems. Their architectures address four key challenges:</p>
+<ol>
+<li>
+<p><strong>Instant results</strong>: Uses async generators to stream output as it's produced.</p>
+<pre><code class="language-typescript">// Streaming results with generators instead of waiting
+async function* streamedResponse() {
+  yield &quot;First part of response&quot;;
+  // Next part starts rendering immediately
+  yield await expensiveOperation();
+}
+</code></pre>
+</li>
+<li>
+<p><strong>Safe defaults</strong>: Implements explicit permission gates for file and system modifications.</p>
+</li>
+<li>
+<p><strong>Extensible by design</strong>: Common interface patterns make adding new tools straightforward.</p>
+</li>
+<li>
+<p><strong>Transparent operations</strong>: Shows exactly what's happening at each step of execution.</p>
+</li>
+</ol>
+<p>The result is AI assistants that work with local development environments in ways that feel fast, safe, and predictable. These aren't just technical demos - they're practical tools designed for real development workflows.</p>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<p>The best AI coding assistants follow consistent design principles:</p>
+<p><strong>User-First Responsiveness</strong>: Every operation provides immediate feedback. Users see progress as it happens rather than staring at frozen terminals.</p>
+<p><strong>Explicit Over Implicit</strong>: Actions that modify files or execute commands require clear permission. Nothing happens without user awareness.</p>
+<p><strong>Composable Tools</strong>: Each capability exists as an independent tool that follows standard patterns. New tools integrate without changing core systems.</p>
+<p><strong>Predictable Behavior</strong>: Given the same inputs, tools produce consistent outputs. No hidden state or surprising side effects.</p>
+<p><strong>Progressive Enhancement</strong>: Start with basic features, then layer on advanced capabilities. Simple tasks remain simple.</p>
+<h2 id="technical-philosophy"><a class="header" href="#technical-philosophy">Technical Philosophy</a></h2>
+<p>These systems embrace certain technical choices:</p>
+<p><strong>Streaming First</strong>: Data flows through the system as streams, not batches. This enables responsive UIs and efficient resource usage.</p>
+<p><strong>Generators Everywhere</strong>: Async generators provide abstractions for complex asynchronous flows while maintaining clean code.</p>
+<p><strong>Type Safety</strong>: Strong typing with runtime validation prevents entire classes of errors before they reach users.</p>
+<p><strong>Parallel When Possible</strong>: Read operations run concurrently. Write operations execute sequentially. Smart defaults prevent conflicts.</p>
+<p><strong>Clean Abstractions</strong>: Each layer of the system has clear boundaries. Terminal UI, LLM integration, and tools remain independent.</p>
+<h2 id="practical-impact"><a class="header" href="#practical-impact">Practical Impact</a></h2>
+<p>These architectural choices create tangible benefits:</p>
+<ul>
+<li>Operations that might take minutes complete in seconds through parallel execution</li>
+<li>Users maintain control through clear permission boundaries</li>
+<li>Developers extend functionality without understanding the entire system</li>
+<li>Errors surface immediately with helpful context rather than failing silently</li>
+</ul>
+<p>The combination of thoughtful architecture and practical implementation creates AI assistants that developers actually want to use.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="core-architecture.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="core-architecture.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

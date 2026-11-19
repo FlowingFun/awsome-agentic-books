@@ -1,0 +1,573 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Core Architecture - The Agentic Systems Series</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">The Agentic Systems Series</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Book 1: Building an Agentic System</li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview-and-philosophy.html"><strong aria-hidden="true">2.</strong> Overview and Philosophy</a></li><li class="chapter-item expanded "><a href="core-architecture.html" class="active"><strong aria-hidden="true">3.</strong> Core Architecture</a></li><li class="chapter-item expanded "><a href="system-architecture-diagram.html"><strong aria-hidden="true">4.</strong> System Architecture Patterns</a></li><li class="chapter-item expanded "><a href="system-prompts-and-model-settings.html"><strong aria-hidden="true">5.</strong> System Prompts and Configuration</a></li><li class="chapter-item expanded "><a href="initialization-process.html"><strong aria-hidden="true">6.</strong> Initialization Patterns</a></li><li class="chapter-item expanded "><a href="ink-yoga-reactive-ui.html"><strong aria-hidden="true">7.</strong> Reactive UI with Ink and Yoga</a></li><li class="chapter-item expanded "><a href="execution-flow-in-detail.html"><strong aria-hidden="true">8.</strong> Execution Flow</a></li><li class="chapter-item expanded "><a href="the-permission-system.html"><strong aria-hidden="true">9.</strong> Permission Systems</a></li><li class="chapter-item expanded "><a href="parallel-tool-execution.html"><strong aria-hidden="true">10.</strong> Parallel Execution</a></li><li class="chapter-item expanded "><a href="feature-flag-integration.html"><strong aria-hidden="true">11.</strong> Feature Management</a></li><li class="chapter-item expanded "><a href="real-world-examples.html"><strong aria-hidden="true">12.</strong> Real-World Patterns</a></li><li class="chapter-item expanded "><a href="lessons-learned-and-implementation-challenges.html"><strong aria-hidden="true">13.</strong> Lessons Learned</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 2: Amping Up an Agentic System</li><li class="chapter-item expanded "><a href="second-edition/index.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-1-from-local-to-collaborative.html"><strong aria-hidden="true">15.</strong> From Local to Collaborative</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html"><strong aria-hidden="true">16.</strong> Collaborative Architecture Overview</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-3-authentication-and-identity.html"><strong aria-hidden="true">17.</strong> Authentication and Identity</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-4-thread-management-at-scale.html"><strong aria-hidden="true">18.</strong> Conversation Management at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html"><strong aria-hidden="true">19.</strong> Real-Time Synchronization</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html"><strong aria-hidden="true">20.</strong> Tool System Evolution</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-7-sharing-and-permissions.html"><strong aria-hidden="true">21.</strong> Sharing and Permissions</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-8-team-workflows.html"><strong aria-hidden="true">22.</strong> Team Workflows</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-9-enterprise-integration.html"><strong aria-hidden="true">23.</strong> Enterprise Integration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html"><strong aria-hidden="true">24.</strong> Multi-Agent Orchestration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html"><strong aria-hidden="true">25.</strong> Performance at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-12-observability-and-monitoring.html"><strong aria-hidden="true">26.</strong> Observability and Monitoring</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 3: Contextualizing an Agentic System</li><li class="chapter-item expanded "><a href="arming-introduction.html"><strong aria-hidden="true">27.</strong> Introduction to Tools and Commands</a></li><li class="chapter-item expanded "><a href="tool-system-deep-dive.html"><strong aria-hidden="true">28.</strong> Tool System Overview</a></li><li class="chapter-item expanded "><a href="command-system-deep-dive.html"><strong aria-hidden="true">29.</strong> Command System Overview</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Agentic Systems Series</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/gerred/building-an-agentic-system" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="core-architecture"><a class="header" href="#core-architecture">Core Architecture</a></h1>
+<p>Modern AI coding assistants typically organize around three primary architectural layers that work together to create effective developer experiences:</p>
+<h2 id="terminal-ui-layer-react-patterns"><a class="header" href="#terminal-ui-layer-react-patterns">Terminal UI Layer (React Patterns)</a></h2>
+<p>Terminal-based AI assistants leverage React-like patterns to deliver rich interactions beyond standard CLI capabilities:</p>
+<ul>
+<li>Interactive permission prompts for secure tool execution</li>
+<li>Syntax-highlighted code snippets for better readability</li>
+<li>Real-time status updates during tool operations</li>
+<li>Markdown rendering directly within the terminal environment</li>
+</ul>
+<p>React hooks and state management patterns enable complex interactive experiences while maintaining a terminal-based interface. Popular implementations use libraries like Ink to bring React's component model to the terminal.</p>
+<h2 id="intelligence-layer-llm-integration"><a class="header" href="#intelligence-layer-llm-integration">Intelligence Layer (LLM Integration)</a></h2>
+<p>The intelligence layer connects with Large Language Models through streaming interfaces:</p>
+<ul>
+<li>Parses responses to identify intended tool executions</li>
+<li>Extracts parameters from natural language instructions</li>
+<li>Validates input using schema validation to ensure correctness</li>
+<li>Handles errors gracefully when the model provides invalid instructions</li>
+</ul>
+<p>Communication flows bidirectionally - the LLM triggers tool execution, and structured results stream back into the conversation context. This creates a feedback loop that enables multi-step operations.</p>
+<h2 id="tools-layer"><a class="header" href="#tools-layer">Tools Layer</a></h2>
+<p>Effective tool systems follow consistent patterns across implementations:</p>
+<pre><code class="language-typescript">const ExampleTool = {
+  name: &quot;example&quot;,
+  description: &quot;Does something useful&quot;,
+  schema: z.object({ param: z.string() }),
+  isReadOnly: () =&gt; true,
+  needsPermissions: (input) =&gt; true,
+  async *call(input) {
+    // Execute and yield results
+  }
+} satisfies Tool;
+</code></pre>
+<p>This approach creates a plugin architecture where developers can add new capabilities by implementing a standard interface. Available tools are dynamically loaded and presented to the LLM, establishing an extensible capability framework.</p>
+<h2 id="reactive-command-loop"><a class="header" href="#reactive-command-loop">Reactive Command Loop</a></h2>
+<p>At the core of these systems lies a reactive command loop - processing user input through the LLM's intelligence, executing resulting actions, and displaying outcomes while streaming results in real-time.</p>
+<p>The fundamental pattern powering this flow uses generators:</p>
+<pre><code class="language-typescript">// Core pattern enabling streaming UI
+async function* query(input: string): AsyncGenerator&lt;Message&gt; {
+  // Show user's message immediately
+  yield createUserMessage(input);
+  
+  // Stream AI response as it arrives
+  for await (const chunk of aiStream) {
+    yield chunk;
+    
+    // Process tool use requests
+    if (detectToolUse(chunk)) {
+      // Execute tools and yield results
+      for await (const result of executeTool(chunk)) {
+        yield result;
+      }
+      
+      // Continue conversation with tool results
+      yield* continueWithToolResults(chunk);
+    }
+  }
+}
+</code></pre>
+<p>This recursive generator approach keeps the system responsive during complex operations. Rather than freezing while waiting for operations to complete, the UI updates continuously with real-time progress.</p>
+<h2 id="query-implementation-patterns"><a class="header" href="#query-implementation-patterns">Query Implementation Patterns</a></h2>
+<p>Complete query functions in production systems handle all aspects of the conversation flow:</p>
+<pre><code class="language-typescript">async function* query(
+  input: string, 
+  context: QueryContext
+): AsyncGenerator&lt;Message&gt; {
+  // Process user input
+  const userMessage = createUserMessage(input);
+  yield userMessage;
+  
+  // Get streaming AI response
+  const aiResponseGenerator = queryLLM(
+    normalizeMessagesForAPI([...existingMessages, userMessage]),
+    systemPrompt,
+    context.maxTokens,
+    context.tools,
+    context.abortSignal,
+    { dangerouslySkipPermissions: false }
+  );
+  
+  // Stream response chunks
+  for await (const chunk of aiResponseGenerator) {
+    yield chunk;
+    
+    // Handle tool use requests
+    if (chunk.message.content.some(c =&gt; c.type === 'tool_use')) {
+      const toolUses = extractToolUses(chunk.message.content);
+      
+      // Execute tools (potentially in parallel)
+      const toolResults = await executeTools(toolUses, context);
+      
+      // Yield tool results
+      for (const result of toolResults) {
+        yield result;
+      }
+      
+      // Continue conversation recursively
+      const continuationGenerator = query(
+        null, // No new user input
+        { 
+          ...context,
+          messages: [...existingMessages, userMessage, chunk, ...toolResults]
+        }
+      );
+      
+      // Yield continuation messages
+      yield* continuationGenerator;
+    }
+  }
+}
+</code></pre>
+<p>Key benefits of this implementation pattern include:</p>
+<ol>
+<li>
+<p><strong>Immediate feedback</strong>: Results appear as they become available through generator streaming.</p>
+</li>
+<li>
+<p><strong>Natural tool execution</strong>: When the LLM invokes tools, the function recursively calls itself with updated context, maintaining conversation flow.</p>
+</li>
+<li>
+<p><strong>Responsive cancellation</strong>: Abort signals propagate throughout the system for fast, clean cancellation.</p>
+</li>
+<li>
+<p><strong>Comprehensive state management</strong>: Each step preserves context, ensuring continuity between operations.</p>
+</li>
+</ol>
+<h2 id="parallel-execution-engine"><a class="header" href="#parallel-execution-engine">Parallel Execution Engine</a></h2>
+<p>A distinctive feature of advanced AI coding assistants is parallel tool execution. This capability dramatically improves performance when working with large codebases - tasks that might take minutes when executed sequentially often complete in seconds with parallel processing.</p>
+<h3 id="concurrent-generator-approach"><a class="header" href="#concurrent-generator-approach">Concurrent Generator Approach</a></h3>
+<p>Production systems implement elegant solutions using async generators to process multiple operations in parallel while streaming results as they become available.</p>
+<p>The core implementation breaks down into several manageable concepts:</p>
+<h4 id="1-generator-state-tracking"><a class="header" href="#1-generator-state-tracking">1. Generator State Tracking</a></h4>
+<pre><code class="language-typescript">// Each generator has a state object tracking its progress
+type GeneratorState&lt;T&gt; = {
+  generator: AsyncGenerator&lt;T&gt;    // The generator itself
+  lastYield: Promise&lt;IteratorResult&lt;T&gt;&gt;  // Its next pending result
+  done: boolean                   // Whether it's finished
+}
+
+// Track all active generators in a map
+const generatorStates = new Map&lt;number, GeneratorState&lt;T&gt;&gt;()
+
+// Track which generators are still running
+const remaining = new Set(generators.map((_, i) =&gt; i))
+</code></pre>
+<h4 id="2-concurrency-management"><a class="header" href="#2-concurrency-management">2. Concurrency Management</a></h4>
+<pre><code class="language-typescript">// Control how many generators run simultaneously 
+const { signal, maxConcurrency = MAX_CONCURRENCY } = options
+
+// Start only a limited batch initially
+const initialBatchSize = Math.min(generators.length, maxConcurrency)
+for (let i = 0; i &lt; initialBatchSize; i++) {
+  if (generators[i]) {
+    // Initialize each generator and start its first operation
+    generatorStates.set(i, {
+      generator: generators[i],
+      lastYield: generators[i].next(),
+      done: false,
+    })
+  }
+}
+</code></pre>
+<h4 id="3-non-blocking-result-collection"><a class="header" href="#3-non-blocking-result-collection">3. Non-blocking Result Collection</a></h4>
+<pre><code class="language-typescript">// Race to get results from whichever generator finishes first
+const entries = Array.from(generatorStates.entries())
+const nextResults = await Promise.race(
+  entries.map(async ([index, state]) =&gt; {
+    const result = await state.lastYield
+    return { index, result }
+  })
+)
+
+// Process whichever result came back first
+const { index, result } = nextResults
+
+// Immediately yield that result with tracking info
+if (!result.done) {
+  yield { ...result.value, generatorIndex: index }
+  
+  // Queue the next value from this generator without waiting
+  const state = generatorStates.get(index)!
+  state.lastYield = state.generator.next()
+}
+</code></pre>
+<h4 id="4-dynamic-generator-replacement"><a class="header" href="#4-dynamic-generator-replacement">4. Dynamic Generator Replacement</a></h4>
+<pre><code class="language-typescript">// When a generator finishes, remove it
+if (result.done) {
+  remaining.delete(index)
+  generatorStates.delete(index)
+  
+  // Calculate the next generator to start
+  const nextGeneratorIndex = Math.min(
+    generators.length - 1,
+    Math.max(...Array.from(generatorStates.keys())) + 1
+  )
+  
+  // If there's another generator waiting, start it
+  if (
+    nextGeneratorIndex &gt;= 0 &amp;&amp;
+    nextGeneratorIndex &lt; generators.length &amp;&amp;
+    !generatorStates.has(nextGeneratorIndex)
+  ) {
+    generatorStates.set(nextGeneratorIndex, {
+      generator: generators[nextGeneratorIndex],
+      lastYield: generators[nextGeneratorIndex].next(),
+      done: false,
+    })
+  }
+}
+</code></pre>
+<h4 id="5-cancellation-support"><a class="header" href="#5-cancellation-support">5. Cancellation Support</a></h4>
+<pre><code class="language-typescript">// Check for cancellation on every iteration
+if (signal?.aborted) {
+  throw new AbortError()
+}
+</code></pre>
+<h3 id="the-complete-picture"><a class="header" href="#the-complete-picture">The Complete Picture</a></h3>
+<p>These pieces work together to create systems that:</p>
+<ol>
+<li>Run a controlled number of operations concurrently</li>
+<li>Return results immediately as they become available from any operation</li>
+<li>Dynamically start new operations as others complete</li>
+<li>Track which generator produced each result</li>
+<li>Support clean cancellation at any point</li>
+</ol>
+<p>This approach maximizes throughput while maintaining order tracking, enabling efficient processing of large codebases.</p>
+<h2 id="tool-execution-strategy"><a class="header" href="#tool-execution-strategy">Tool Execution Strategy</a></h2>
+<p>When an LLM requests multiple tools, the system must decide how to execute them efficiently. A key insight drives this decision: read operations can run in parallel, but write operations need careful coordination.</p>
+<h3 id="smart-execution-paths"><a class="header" href="#smart-execution-paths">Smart Execution Paths</a></h3>
+<p>Tool executors in production systems make important distinctions:</p>
+<pre><code class="language-typescript">async function executeTools(toolUses: ToolUseRequest[], context: QueryContext) {
+  // First, check if all requested tools are read-only
+  const allReadOnly = toolUses.every(toolUse =&gt; {
+    const tool = findToolByName(toolUse.name);
+    return tool &amp;&amp; tool.isReadOnly();
+  });
+  
+  let results: ToolResult[] = [];
+  
+  // Choose execution strategy based on tool types
+  if (allReadOnly) {
+    // Safe to run in parallel when all tools just read
+    results = await runToolsConcurrently(toolUses, context);
+  } else {
+    // Run one at a time when any tool might modify state
+    results = await runToolsSerially(toolUses, context);
+  }
+  
+  // Ensure results match the original request order
+  return sortToolResultsByRequestOrder(results, toolUses);
+}
+</code></pre>
+<h3 id="performance-optimizations"><a class="header" href="#performance-optimizations">Performance Optimizations</a></h3>
+<p>This approach contains several sophisticated optimizations:</p>
+<h4 id="read-vs-write-classification"><a class="header" href="#read-vs-write-classification">Read vs. Write Classification</a></h4>
+<p>Each tool declares whether it's read-only through an <code>isReadOnly()</code> method:</p>
+<pre><code class="language-typescript">// Example tools showing classification
+const ViewFileTool = {
+  name: &quot;View&quot;,
+  // Marked as read-only - can run in parallel
+  isReadOnly: () =&gt; true, 
+  // Implementation...
+}
+
+const EditFileTool = {
+  name: &quot;Edit&quot;,
+  // Marked as write - must run sequentially
+  isReadOnly: () =&gt; false,
+  // Implementation...
+}
+</code></pre>
+<h4 id="smart-concurrency-control"><a class="header" href="#smart-concurrency-control">Smart Concurrency Control</a></h4>
+<p>The execution strategy balances resource usage with execution safety:</p>
+<ol>
+<li>
+<p><strong>Parallel for read operations</strong>:</p>
+<ul>
+<li>File readings, glob searches, and grep operations run simultaneously</li>
+<li>Typically limits concurrency to ~10 operations at once</li>
+<li>Uses the parallel execution engine discussed earlier</li>
+</ul>
+</li>
+<li>
+<p><strong>Sequential for write operations</strong>:</p>
+<ul>
+<li>Any operation that might change state (file edits, bash commands)</li>
+<li>Runs one at a time in the requested order</li>
+<li>Prevents potential conflicts or race conditions</li>
+</ul>
+</li>
+</ol>
+<h4 id="ordering-preservation"><a class="header" href="#ordering-preservation">Ordering Preservation</a></h4>
+<p>Despite parallel execution, results maintain a predictable order:</p>
+<pre><code class="language-typescript">function sortToolResultsByRequestOrder(
+  results: ToolResult[], 
+  originalRequests: ToolUseRequest[]
+): ToolResult[] {
+  // Create mapping of tool IDs to their original position
+  const orderMap = new Map(
+    originalRequests.map((req, index) =&gt; [req.id, index])
+  );
+  
+  // Sort results to match original request order
+  return [...results].sort((a, b) =&gt; {
+    return orderMap.get(a.id)! - orderMap.get(b.id)!;
+  });
+}
+</code></pre>
+<h3 id="real-world-impact"><a class="header" href="#real-world-impact">Real-World Impact</a></h3>
+<p>The parallel execution strategy significantly improves performance for operations that would otherwise run sequentially, making AI assistants more responsive when working with multiple files or commands.</p>
+<h2 id="key-components-and-design-patterns"><a class="header" href="#key-components-and-design-patterns">Key Components and Design Patterns</a></h2>
+<p>Modern AI assistant architectures rely on several foundational patterns:</p>
+<h3 id="core-patterns"><a class="header" href="#core-patterns">Core Patterns</a></h3>
+<ul>
+<li><strong>Async Generators</strong>: Enable streaming data throughout the system</li>
+<li><strong>Recursive Functions</strong>: Power multi-turn conversations and tool usage</li>
+<li><strong>Plugin Architecture</strong>: Allow extending the system with new tools</li>
+<li><strong>State Isolation</strong>: Keep tool executions from interfering with each other</li>
+<li><strong>Dynamic Concurrency</strong>: Adjust parallelism based on operation types</li>
+</ul>
+<h3 id="typical-component-organization"><a class="header" href="#typical-component-organization">Typical Component Organization</a></h3>
+<p>Production systems often organize code around these concepts:</p>
+<ul>
+<li><strong>Generator utilities</strong>: Parallel execution engine and streaming helpers</li>
+<li><strong>Query handlers</strong>: Reactive command loop and tool execution logic</li>
+<li><strong>Tool interfaces</strong>: Standard contracts all tools implement</li>
+<li><strong>Tool registry</strong>: Dynamic tool discovery and management</li>
+<li><strong>Permission layer</strong>: Security boundaries for tool execution</li>
+</ul>
+<h3 id="ui-components"><a class="header" href="#ui-components">UI Components</a></h3>
+<p>Terminal-based systems typically include:</p>
+<ul>
+<li><strong>REPL interface</strong>: Main conversation loop</li>
+<li><strong>Input handling</strong>: Command history and user interaction</li>
+<li><strong>LLM communication</strong>: API integration and response streaming</li>
+<li><strong>Message formatting</strong>: Rich terminal output rendering</li>
+</ul>
+<p>These architectural patterns form the foundation of practical AI coding assistants. By understanding these core concepts, you can build systems that deliver responsive, safe, and extensible AI-powered development experiences.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="overview-and-philosophy.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="system-architecture-diagram.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="overview-and-philosophy.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="system-architecture-diagram.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

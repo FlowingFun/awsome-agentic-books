@@ -59,14 +59,14 @@ def units(article):
             yield source, group, slots, expected
 
 
-def extract(raw):
+def extract(raw, selector='article'):
     soup = page(raw)
-    return {str(i): source for i, (source, *_) in enumerate(units(soup.article), 1)}
+    return {str(i): source for i, (source, *_) in enumerate(units(soup.select_one(selector)), 1)}
 
 
-def apply(raw, entries):
+def apply(raw, entries, selector='article'):
     soup = page(raw)
-    groups = list(units(soup.article))
+    groups = list(units(soup.select_one(selector)))
     for key, text in entries.items():
         if not key.isdecimal() or not 1 <= int(key) <= len(groups):
             raise ValueError(f'Unknown unit: {key}')

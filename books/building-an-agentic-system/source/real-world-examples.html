@@ -1,0 +1,480 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Real-World Patterns - The Agentic Systems Series</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">The Agentic Systems Series</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Book 1: Building an Agentic System</li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview-and-philosophy.html"><strong aria-hidden="true">2.</strong> Overview and Philosophy</a></li><li class="chapter-item expanded "><a href="core-architecture.html"><strong aria-hidden="true">3.</strong> Core Architecture</a></li><li class="chapter-item expanded "><a href="system-architecture-diagram.html"><strong aria-hidden="true">4.</strong> System Architecture Patterns</a></li><li class="chapter-item expanded "><a href="system-prompts-and-model-settings.html"><strong aria-hidden="true">5.</strong> System Prompts and Configuration</a></li><li class="chapter-item expanded "><a href="initialization-process.html"><strong aria-hidden="true">6.</strong> Initialization Patterns</a></li><li class="chapter-item expanded "><a href="ink-yoga-reactive-ui.html"><strong aria-hidden="true">7.</strong> Reactive UI with Ink and Yoga</a></li><li class="chapter-item expanded "><a href="execution-flow-in-detail.html"><strong aria-hidden="true">8.</strong> Execution Flow</a></li><li class="chapter-item expanded "><a href="the-permission-system.html"><strong aria-hidden="true">9.</strong> Permission Systems</a></li><li class="chapter-item expanded "><a href="parallel-tool-execution.html"><strong aria-hidden="true">10.</strong> Parallel Execution</a></li><li class="chapter-item expanded "><a href="feature-flag-integration.html"><strong aria-hidden="true">11.</strong> Feature Management</a></li><li class="chapter-item expanded "><a href="real-world-examples.html" class="active"><strong aria-hidden="true">12.</strong> Real-World Patterns</a></li><li class="chapter-item expanded "><a href="lessons-learned-and-implementation-challenges.html"><strong aria-hidden="true">13.</strong> Lessons Learned</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 2: Amping Up an Agentic System</li><li class="chapter-item expanded "><a href="second-edition/index.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-1-from-local-to-collaborative.html"><strong aria-hidden="true">15.</strong> From Local to Collaborative</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html"><strong aria-hidden="true">16.</strong> Collaborative Architecture Overview</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-3-authentication-and-identity.html"><strong aria-hidden="true">17.</strong> Authentication and Identity</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-4-thread-management-at-scale.html"><strong aria-hidden="true">18.</strong> Conversation Management at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html"><strong aria-hidden="true">19.</strong> Real-Time Synchronization</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html"><strong aria-hidden="true">20.</strong> Tool System Evolution</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-7-sharing-and-permissions.html"><strong aria-hidden="true">21.</strong> Sharing and Permissions</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-8-team-workflows.html"><strong aria-hidden="true">22.</strong> Team Workflows</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-9-enterprise-integration.html"><strong aria-hidden="true">23.</strong> Enterprise Integration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html"><strong aria-hidden="true">24.</strong> Multi-Agent Orchestration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html"><strong aria-hidden="true">25.</strong> Performance at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-12-observability-and-monitoring.html"><strong aria-hidden="true">26.</strong> Observability and Monitoring</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 3: Contextualizing an Agentic System</li><li class="chapter-item expanded "><a href="arming-introduction.html"><strong aria-hidden="true">27.</strong> Introduction to Tools and Commands</a></li><li class="chapter-item expanded "><a href="tool-system-deep-dive.html"><strong aria-hidden="true">28.</strong> Tool System Overview</a></li><li class="chapter-item expanded "><a href="command-system-deep-dive.html"><strong aria-hidden="true">29.</strong> Command System Overview</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Agentic Systems Series</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/gerred/building-an-agentic-system" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="real-world-examples"><a class="header" href="#real-world-examples">Real-World Examples</a></h2>
+<p>To illustrate how all these components work together, let's walk through two concrete examples.</p>
+<h3 id="example-1-finding-and-fixing-a-bug"><a class="header" href="#example-1-finding-and-fixing-a-bug">Example 1: Finding and Fixing a Bug</a></h3>
+<p>Below is a step-by-step walkthrough of a user asking Claude Code to &quot;Find and fix bugs in the file Bug.tsx&quot;:</p>
+<h4 id="phase-1-initial-user-input-and-processing"><a class="header" href="#phase-1-initial-user-input-and-processing">Phase 1: Initial User Input and Processing</a></h4>
+<ol>
+<li>User types &quot;Find and fix bugs in the file Bug.tsx&quot; and hits Enter</li>
+<li><code>PromptInput.tsx</code> captures this input in its <code>value</code> state</li>
+<li><code>onSubmit()</code> handler creates an AbortController and calls <code>processUserInput()</code></li>
+<li>Input is identified as a regular prompt (not starting with <code>!</code> or <code>/</code>)</li>
+<li>A message object is created with:
+<pre><code class="language-typescript">{
+  role: 'user',
+  content: 'Find and fix bugs in the file Bug.tsx',
+  type: 'prompt',
+  id: generateId()
+}
+</code></pre>
+</li>
+<li>The message is passed to <code>onQuery()</code> in <code>REPL.tsx</code></li>
+</ol>
+<h4 id="phase-2-query-generation-and-api-call"><a class="header" href="#phase-2-query-generation-and-api-call">Phase 2: Query Generation and API Call</a></h4>
+<ol>
+<li><code>onQuery()</code> collects:
+<ul>
+<li>System prompt from <code>getSystemPrompt()</code> including capabilities info</li>
+<li>Context from <code>getContextForQuery()</code> including directory structure</li>
+<li>Model information from state</li>
+</ul>
+</li>
+<li><code>query()</code> in <code>query.ts</code> is called with the messages and options</li>
+<li>Messages are formatted into Claude API format in <code>querySonnet()</code></li>
+<li>API call is made to Claude using <code>fetch()</code> in <code>services/claude.ts</code></li>
+<li>Response begins streaming with content starting to contain a plan to find bugs</li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    User-&gt;&gt;PromptInput: &quot;Find and fix bugs in Bug.tsx&quot;
+    PromptInput-&gt;&gt;processUserInput: Create message object
+    processUserInput-&gt;&gt;REPL: Pass message to onQuery()
+    REPL-&gt;&gt;query.ts: Call query() with message
+    query.ts-&gt;&gt;claude.ts: Call querySonnet() with formatted message
+    claude.ts-&gt;&gt;Claude API: Make API request
+    Claude API--&gt;&gt;claude.ts: Stream response
+</pre>
+<h4 id="phase-3-tool-use-execution---finding-the-file"><a class="header" href="#phase-3-tool-use-execution---finding-the-file">Phase 3: Tool Use Execution - Finding the File</a></h4>
+<ol>
+<li>Claude decides to use a pattern matching tool to locate the file</li>
+<li>The response contains a tool_use block:
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;GlobTool&quot;,
+  &quot;parameters&quot;: {
+    &quot;pattern&quot;: &quot;**/Bug.tsx&quot;
+  }
+}
+</code></pre>
+</li>
+<li>Generator system detects tool_use and calls <code>runToolsConcurrently()</code></li>
+<li><code>canUseTool()</code> checks permissions for the pattern matching tool which can run without explicit user approval</li>
+<li>The tool executes with parameters, running file search on the filesystem</li>
+<li>Results are returned:
+<pre><code>Found 1 file:
+/path/to/project/src/components/Bug.tsx
+</code></pre>
+</li>
+</ol>
+<h4 id="phase-4-tool-use-execution---reading-the-file"><a class="header" href="#phase-4-tool-use-execution---reading-the-file">Phase 4: Tool Use Execution - Reading the File</a></h4>
+<ol>
+<li>Claude decides to use <code>View</code> to read the file content</li>
+<li>Another tool_use block is generated:
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;View&quot;,
+  &quot;parameters&quot;: {
+    &quot;file_path&quot;: &quot;/path/to/project/src/components/Bug.tsx&quot;
+  }
+}
+</code></pre>
+</li>
+<li><code>View.call()</code> executes, reading the file content</li>
+<li>Results contain the file content with a potential bug:
+<pre><code class="language-tsx">import React from 'react';
+import { Box } from 'ink';
+
+interface BugProps {
+  message: string;
+}
+
+// Bug: This component tries to access undefinedProp which doesn't exist
+export function Bug({ message }: BugProps) {
+  return (
+    &lt;Box&gt;
+      {message.toUpperCase()}
+      {undefinedProp.toString()} // This will cause an error
+    &lt;/Box&gt;
+  );
+}
+</code></pre>
+</li>
+</ol>
+<h4 id="phase-5-tool-use-execution---editing-the-file"><a class="header" href="#phase-5-tool-use-execution---editing-the-file">Phase 5: Tool Use Execution - Editing the File</a></h4>
+<ol>
+<li>Claude decides to use <code>Edit</code> to fix the bug</li>
+<li>Another tool_use block is generated:
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Edit&quot;,
+  &quot;parameters&quot;: {
+    &quot;file_path&quot;: &quot;/path/to/project/src/components/Bug.tsx&quot;,
+    &quot;old_string&quot;: &quot;export function Bug({ message }: BugProps) {\n  return (\n    &lt;Box&gt;\n      {message.toUpperCase()}\n      {undefinedProp.toString()} // This will cause an error\n    &lt;/Box&gt;\n  );\n}&quot;,
+    &quot;new_string&quot;: &quot;export function Bug({ message }: BugProps) {\n  return (\n    &lt;Box&gt;\n      {message.toUpperCase()}\n      {/* Removed reference to undefined prop */}\n    &lt;/Box&gt;\n  );\n}&quot;
+  }
+}
+</code></pre>
+</li>
+<li><code>Edit.needsPermissions</code> returns true, prompting user permission</li>
+<li>A permission request is displayed: &quot;Claude wants to edit file /path/to/project/src/components/Bug.tsx&quot;</li>
+<li>User approves the edit</li>
+<li><code>Edit.call()</code> executes, modifying the file</li>
+<li>Results show successful edit:
+<pre><code>The file /path/to/project/src/components/Bug.tsx has been updated. 
+</code></pre>
+</li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    Claude API--&gt;&gt;query.ts: Tool use: Pattern Matching
+    query.ts-&gt;&gt;PatternTool: Execute with pattern &quot;**/Bug.tsx&quot;
+    PatternTool--&gt;&gt;query.ts: Return file location
+    query.ts-&gt;&gt;Claude API: Send tool result
+    Claude API--&gt;&gt;query.ts: Tool use: View
+    query.ts-&gt;&gt;View: Execute with file_path
+    View--&gt;&gt;query.ts: Return file content
+    query.ts-&gt;&gt;Claude API: Send tool result
+    Claude API--&gt;&gt;query.ts: Tool use: Edit
+    query.ts-&gt;&gt;permissions.ts: Check permissions
+    permissions.ts--&gt;&gt;User: Show permission request
+    User-&gt;&gt;permissions.ts: Approve edit
+    query.ts-&gt;&gt;Edit: Execute with edits
+    Edit--&gt;&gt;query.ts: Return edit result
+    query.ts-&gt;&gt;Claude API: Send tool result
+</pre>
+<h4 id="phase-6-recursive-query-and-final-response"><a class="header" href="#phase-6-recursive-query-and-final-response">Phase 6: Recursive Query and Final Response</a></h4>
+<ol>
+<li>After each tool execution, the results are added to the messages array:
+<pre><code class="language-typescript">messages.push({
+  role: 'assistant',
+  content: null,
+  tool_use: { ... } // Tool use object
+});
+messages.push({
+  role: 'user',
+  content: null,
+  tool_result: { ... } // Tool result object
+});
+</code></pre>
+</li>
+<li><code>query()</code> is called recursively with updated messages</li>
+<li>Claude API generates a final response summarizing the bug fix</li>
+<li>This final response streams back to the UI without any further tool use</li>
+<li>The message is normalized and shown to the user</li>
+</ol>
+<h3 id="example-2-parallel-codebase-analysis"><a class="header" href="#example-2-parallel-codebase-analysis">Example 2: Parallel Codebase Analysis</a></h3>
+<p>This example showcases a user asking Claude Code to &quot;Show me all React components using useState hooks&quot;:</p>
+<h4 id="phase-1-initial-user-input-and-processing-1"><a class="header" href="#phase-1-initial-user-input-and-processing-1">Phase 1: Initial User Input and Processing</a></h4>
+<p>Just as in Example 1, the input is captured, processed, and passed to the query system.</p>
+<h4 id="phase-2-claudes-response-with-multiple-tool-uses"><a class="header" href="#phase-2-claudes-response-with-multiple-tool-uses">Phase 2: Claude's Response with Multiple Tool Uses</a></h4>
+<p>Claude analyzes the request and determines it needs to:</p>
+<ul>
+<li>Find all React component files</li>
+<li>Search for useState hook usage</li>
+<li>Read relevant files to show the components</li>
+</ul>
+<p>Instead of responding with a single tool use, Claude returns multiple tool uses in one response:</p>
+<pre><code class="language-json">{
+  &quot;content&quot;: [
+    {
+      &quot;type&quot;: &quot;tool_use&quot;,
+      &quot;id&quot;: &quot;tool_use_1&quot;,
+      &quot;name&quot;: &quot;GlobTool&quot;,
+      &quot;parameters&quot;: {
+        &quot;pattern&quot;: &quot;**/*.tsx&quot;
+      }
+    },
+    {
+      &quot;type&quot;: &quot;tool_use&quot;, 
+      &quot;id&quot;: &quot;tool_use_2&quot;,
+      &quot;name&quot;: &quot;GrepTool&quot;,
+      &quot;parameters&quot;: {
+        &quot;pattern&quot;: &quot;import.*\\{.*useState.*\\}.*from.*['\&quot;]react['\&quot;]&quot;,
+        &quot;include&quot;: &quot;*.tsx&quot;
+      }
+    },
+    {
+      &quot;type&quot;: &quot;tool_use&quot;,
+      &quot;id&quot;: &quot;tool_use_3&quot;,
+      &quot;name&quot;: &quot;GrepTool&quot;,
+      &quot;parameters&quot;: {
+        &quot;pattern&quot;: &quot;const.*\\[.*\\].*=.*useState\\(&quot;,
+        &quot;include&quot;: &quot;*.tsx&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<h4 id="phase-3-parallel-tool-execution"><a class="header" href="#phase-3-parallel-tool-execution">Phase 3: Parallel Tool Execution</a></h4>
+<ol>
+<li><code>query.ts</code> detects multiple tool uses in one response</li>
+<li>It checks if all tools are read-only (GlobTool and GrepTool are both read-only)</li>
+<li>Since all tools are read-only, it calls <code>runToolsConcurrently()</code></li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    participant User
+    participant REPL
+    participant query.ts as query.ts
+    participant Claude as Claude API
+    participant GlobTool
+    participant GrepTool1 as GrepTool (import)
+    participant GrepTool2 as GrepTool (useState)
+    
+    User-&gt;&gt;REPL: &quot;Show me all React components using useState hooks&quot;
+    REPL-&gt;&gt;query.ts: Process input
+    query.ts-&gt;&gt;Claude: Make API request
+    Claude--&gt;&gt;query.ts: Response with 3 tool_use blocks
+    
+    query.ts-&gt;&gt;query.ts: Check if all tools are read-only
+    
+    par Parallel execution
+        query.ts-&gt;&gt;PatternTool: Execute tool_use_1
+        query.ts-&gt;&gt;SearchTool1: Execute tool_use_2
+        query.ts-&gt;&gt;SearchTool2: Execute tool_use_3
+    end
+    
+    SearchTool1--&gt;&gt;query.ts: Return files importing useState
+    PatternTool--&gt;&gt;query.ts: Return all .tsx files
+    SearchTool2--&gt;&gt;query.ts: Return files using useState hook
+    
+    query.ts-&gt;&gt;query.ts: Sort results in original order
+    query.ts-&gt;&gt;Claude: Send all tool results
+    Claude--&gt;&gt;query.ts: Request file content
+</pre>
+<p>The results are collected from all three tools, sorted back to the original order, and sent back to Claude. Claude then requests to read specific files, which are again executed in parallel, and finally produces an analysis of the useState usage patterns.</p>
+<p>This parallel execution significantly speeds up response time by:</p>
+<ol>
+<li>Running all file search operations concurrently</li>
+<li>Running all file read operations concurrently</li>
+<li>Maintaining correct ordering of results</li>
+<li>Streaming all results back as soon as they're available</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="feature-flag-integration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="lessons-learned-and-implementation-challenges.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="feature-flag-integration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="lessons-learned-and-implementation-challenges.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

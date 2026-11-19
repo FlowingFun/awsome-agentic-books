@@ -1,0 +1,423 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Reactive UI with Ink and Yoga - The Agentic Systems Series</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">The Agentic Systems Series</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Book 1: Building an Agentic System</li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview-and-philosophy.html"><strong aria-hidden="true">2.</strong> Overview and Philosophy</a></li><li class="chapter-item expanded "><a href="core-architecture.html"><strong aria-hidden="true">3.</strong> Core Architecture</a></li><li class="chapter-item expanded "><a href="system-architecture-diagram.html"><strong aria-hidden="true">4.</strong> System Architecture Patterns</a></li><li class="chapter-item expanded "><a href="system-prompts-and-model-settings.html"><strong aria-hidden="true">5.</strong> System Prompts and Configuration</a></li><li class="chapter-item expanded "><a href="initialization-process.html"><strong aria-hidden="true">6.</strong> Initialization Patterns</a></li><li class="chapter-item expanded "><a href="ink-yoga-reactive-ui.html" class="active"><strong aria-hidden="true">7.</strong> Reactive UI with Ink and Yoga</a></li><li class="chapter-item expanded "><a href="execution-flow-in-detail.html"><strong aria-hidden="true">8.</strong> Execution Flow</a></li><li class="chapter-item expanded "><a href="the-permission-system.html"><strong aria-hidden="true">9.</strong> Permission Systems</a></li><li class="chapter-item expanded "><a href="parallel-tool-execution.html"><strong aria-hidden="true">10.</strong> Parallel Execution</a></li><li class="chapter-item expanded "><a href="feature-flag-integration.html"><strong aria-hidden="true">11.</strong> Feature Management</a></li><li class="chapter-item expanded "><a href="real-world-examples.html"><strong aria-hidden="true">12.</strong> Real-World Patterns</a></li><li class="chapter-item expanded "><a href="lessons-learned-and-implementation-challenges.html"><strong aria-hidden="true">13.</strong> Lessons Learned</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 2: Amping Up an Agentic System</li><li class="chapter-item expanded "><a href="second-edition/index.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-1-from-local-to-collaborative.html"><strong aria-hidden="true">15.</strong> From Local to Collaborative</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html"><strong aria-hidden="true">16.</strong> Collaborative Architecture Overview</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-3-authentication-and-identity.html"><strong aria-hidden="true">17.</strong> Authentication and Identity</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-4-thread-management-at-scale.html"><strong aria-hidden="true">18.</strong> Conversation Management at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html"><strong aria-hidden="true">19.</strong> Real-Time Synchronization</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html"><strong aria-hidden="true">20.</strong> Tool System Evolution</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-7-sharing-and-permissions.html"><strong aria-hidden="true">21.</strong> Sharing and Permissions</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-8-team-workflows.html"><strong aria-hidden="true">22.</strong> Team Workflows</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-9-enterprise-integration.html"><strong aria-hidden="true">23.</strong> Enterprise Integration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html"><strong aria-hidden="true">24.</strong> Multi-Agent Orchestration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html"><strong aria-hidden="true">25.</strong> Performance at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-12-observability-and-monitoring.html"><strong aria-hidden="true">26.</strong> Observability and Monitoring</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 3: Contextualizing an Agentic System</li><li class="chapter-item expanded "><a href="arming-introduction.html"><strong aria-hidden="true">27.</strong> Introduction to Tools and Commands</a></li><li class="chapter-item expanded "><a href="tool-system-deep-dive.html"><strong aria-hidden="true">28.</strong> Tool System Overview</a></li><li class="chapter-item expanded "><a href="command-system-deep-dive.html"><strong aria-hidden="true">29.</strong> Command System Overview</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Agentic Systems Series</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/gerred/building-an-agentic-system" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ink-yoga-and-reactive-ui-system"><a class="header" href="#ink-yoga-and-reactive-ui-system">Ink, Yoga, and Reactive UI System</a></h1>
+<p>A terminal-based reactive UI system can be built with Ink, Yoga, and React. This architecture renders rich, interactive components with responsive layouts in a text-based environment, showing how modern UI paradigms can work in terminal applications.</p>
+<h2 id="core-ui-architecture"><a class="header" href="#core-ui-architecture">Core UI Architecture</a></h2>
+<p>The UI architecture applies React component patterns to terminal rendering through the Ink library. This approach enables composition, state management, and declarative UIs in text-based interfaces.</p>
+<h3 id="entry-points-and-initialization"><a class="header" href="#entry-points-and-initialization">Entry Points and Initialization</a></h3>
+<p>A typical entry point initializes the application:</p>
+<pre><code class="language-tsx">// Main render entry point
+render(
+  &lt;SentryErrorBoundary&gt;
+    &lt;App persistDir={persistDir} /&gt;
+  &lt;/SentryErrorBoundary&gt;,
+  {
+    // Prevent Ink from exiting when no active components are rendered
+    exitOnCtrlC: false,
+  }
+)
+</code></pre>
+<p>The application then mounts the REPL (Read-Eval-Print Loop) component, which serves as the primary container for the UI.</p>
+<h3 id="component-hierarchy"><a class="header" href="#component-hierarchy">Component Hierarchy</a></h3>
+<p>The UI component hierarchy follows this structure:</p>
+<ul>
+<li><strong>REPL</strong> (<code>src/screens/REPL.tsx</code>) - Main container
+<ul>
+<li><strong>Logo</strong> - Branding display</li>
+<li><strong>Message Components</strong> - Conversation rendering
+<ul>
+<li>AssistantTextMessage</li>
+<li>AssistantToolUseMessage</li>
+<li>UserTextMessage</li>
+<li>UserToolResultMessage</li>
+</ul>
+</li>
+<li><strong>PromptInput</strong> - User input handling</li>
+<li><strong>Permission Components</strong> - Tool use authorization</li>
+<li><strong>Various dialogs and overlays</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="state-management"><a class="header" href="#state-management">State Management</a></h3>
+<p>The application uses React hooks extensively for state management:</p>
+<ul>
+<li><strong>useState</strong> for local component state (messages, loading, input mode)</li>
+<li><strong>useEffect</strong> for side effects (terminal setup, message logging)</li>
+<li><strong>useMemo</strong> for derived state and performance optimization</li>
+<li><strong>Custom hooks</strong> for specialized functionality:
+<ul>
+<li><code>useTextInput</code> - Handles cursor and text entry</li>
+<li><code>useArrowKeyHistory</code> - Manages command history</li>
+<li><code>useSlashCommandTypeahead</code> - Provides command suggestions</li>
+</ul>
+</li>
+</ul>
+<h2 id="ink-terminal-ui-system"><a class="header" href="#ink-terminal-ui-system">Ink Terminal UI System</a></h2>
+<p>Ink allows React components to render in the terminal, enabling a component-based approach to terminal UI development.</p>
+<h3 id="ink-components"><a class="header" href="#ink-components">Ink Components</a></h3>
+<p>The application uses these core Ink components:</p>
+<ul>
+<li><strong>Box</strong> - Container with flexbox-like layout properties</li>
+<li><strong>Text</strong> - Terminal text with styling capabilities</li>
+<li><strong>Static</strong> - Performance optimization for unchanging content</li>
+<li><strong>useInput</strong> - Hook for capturing keyboard input</li>
+</ul>
+<h3 id="terminal-rendering-challenges"><a class="header" href="#terminal-rendering-challenges">Terminal Rendering Challenges</a></h3>
+<p>Terminal UIs face unique challenges addressed by the system:</p>
+<ol>
+<li><strong>Limited layout capabilities</strong> - Solved through Yoga layout engine</li>
+<li><strong>Text-only interface</strong> - Addressed with ANSI styling and borders</li>
+<li><strong>Cursor management</strong> - Custom <code>Cursor.ts</code> utility for text input</li>
+<li><strong>Screen size constraints</strong> - <code>useTerminalSize</code> for responsive design</li>
+<li><strong>Rendering artifacts</strong> - Special handling for newlines and clearing</li>
+</ol>
+<h3 id="terminal-input-handling"><a class="header" href="#terminal-input-handling">Terminal Input Handling</a></h3>
+<p>Input handling in the terminal requires special consideration:</p>
+<pre><code class="language-tsx">function useTextInput({
+  value: originalValue,
+  onChange,
+  onSubmit,
+  multiline = false,
+  // ...
+}: UseTextInputProps): UseTextInputResult {
+  // Manage cursor position and text manipulation
+  const cursor = Cursor.fromText(originalValue, columns, offset)
+  
+  function onInput(input: string, key: Key): void {
+    // Handle special keys and input
+    const nextCursor = mapKey(key)(input)
+    if (nextCursor) {
+      setOffset(nextCursor.offset)
+      if (cursor.text !== nextCursor.text) {
+        onChange(nextCursor.text)
+      }
+    }
+  }
+  
+  return {
+    onInput,
+    renderedValue: cursor.render(cursorChar, mask, invert),
+    offset,
+    setOffset,
+  }
+}
+</code></pre>
+<h2 id="yoga-layout-system"><a class="header" href="#yoga-layout-system">Yoga Layout System</a></h2>
+<p>Yoga provides a cross-platform layout engine that implements Flexbox for terminal UI layouts.</p>
+<h3 id="yoga-integration"><a class="header" href="#yoga-integration">Yoga Integration</a></h3>
+<p>Rather than direct usage, Yoga is integrated through:</p>
+<ol>
+<li>The <code>yoga.wasm</code> WebAssembly module included in the package</li>
+<li>Ink's abstraction layer that interfaces with Yoga</li>
+<li>React components that use Yoga-compatible props</li>
+</ol>
+<h3 id="layout-patterns"><a class="header" href="#layout-patterns">Layout Patterns</a></h3>
+<p>The codebase uses these core layout patterns:</p>
+<ul>
+<li><strong>Flexbox Layouts</strong> - Using <code>flexDirection=&quot;column&quot;</code> or <code>&quot;row&quot;</code></li>
+<li><strong>Width Controls</strong> - With <code>width=&quot;100%&quot;</code> or pixel values</li>
+<li><strong>Padding and Margins</strong> - For spacing between elements</li>
+<li><strong>Borders</strong> - Visual separation with border styling</li>
+</ul>
+<h3 id="styling-approach"><a class="header" href="#styling-approach">Styling Approach</a></h3>
+<p>Styling is applied through:</p>
+<ol>
+<li><strong>Component Props</strong> - Direct styling on Ink components</li>
+<li><strong>Theme System</strong> - In <code>theme.ts</code> with light/dark modes</li>
+<li><strong>Terminal-specific styling</strong> - ANSI colors and formatting</li>
+</ol>
+<h2 id="performance-optimizations"><a class="header" href="#performance-optimizations">Performance Optimizations</a></h2>
+<p>Terminal rendering requires special performance techniques:</p>
+<h3 id="static-vs-dynamic-rendering"><a class="header" href="#static-vs-dynamic-rendering">Static vs. Dynamic Rendering</a></h3>
+<p>The REPL component optimizes rendering by separating static from dynamic content:</p>
+<pre><code class="language-tsx">&lt;Static key={`static-messages-${forkNumber}`} items={messagesJSX.filter(_ =&gt; _.type === 'static')}&gt;
+  {_ =&gt; _.jsx}
+&lt;/Static&gt;
+{messagesJSX.filter(_ =&gt; _.type === 'transient').map(_ =&gt; _.jsx)}
+</code></pre>
+<h3 id="memoization"><a class="header" href="#memoization">Memoization</a></h3>
+<p>Expensive operations are memoized to avoid recalculation:</p>
+<pre><code class="language-tsx">const messagesJSX = useMemo(() =&gt; {
+  // Complex message processing
+  return messages.map(/* ... */)
+}, [messages, /* dependencies */])
+</code></pre>
+<h3 id="content-streaming"><a class="header" href="#content-streaming">Content Streaming</a></h3>
+<p>Terminal output is streamed using generator functions:</p>
+<pre><code class="language-tsx">for await (const message of query([...messages, lastMessage], /* ... */)) {
+  setMessages(oldMessages =&gt; [...oldMessages, message])
+}
+</code></pre>
+<h2 id="integration-with-other-systems"><a class="header" href="#integration-with-other-systems">Integration with Other Systems</a></h2>
+<p>The UI system integrates with other core components of an agentic system.</p>
+<h3 id="tool-system-integration"><a class="header" href="#tool-system-integration">Tool System Integration</a></h3>
+<p>Tool execution is visualized through specialized components:</p>
+<ul>
+<li><strong>AssistantToolUseMessage</strong> - Shows tool execution requests</li>
+<li><strong>UserToolResultMessage</strong> - Displays tool execution results</li>
+<li>Tool status tracking using ID sets for progress visualization</li>
+</ul>
+<h3 id="permission-system-integration"><a class="header" href="#permission-system-integration">Permission System Integration</a></h3>
+<p>The permission system uses UI components for user interaction:</p>
+<ul>
+<li><strong>PermissionRequest</strong> - Base component for authorization requests</li>
+<li><strong>Tool-specific permission UIs</strong> - For different permission types</li>
+<li>Risk-based styling with different colors based on potential impact</li>
+</ul>
+<h3 id="state-coordination"><a class="header" href="#state-coordination">State Coordination</a></h3>
+<p>The REPL coordinates state across multiple systems:</p>
+<ul>
+<li>Permission state (temporary vs. permanent approvals)</li>
+<li>Tool execution state (queued, in-progress, completed, error)</li>
+<li>Message history integration with tools and permissions</li>
+<li>User input mode (prompt vs. bash)</li>
+</ul>
+<h2 id="applying-to-custom-systems"><a class="header" href="#applying-to-custom-systems">Applying to Custom Systems</a></h2>
+<p>Ink/Yoga/React creates powerful terminal UIs with several advantages:</p>
+<ol>
+<li><strong>Component reusability</strong> - Terminal UI component libraries work like web components</li>
+<li><strong>Modern state management</strong> - React hooks handle complex state in terminal apps</li>
+<li><strong>Flexbox layouts in text</strong> - Yoga brings sophisticated layouts to text interfaces</li>
+<li><strong>Performance optimization</strong> - Static/dynamic content separation prevents flicker</li>
+</ol>
+<p>Building similar terminal UI systems requires:</p>
+<ol>
+<li>React renderer for terminals (Ink)</li>
+<li>Layout engine (Yoga via WebAssembly)</li>
+<li>Terminal-specific input handling</li>
+<li>Text rendering optimizations</li>
+</ol>
+<p>Combining these elements enables rich terminal interfaces for developer tools, CLI applications, and text-based programs that rival the sophistication of traditional GUI applications.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="initialization-process.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="execution-flow-in-detail.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="initialization-process.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="execution-flow-in-detail.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

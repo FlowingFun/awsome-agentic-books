@@ -1,10 +1,13 @@
 # awsome-agentic-books
 
-一个收录智能体工程书籍的中文书库。第一本书是 James C. Davis 的《基于模型的智能体工程：一个软件工程案例研究》。
+一个精选智能体工程在线书籍和一手技术文章的书库。首页默认英文，可切换简体中文。第一本书是 James C. Davis 的《基于模型的智能体工程：一个软件工程案例研究》。
 
 ## 中文译本
 
-第 1 版网页版共 70 页，已完成正文、附录、目录、图注和索引的逐段翻译。原图和图内文字、代码、公式、参考文献著录信息保留原样。构建时会核对原书资源、章内锚点和站内链接。
+- **《基于模型的智能体工程》**：第 1 版网页版共 70 页，已完成正文、附录、目录、图注和索引的逐段翻译。原图和图内文字、代码、公式、参考文献著录信息保留原样。
+- **《构建智能体系统》**：Gerred Dillon 原著，第一卷全部 13 章已翻译。原站章节编号、分组、图表定义和代码保留原样。原书及本站译文按 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 许可，详情见各章页脚。
+
+构建时会核对译文覆盖、原书资源、章内锚点和站内链接。
 
 ## 本地构建与预览
 
@@ -18,7 +21,7 @@ python3 tools/build_site.py --output _site
 python3 -m http.server 8000 --bind 127.0.0.1 --directory _site
 ```
 
-打开 <http://127.0.0.1:8000/>，点击「进入阅读」，或直接访问 <http://127.0.0.1:8000/books/mage/index.html>。`_site/` 是生成目录，不提交到仓库。
+打开 <http://127.0.0.1:8000/>，用顶部「简体中文」切换书库语言；MAGE 中文译本位于 <http://127.0.0.1:8000/books/mage/index.html>。`_site/` 是生成目录，不提交到仓库。
 
 ## 文件说明
 
@@ -27,7 +30,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory _site
 | `books/mage/source/` | [原书第 1 版网页版](https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/index.html)快照；网页、资源和原版授权原样保留，哈希记录在 `snapshot.json`。 |
 | `books/mage/zh/` | 按原书页名保存逐段译文，构建时回填到原有版式。 |
 | `books/mage/navigation.json` | 书名、章节目录和阅读界面的中文用语。 |
-| `site/index.html`、`site/styles.css` | 中文站点首页及样式。首页的 `mage-progress` 元素由构建更新。 |
+| `books/building-an-agentic-system/` | 《构建智能体系统》第一卷的原站正文快照、目录与译文。 |
+| `site/index.html`、`site/zh.html`、`site/styles.css` | 英文首页、中文首页及共用样式。两页的 `mage-progress` 由构建更新。 |
 | `tools/build_site.py` | 生成静态站点。 |
 | `requirements.txt` | 本地及 CI 构建依赖。 |
 | `.gitignore` | 忽略构建产物和本地 Python 环境文件。 |

@@ -10,6 +10,8 @@ from urllib.parse import unquote, urljoin, urlsplit
 
 from bs4 import NavigableString
 
+from build_agentic_system import build_agentic_system
+from build_macro_evals import build_macro_evals
 from mage_text import apply, extract, page
 from snapshot_mage import BASE, check_html, references
 
@@ -131,7 +133,7 @@ def decorate(name, soup, complete, counts, labels):
         config.string = json.dumps(data, ensure_ascii=False)
 
     note = soup.new_tag('p', attrs={'class': 'collection-note', 'lang': 'zh-CN'})
-    library = soup.new_tag('a', href='../../index.html')
+    library = soup.new_tag('a', href='../../zh.html')
     library.string = '返回书库'
     note.append(library)
     if complete:
@@ -208,10 +210,14 @@ def build(output):
     labels = json.loads((BOOK / 'navigation.json').read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ROOT / 'site', output, dirs_exist_ok=True)
-    homepage = page((output / 'index.html').read_bytes())
-    progress = f'已完成 {len(translated)} / {len(articles)} 页' if len(translated) < len(articles) else f'全书 {len(articles)} 页已翻译'
-    homepage.find(id='mage-progress').string = progress
-    (output / 'index.html').write_text(str(homepage), encoding='utf-8')
+    complete, total = len(translated), len(articles)
+    progress = f'已完成 {complete} / {total} 页' if complete < total else f'全书 {total} 页已翻译'
+    progress_en = f'{complete} of {total} pages translated' if complete < total else f'All {total} pages translated'
+    for filename, status in [('index.html', progress_en), ('zh.html', progress)]:
+        home_path = output / filename
+        homepage = page(home_path.read_bytes())
+        homepage.find(id='mage-progress').string = status
+        home_path.write_text(str(homepage), encoding='utf-8')
     (output / '.nojekyll').touch()
     book = output / 'books/mage'
     for name, body in raw.items():
@@ -233,6 +239,8 @@ def build(output):
     notices = BOOK / 'notices'
     if notices.exists():
         shutil.copytree(notices, book / 'notices', dirs_exist_ok=True)
+    build_agentic_system(output)
+    build_macro_evals(output)
     upstream_issues = verify_links(output)
     print(f'{progress}；{len(raw) - len(articles)} 个原始静态资源；'
           f'{upstream_issues} 个原书已有的无效锚点，未新增。')
@@ -243,6 +251,6 @@ if __name__ == '__main__':
     cli.add_argument('--output', type=Path, default=ROOT / '_site')
     args = cli.parse_args()
     dest = args.output.resolve()
-    if dest == ROOT or dest in ROOT.parents or dest.is_relative_to(BOOK) or dest.is_relative_to(ROOT / 'site'):
+    if dest == ROOT or dest in ROOT.parents or dest.is_relative_to(ROOT / 'books') or dest.is_relative_to(ROOT / 'site'):
         cli.error('输出目录不能覆盖网站或译本源码')
     build(dest)

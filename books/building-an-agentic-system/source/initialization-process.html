@@ -1,0 +1,650 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Initialization Patterns - The Agentic Systems Series</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">The Agentic Systems Series</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Book 1: Building an Agentic System</li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview-and-philosophy.html"><strong aria-hidden="true">2.</strong> Overview and Philosophy</a></li><li class="chapter-item expanded "><a href="core-architecture.html"><strong aria-hidden="true">3.</strong> Core Architecture</a></li><li class="chapter-item expanded "><a href="system-architecture-diagram.html"><strong aria-hidden="true">4.</strong> System Architecture Patterns</a></li><li class="chapter-item expanded "><a href="system-prompts-and-model-settings.html"><strong aria-hidden="true">5.</strong> System Prompts and Configuration</a></li><li class="chapter-item expanded "><a href="initialization-process.html" class="active"><strong aria-hidden="true">6.</strong> Initialization Patterns</a></li><li class="chapter-item expanded "><a href="ink-yoga-reactive-ui.html"><strong aria-hidden="true">7.</strong> Reactive UI with Ink and Yoga</a></li><li class="chapter-item expanded "><a href="execution-flow-in-detail.html"><strong aria-hidden="true">8.</strong> Execution Flow</a></li><li class="chapter-item expanded "><a href="the-permission-system.html"><strong aria-hidden="true">9.</strong> Permission Systems</a></li><li class="chapter-item expanded "><a href="parallel-tool-execution.html"><strong aria-hidden="true">10.</strong> Parallel Execution</a></li><li class="chapter-item expanded "><a href="feature-flag-integration.html"><strong aria-hidden="true">11.</strong> Feature Management</a></li><li class="chapter-item expanded "><a href="real-world-examples.html"><strong aria-hidden="true">12.</strong> Real-World Patterns</a></li><li class="chapter-item expanded "><a href="lessons-learned-and-implementation-challenges.html"><strong aria-hidden="true">13.</strong> Lessons Learned</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 2: Amping Up an Agentic System</li><li class="chapter-item expanded "><a href="second-edition/index.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-1-from-local-to-collaborative.html"><strong aria-hidden="true">15.</strong> From Local to Collaborative</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html"><strong aria-hidden="true">16.</strong> Collaborative Architecture Overview</a></li><li class="chapter-item expanded "><a href="second-edition/part-i-foundations/chapter-3-authentication-and-identity.html"><strong aria-hidden="true">17.</strong> Authentication and Identity</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-4-thread-management-at-scale.html"><strong aria-hidden="true">18.</strong> Conversation Management at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html"><strong aria-hidden="true">19.</strong> Real-Time Synchronization</a></li><li class="chapter-item expanded "><a href="second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html"><strong aria-hidden="true">20.</strong> Tool System Evolution</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-7-sharing-and-permissions.html"><strong aria-hidden="true">21.</strong> Sharing and Permissions</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-8-team-workflows.html"><strong aria-hidden="true">22.</strong> Team Workflows</a></li><li class="chapter-item expanded "><a href="second-edition/part-iii-collaboration/chapter-9-enterprise-integration.html"><strong aria-hidden="true">23.</strong> Enterprise Integration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html"><strong aria-hidden="true">24.</strong> Multi-Agent Orchestration</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html"><strong aria-hidden="true">25.</strong> Performance at Scale</a></li><li class="chapter-item expanded "><a href="second-edition/part-iv-advanced-patterns/chapter-12-observability-and-monitoring.html"><strong aria-hidden="true">26.</strong> Observability and Monitoring</a></li><li class="chapter-item expanded affix "><li class="part-title">Book 3: Contextualizing an Agentic System</li><li class="chapter-item expanded "><a href="arming-introduction.html"><strong aria-hidden="true">27.</strong> Introduction to Tools and Commands</a></li><li class="chapter-item expanded "><a href="tool-system-deep-dive.html"><strong aria-hidden="true">28.</strong> Tool System Overview</a></li><li class="chapter-item expanded "><a href="command-system-deep-dive.html"><strong aria-hidden="true">29.</strong> Command System Overview</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Agentic Systems Series</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/gerred/building-an-agentic-system" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="initialization-process"><a class="header" href="#initialization-process">Initialization Process</a></h1>
+<p>This section explores the initialization process of an AI coding assistant from CLI invocation to application readiness.</p>
+<h2 id="startup-flow"><a class="header" href="#startup-flow">Startup Flow</a></h2>
+<p>When a user runs the CLI tool, this sequence triggers:</p>
+<p>The startup process follows these steps:</p>
+<ol>
+<li>CLI invocation</li>
+<li>Parse arguments</li>
+<li>Validate configuration</li>
+<li>Run system checks (Doctor, Permissions, Auto-updater)</li>
+<li>Setup environment (Set directory, Load global config, Load project config)</li>
+<li>Load tools</li>
+<li>Initialize REPL</li>
+<li>Ready for input</li>
+</ol>
+<h2 id="entry-points"><a class="header" href="#entry-points">Entry Points</a></h2>
+<p>The initialization typically starts in two key files:</p>
+<ol>
+<li>
+<p><strong>CLI Entry</strong>: <code>cli.mjs</code></p>
+<ul>
+<li>Main CLI entry point</li>
+<li>Basic arg parsing</li>
+<li>Delegates to application logic</li>
+</ul>
+</li>
+<li>
+<p><strong>App Bootstrap</strong>: <code>src/entrypoints/cli.tsx</code></p>
+<ul>
+<li>Contains <code>main()</code> function</li>
+<li>Orchestrates initialization</li>
+<li>Sets up React rendering</li>
+</ul>
+</li>
+</ol>
+<h3 id="entry-point-climjs"><a class="header" href="#entry-point-climjs">Entry Point (cli.mjs)</a></h3>
+<pre><code class="language-javascript">#!/usr/bin/env node
+import 'source-map-support/register.js'
+import './src/entrypoints/cli.js'
+</code></pre>
+<h3 id="main-bootstrap-clitsx"><a class="header" href="#main-bootstrap-clitsx">Main Bootstrap (cli.tsx)</a></h3>
+<pre><code class="language-javascript">async function main(): Promise&lt;void&gt; {
+  // Validate configs
+  enableConfigs()
+
+  program
+    .name('cli-tool')
+    .description(`${PRODUCT_NAME} - starts an interactive session by default...`)
+    // Various command line options defined here
+    .option('-c, --cwd &lt;cwd&gt;', 'set working directory')
+    .option('-d, --debug', 'enable debug mode')
+    // ... other options
+    
+  program.parse(process.argv)
+  const options = program.opts()
+  
+  // Set up environment
+  const cwd = options.cwd ? path.resolve(options.cwd) : process.cwd()
+  process.chdir(cwd)
+  
+  // Load configurations and check permissions
+  await showSetupScreens(dangerouslySkipPermissions, print)
+  await setup(cwd, dangerouslySkipPermissions)
+  
+  // Load tools
+  const [tools, mcpClients] = await Promise.all([
+    getTools(enableArchitect ?? getCurrentProjectConfig().enableArchitectTool),
+    getClients(),
+  ])
+  
+  // Render REPL interface
+  render(
+    &lt;REPL
+      commands={commands}
+      debug={debug}
+      initialPrompt={inputPrompt}
+      messageLogName={dateToFilename(new Date())}
+      shouldShowPromptInput={true}
+      verbose={verbose}
+      tools={tools}
+      dangerouslySkipPermissions={dangerouslySkipPermissions}
+      mcpClients={mcpClients}
+      isDefaultModel={isDefaultModel}
+    /&gt;,
+    renderContext,
+  )
+}
+
+main().catch(error =&gt; {
+  console.error(error)
+  process.exit(1)
+})
+</code></pre>
+<h3 id="execution-sequence"><a class="header" href="#execution-sequence">Execution Sequence</a></h3>
+<ol>
+<li>User executes command</li>
+<li>cli.mjs parses args &amp; bootstraps</li>
+<li>cli.tsx calls enableConfigs()</li>
+<li>cli.tsx calls showSetupScreens()</li>
+<li>cli.tsx calls setup(cwd)</li>
+<li>cli.tsx calls getTools()</li>
+<li>cli.tsx renders REPL</li>
+<li>REPL displays interface to user</li>
+</ol>
+<h2 id="configuration-loading"><a class="header" href="#configuration-loading">Configuration Loading</a></h2>
+<p>Early in the process, configs are validated and loaded:</p>
+<ol>
+<li>
+<p><strong>Enable Configuration</strong>:</p>
+<pre><code class="language-javascript">enableConfigs()
+</code></pre>
+<p>Ensures config files exist, are valid JSON, and initializes the config system.</p>
+</li>
+<li>
+<p><strong>Load Global Config</strong>:</p>
+<pre><code class="language-javascript">const config = getConfig(GLOBAL_CLAUDE_FILE, DEFAULT_GLOBAL_CONFIG)
+</code></pre>
+<p>Loads user's global config with defaults where needed.</p>
+</li>
+<li>
+<p><strong>Load Project Config</strong>:</p>
+<pre><code class="language-javascript">getCurrentProjectConfig()
+</code></pre>
+<p>Gets project-specific settings for the current directory.</p>
+</li>
+</ol>
+<p>The config system uses a hierarchical structure:</p>
+<pre><code class="language-javascript">// Default configuration
+const DEFAULT_GLOBAL_CONFIG = {
+  largeModel: undefined,
+  smallModel: undefined,
+  largeModelApiKey: undefined,
+  smallModelApiKey: undefined,
+  largeModelBaseURL: undefined,
+  smallModelBaseURL: undefined,
+  googleApiKey: undefined,
+  googleProjectId: undefined,
+  geminiModels: undefined,
+  largeModelCustomProvider: undefined,
+  smallModelCustomProvider: undefined,
+  largeModelMaxTokens: undefined,
+  smallModelMaxTokens: undefined,
+  largeModelReasoningEffort: undefined,
+  smallModelReasoningEffort: undefined,
+  autoUpdaterStatus: undefined,
+  costThreshold: 5,
+  lastKnownExternalIP: undefined,
+  localPort: undefined,
+  trustedExecutables: [],
+  // Project configs
+  projects: {},
+} as GlobalClaudeConfig
+</code></pre>
+<h2 id="system-checks"><a class="header" href="#system-checks">System Checks</a></h2>
+<p>Before the app starts, several checks run:</p>
+<h3 id="system-checks-overview"><a class="header" href="#system-checks-overview">System Checks Overview</a></h3>
+<p>The system performs three main types of checks:</p>
+<ol>
+<li>
+<p><strong>Doctor</strong></p>
+<ul>
+<li>Environment check</li>
+<li>Dependency check</li>
+</ul>
+</li>
+<li>
+<p><strong>Permissions</strong></p>
+<ul>
+<li>Trust dialog</li>
+<li>File permissions</li>
+</ul>
+</li>
+<li>
+<p><strong>Auto-updater</strong></p>
+<ul>
+<li>Updater configuration</li>
+</ul>
+</li>
+<li>
+<p><strong>Doctor Check</strong>:</p>
+<pre><code class="language-javascript">async function runDoctor(): Promise&lt;void&gt; {
+  await new Promise&lt;void&gt;(resolve =&gt; {
+    render(&lt;Doctor onDone={() =&gt; resolve()} /&gt;)
+  })
+}
+</code></pre>
+<p>The Doctor component checks:</p>
+<ul>
+<li>Node.js version</li>
+<li>Required executables</li>
+<li>Environment setup</li>
+<li>Workspace permissions</li>
+</ul>
+</li>
+<li>
+<p><strong>Permission Checks</strong>:</p>
+<pre><code class="language-javascript">// Check trust dialog
+const hasTrustDialogAccepted = checkHasTrustDialogAccepted()
+if (!hasTrustDialogAccepted) {
+  await showTrustDialog()
+}
+
+// Grant filesystem permissions 
+await grantReadPermissionForOriginalDir()
+</code></pre>
+<p>Ensures user accepted trust dialog and granted needed permissions.</p>
+</li>
+<li>
+<p><strong>Auto-updater Check</strong>:</p>
+<pre><code class="language-javascript">const autoUpdaterStatus = globalConfig.autoUpdaterStatus ?? 'not_configured'
+if (autoUpdaterStatus === 'not_configured') {
+  // Initialize auto-updater
+}
+</code></pre>
+<p>Checks and initializes auto-update functionality.</p>
+</li>
+</ol>
+<h2 id="tool-loading"><a class="header" href="#tool-loading">Tool Loading</a></h2>
+<p>Tools load based on config and feature flags:</p>
+<pre><code class="language-javascript">async function getTools(enableArchitectTool: boolean = false): Promise&lt;Tool[]&gt; {
+  const tools: Tool[] = [
+    new FileReadTool(),
+    new GlobTool(),
+    new GrepTool(),
+    new lsTool(),
+    new BashTool(),
+    new FileEditTool(),
+    new FileWriteTool(),
+    new NotebookReadTool(),
+    new NotebookEditTool(),
+    new MemoryReadTool(),
+    new MemoryWriteTool(),
+    new AgentTool(),
+    new ThinkTool(),
+  ]
+  
+  // Add conditional tools
+  if (enableArchitectTool) {
+    tools.push(new ArchitectTool())
+  }
+  
+  return tools
+}
+</code></pre>
+<p>This makes various tools available:</p>
+<ul>
+<li>File tools (Read, Edit, Write)</li>
+<li>Search tools (Glob, Grep, ls)</li>
+<li>Agent tools (Agent, Architect)</li>
+<li>Execution tools (Bash)</li>
+<li>Notebook tools (Read, Edit)</li>
+<li>Memory tools (Read, Write)</li>
+<li>Thinking tool (Think)</li>
+</ul>
+<h2 id="repl-initialization"><a class="header" href="#repl-initialization">REPL Initialization</a></h2>
+<p>The final step initializes the REPL interface:</p>
+<h3 id="repl-initialization-components"><a class="header" href="#repl-initialization-components">REPL Initialization Components</a></h3>
+<p>The REPL initialization process involves several parallel steps:</p>
+<ol>
+<li>
+<p><strong>Load system prompt</strong></p>
+<ul>
+<li>Base prompt</li>
+<li>Environment info</li>
+</ul>
+</li>
+<li>
+<p><strong>Set up context</strong></p>
+<ul>
+<li>Working directory</li>
+<li>Git context</li>
+</ul>
+</li>
+<li>
+<p><strong>Configure model</strong></p>
+<ul>
+<li>Model parameters</li>
+<li>Token limits</li>
+</ul>
+</li>
+<li>
+<p><strong>Initialize message handlers</strong></p>
+<ul>
+<li>Message renderer</li>
+<li>Input handlers</li>
+</ul>
+</li>
+</ol>
+<p>The REPL component handles interactive sessions:</p>
+<pre><code class="language-javascript">// Inside REPL component
+useEffect(() =&gt; {
+  async function init() {
+    // Load prompt, context, model and token limits
+    const [systemPrompt, context, model, maxThinkingTokens] = await Promise.all([
+      getSystemPrompt(),
+      getContext(),
+      getSlowAndCapableModel(),
+      getMaxThinkingTokens(
+        getGlobalConfig().largeModelMaxTokens,
+        history.length &gt; 0
+      ),
+    ])
+    
+    // Set up message handlers
+    setMessageHandlers({
+      onNewMessage: handleNewMessage,
+      onUserMessage: handleUserMessage,
+      // ... other handlers
+    })
+    
+    // Initialize model params
+    setModelParams({
+      systemPrompt,
+      context,
+      model,
+      maxThinkingTokens,
+      // ... other parameters
+    })
+    
+    // Ready for input
+    setIsModelReady(true)
+  }
+  
+  init()
+}, [])
+</code></pre>
+<p>The REPL component manages:</p>
+<ol>
+<li>User interface rendering</li>
+<li>Message flow between user and AI</li>
+<li>User input and command processing</li>
+<li>Tool execution</li>
+<li>Conversation history</li>
+</ol>
+<h2 id="context-loading"><a class="header" href="#context-loading">Context Loading</a></h2>
+<p>The context gathering process builds AI information:</p>
+<pre><code class="language-javascript">async function getContext(): Promise&lt;Record&lt;string, unknown&gt;&gt; {
+  // Directory context
+  const directoryStructure = await getDirectoryStructure()
+  
+  // Git status
+  const gitContext = await getGitContext()
+  
+  // User context from project context file
+  const userContext = await loadUserContext()
+  
+  return {
+    directoryStructure,
+    gitStatus: gitContext,
+    userDefinedContext: userContext,
+    // Other context
+  }
+}
+</code></pre>
+<p>This includes:</p>
+<ul>
+<li>Directory structure</li>
+<li>Git repo status and history</li>
+<li>User-defined context from project context file</li>
+<li>Environment info</li>
+</ul>
+<h2 id="command-registration"><a class="header" href="#command-registration">Command Registration</a></h2>
+<p>Commands register during initialization:</p>
+<pre><code class="language-javascript">const commands: Record&lt;string, Command&gt; = {
+  help: helpCommand,
+  model: modelCommand,
+  config: configCommand,
+  cost: costCommand,
+  doctor: doctorCommand,
+  clear: clearCommand,
+  logout: logoutCommand,
+  login: loginCommand,
+  resume: resumeCommand,
+  compact: compactCommand,
+  bug: bugCommand,
+  init: initCommand,
+  release_notes: releaseNotesCommand,
+  // ... more commands
+}
+</code></pre>
+<p>Each command implements a standard interface:</p>
+<pre><code class="language-typescript">interface Command {
+  name: string
+  description: string
+  execute: (args: string[], messages: Message[]) =&gt; Promise&lt;CommandResult&gt;
+  // ... other properties
+}
+</code></pre>
+<h2 id="complete-initialization-flow"><a class="header" href="#complete-initialization-flow">Complete Initialization Flow</a></h2>
+<p>The full sequence:</p>
+<ol>
+<li>User runs CLI command</li>
+<li>CLI entry point loads</li>
+<li>Args parse</li>
+<li>Config validates and loads</li>
+<li>System checks run</li>
+<li>Environment sets up</li>
+<li>Tools load</li>
+<li>Commands register</li>
+<li>REPL initializes</li>
+<li>System prompt and context load</li>
+<li>Model configures</li>
+<li>Message handlers set up</li>
+<li>UI renders</li>
+<li>System ready for input</li>
+</ol>
+<h2 id="practical-implications"><a class="header" href="#practical-implications">Practical Implications</a></h2>
+<p>This initialization creates consistency while adapting to user config:</p>
+<ol>
+<li><strong>Modularity</strong>: Components load conditionally based on config</li>
+<li><strong>Configurability</strong>: Global and project-specific settings</li>
+<li><strong>Health Checks</strong>: System verification ensures proper setup</li>
+<li><strong>Context Building</strong>: Automatic context gathering provides relevant info</li>
+<li><strong>Tool Availability</strong>: Tools load based on config and feature flags</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="system-prompts-and-model-settings.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ink-yoga-reactive-ui.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="system-prompts-and-model-settings.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ink-yoga-reactive-ui.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

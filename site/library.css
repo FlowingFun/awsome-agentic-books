@@ -239,9 +239,9 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 }
 
 /* Official marks, used unaltered to identify article sources: Anthropic press kit and OpenAI brand kit. */
-.publisher-logo { justify-self: center; width: 1.5rem; height: auto; }
-/* The Blossom SVG includes clear space; keep it intact and size the canvas accordingly. */
-.publisher-logo--openai { width: 100%; }
+.publisher-logo { justify-self: center; width: 1.5rem; max-width: 100%; height: auto; }
+/* The Blossom SVG includes clear space; a 2.5rem canvas gives a roughly 1.25rem mark. */
+.publisher-logo--openai { width: 2.5rem; }
 .article-groups .entries > li + li { margin-top: 1.05rem; }
 
 @media (max-width: 45rem) {

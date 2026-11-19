@@ -1,0 +1,3380 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Case Study in Software Engineering — web edition.">
+      
+      
+      
+      
+        <link rel="prev" href="2.4-behavioral.html">
+      
+      
+        <link rel="next" href="2.6-system-knowledge.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>§2.5 · Decision Models: What Should Happen Next? - Model-Based Agentic Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/mage-family.css">
+    
+      <link rel="stylesheet" href="assets/mage-book.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="citation_title" content="Decision Models: What Should Happen Next?"><meta name="citation_author" content="James C. Davis"><meta name="citation_book_title" content="Model-Based Agentic Engineering"><meta name="citation_publication_date" content="2026"><meta name="citation_fulltext_html_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/2.5-decision.html"><meta name="citation_pdf_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/mage-book.pdf"><meta name="citation_reference" content="citation_title=Protection;citation_author=Butler W. Lampson;citation_publication_date=1974"><meta name="citation_reference" content="citation_title=Web Content Accessibility Guidelines (WCAG) 2.1;citation_author=World Wide Web Consortium;citation_publication_date=2018"><meta name="citation_reference" content="citation_title=Yves Klein. Blue Monochrome. 1961;citation_author=Museum of Modern Art">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#conditions-alternatives-and-decision-analysis" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-header__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a class="md-header__brandlink" href="index.html" title="Model-Based Agentic Engineering">Model-Based Agentic Engineering</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              §2.5 · Decision Models: What Should Happen Next?
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <nav class="md-header__family" aria-label="MAGE publishing family">
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/">MAGE homepage</a>
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/teach/">Teach with MAGE</a>
+        
+      </nav>
+    
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-nav__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Model-Based Agentic Engineering
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  
+    <a class="md-nav__pdf" href="mage-book.pdf" title="Read the PDF edition" aria-label="Read the PDF edition"><svg class="dl-ico" viewBox="0 0 16 16" width="1.05em" height="1.05em" style="vertical-align:-0.18em;margin-right:0.45em" aria-hidden="true" focusable="false"><path d="M9.4 1.3H4.3a1 1 0 0 0-1 1v11.4a1 1 0 0 0 1 1h7.4a1 1 0 0 0 1-1V4.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.3v3.3h3.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><text x="8" y="12.1" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="4.8" font-weight="700" letter-spacing="-0.1" fill="currentColor">PDF</text></svg>Read the PDF&nbsp;&#8595;
+    </a>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Orientation and Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.0-acknowledgments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acknowledgments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contents.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.3-authors-note.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Author’s Note
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.5-preface.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.1-how-to-read-this-book.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Read This Book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.2-what-this-book-argues.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What This Book Argues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.4-the-books-language.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-1-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.1-the-printer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.1 · The Printer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.2-the-engineering-object.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.2 · The Engineering Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.3-mage-by-example.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.3 · MAGE by Example: DocAble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.4-the-agentic-substrate.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.5-the-new-engineering-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.5 · Two Engineering Problems, One Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Modeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Modeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-2-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.1-context-is-the-first-modeling-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.1 · From Context to Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.2-constructing-and-using-engineering-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.2 · Constructing and Using Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.3-structural.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.3 · Structural Models: What Is Connected to What?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.4-behavioral.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.4 · Behavioral Models: What May Happen?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="2.5-decision.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#conditions-alternatives-and-decision-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.1 Conditions, Alternatives, and Decision Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5.1 Conditions, Alternatives, and Decision Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructing-a-decision-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructing a Decision Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-properties-and-analyses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties and Analyses
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docable-policies-and-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.2 DocAble: Policies and Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.6-system-knowledge.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.7-modeling-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.7 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 3 — Alignment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 3 — Alignment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-3-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.1-where-obligations-can-be-enforced.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.1 · Where Obligations Can Be Enforced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.2-models-and-the-semantic-gap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.2 · From Engineering Intent to Enforceable Obligation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.3-constraints-sensors-validators-gates.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.3 · Governance Mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.4-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.4 · Growing the Governed Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.5-when-guardrails-collide.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.5 · When Controls Become a System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.6-alignment-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.6 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-4-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.1-the-dynamics-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.1 · The Dynamics of MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.2-one-problem-many-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.3-brownfield-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.3 · Brownfield Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.4-engineering-the-environment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.4 · Engineering the Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.5-mage-in-motion-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-5-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.1-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.1 · The Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.2-inside-docables-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.2 · Inside DocAble's Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.3-evaluating-docable.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.3 · Evaluating the Product and Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.4-other-agentic-software-factories.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.4 · Other Agentic Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.5-engineering-the-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.5 · Coda: Engineering the Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 6 — The Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 6 — The Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-6-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.1-toward-a-theory-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.1 · From Production to Cumulative Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.2-what-the-theory-predicts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.2 · What the Theory Predicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.3-scope-conditions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.3 · Scope Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.4-research-agenda.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.4 · Research Agenda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.5-what-the-theory-claims.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 7 — The Profession
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 7 — The Profession
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-7-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Profession
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.1-reorganization-of-se.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.1 · The Reorganization of Software Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.2-software-rejoins-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.2 · Back to Models, but Not Back to Waterfall
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.3-agentic-engineering-beyond-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.3 · Agentic Engineering Beyond Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.4-the-engineer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.5-what-cannot-be-delegated.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Must Not Be Delegated?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="9.1-the-part-that-stays-yours.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-handbook.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-engineering-moves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.1 Engineering Moves: A Field Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-model-coherence.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.2 Model Coherence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.3 Governance Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governed-delegation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.4 Governed Delegation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix B — Practicing MAGE
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-practicing-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.1 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-brownfield-migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.2 Brownfield Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-operating-a-gee.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.3 Operating a GEE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-measuring-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.4 Measuring MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Back Matter
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Back Matter
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="colophon.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colophon — Dogfooding MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about-the-author.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About the Author
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Index
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="book-index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index (terms)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures Gallery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="list-of-figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List of Figures and Tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#conditions-alternatives-and-decision-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.1 Conditions, Alternatives, and Decision Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5.1 Conditions, Alternatives, and Decision Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructing-a-decision-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructing a Decision Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-properties-and-analyses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties and Analyses
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docable-policies-and-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5.2 DocAble: Policies and Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+<div class="wrap">
+<header class="chap"><div class="kicker"><a href="part-2-intro.html" aria-label="Beginning of Chapter 2 — Modeling">Chapter 2 — Modeling</a> &nbsp;::&nbsp; <a href="index.html" aria-label="Book contents — jump to the table of contents">§2.5</a></div><h1><span class="chap-num">§2.5</span> Decision Models: What Should Happen Next?</h1></header><p>A behavioral model can tell us that a failed job may be retried, escalated, or stopped. A decision model addresses the next question: given what we know about this failure, which alternative should we choose? A transient error may justify another attempt, while an exhausted retry budget may call for escalation. What makes this a decision model is that it represents the criteria for choosing among alternatives. The most useful form depends on the choice we face and the information available when we must make it.</p>
+
+</div>
+
+<h2 id="conditions-alternatives-and-decision-analysis"><span class="sec-num">2.5.1</span> Conditions, Alternatives, and Decision Analysis</h2>
+<div class="wrap">
+
+
+</div>
+
+<h3 id="constructing-a-decision-model">Constructing a Decision Model</h3>
+<div class="wrap">
+
+<p>Begin with one request. A service sells prepaid credits and also offers unlimited subscriptions. A customer requests work costing five credits. Should the service admit the request, and if so, should it charge five credits? To answer, we need to know which entitlement applies. For a prepaid customer we also need the balance. For an unlimited subscriber we need to know whether the work is covered.</p>
+<p>A decision table makes the cases easy to inspect when there are only a few. In <a class="xref" href="2.5-decision.html#tbl-2-5-1">Table&nbsp;2.5-1</a>, assume the request falls under exactly one entitlement. Read across the row whose conditions hold. A prepaid customer with five credits can proceed and spends the five; with four credits, the same request is rejected. For an unlimited subscription covering the work, the service admits the request without drawing on a balance.</p>
+<table id="tbl-2-5-1" class="book-table" data-label="simple-admission-policy"><caption data-short="Admission under one entitlement"><span class="tbl-label">Table 2.5-1.</span> <em>Admission under one entitlement.</em> Unlimited entitlement admits covered work without drawing down finite credit; a finite balance must cover the requested work.</caption><thead><tr><th>Entitlement</th><th>Requested work</th><th>Decision</th></tr></thead><tbody><tr><td>Unlimited</td><td>Any amount covered by the subscription</td><td>Admit without drawing down finite credit</td></tr><tr><td>Finite balance</td><td>Enough credit for the request</td><td>Admit and charge the required credit</td></tr><tr><td>Finite balance</td><td>Insufficient credit for the request</td><td>Reject for insufficient credit</td></tr></tbody></table>
+<p>The input to the decision must preserve every distinction that can change its outcome. Suppose a caller supplies only the number of prepaid credits. A customer who has spent the last credit and an unlimited subscriber who never bought credits can both have a balance of zero. The table gives them different answers. No revision to a rule that sees only the balance can recover the missing entitlement.</p>
+<p>A decision tree arranges the same choice as a sequence of tests: first determine the entitlement, then consult the balance only on the prepaid branch. Rules can express exceptions and their precedence; constraints can describe which combinations of features may be selected together. For permissions, an access-control matrix records which operations a subject may perform on an object <sup class="cite-ref"><a href="#wc-2-5-decision-1" aria-label="citation 1">1</a></sup>.<span class="cite-note"><span class="cn-mark">1.</span> Butler W. Lampson, <span>“<span>Protection</span>,”</span> <em><span>ACM SIGOPS Operating Systems Review</span></em> 8, no. 1 (1974): 18–24, <a href="https://doi.org/10.1145/775265.775268">https://doi.org/10.1145/775265.775268</a>.</span> When the alternatives differ in cost or performance, a quantitative model may help choose among them. Predicting a deployment’s latency supplies one input; selecting the least expensive deployment that meets a latency target uses that input to make a decision.</p>
+<p>A permission graph is useful when the decision concerns a relationship. In <a class="xref" href="2.5-decision.html#fig-2-5-1">Figure&nbsp;2.5-1</a>, a web interface may call a report service, and the report service may call a renderer. To decide whether Web may call Renderer directly, look for that particular edge in the declared policy. The two-hop route through the report service grants no such permission. The observed graph records a direct Web-to-Renderer call. Comparing the two identifies a violation. If the observation had missed the call, its absence from the trace would tell us only what was recorded.</p>
+<figure id="fig-2-5-1" class="book-figure" data-label="observed-vs-declared" style="--fig-natural:362px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 362 158" role="img"><title>Illustrative observed calls compared with declared permissions</title><defs><marker id="f-observed-vs-declared-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8 Z" fill="#222"/></marker></defs><style>text {font-family:"Source Sans 3","Source Sans Pro",sans-serif;fill:#111} .edge {fill:none;stroke:#222;stroke-width:1.2;marker-end:url(#f-observed-vs-declared-arrow)}</style><rect x="0" y="0" width="362" height="158" fill="white"/><text x="90.5" y="18" text-anchor="middle" style="font-size:18px;font-weight:bold;">Observed calls</text><text x="271.5" y="18" text-anchor="middle" style="font-size:18px;font-weight:bold;">Declared permissions</text><path d="M181,29 V150" fill="none" stroke="#aaa" stroke-width="1.2"/><rect x="6" y="35" width="60" height="42" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="36.0" y="62.0" text-anchor="middle" style="font-size:18px;">web</text><rect x="90" y="35" width="80" height="42" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="130.0" y="52.5" text-anchor="middle" style="font-size:18px;">report</text><text x="130.0" y="71.5" text-anchor="middle" style="font-size:18px;">service</text><rect x="90" y="105" width="80" height="36" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="130.0" y="129.0" text-anchor="middle" style="font-size:18px;">renderer</text><path d="M66,56 H90" class="edge"/><rect x="187" y="35" width="60" height="42" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="217.0" y="62.0" text-anchor="middle" style="font-size:18px;">web</text><rect x="271" y="35" width="80" height="42" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="311.0" y="52.5" text-anchor="middle" style="font-size:18px;">report</text><text x="311.0" y="71.5" text-anchor="middle" style="font-size:18px;">service</text><rect x="271" y="105" width="80" height="36" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="311.0" y="129.0" text-anchor="middle" style="font-size:18px;">renderer</text><path d="M247,56 H271" class="edge"/><path d="M311,77 V105" class="edge"/><path d="M36,77 V123 H90" class="edge"/><path d="M53,110 L61,118 M53,118 L61,110" fill="none" stroke="#222" stroke-width="1.2"/></svg><figcaption data-short="Observation compared with declared permission"><span class="fig-label">Figure 2.5-1.</span> <em>Observation compared with declared permission.</em> The observed web-to-renderer call violates the declared policy.</figcaption></figure>
+<p>Some decisions cannot be made from the object alone. Accessibility standards distinguish informative images, which need a text alternative, from decorative images, which assistive technology can ignore <sup class="cite-ref"><a href="#wc-2-5-decision-2" aria-label="citation 2">2</a></sup>.<span class="cite-note"><span class="cn-mark">2.</span> World Wide Web Consortium, <em><span>Web Content Accessibility Guidelines (<span>WCAG</span>) 2.1</span></em>, 2018, <a href="https://www.w3.org/TR/2018/REC-WCAG21-20180605/">https://www.w3.org/TR/2018/REC-WCAG21-20180605/</a>.</span> A blue square might decorate a restaurant menu but be the subject of a lecture on modern art.<sup class="note-ref"><a href="#note-2-5-decision-fn-blue-monochrome-context" role="doc-noteref" aria-label="note 1">*</a></sup><span class="editorial-note" id="note-2-5-decision-fn-blue-monochrome-context"><span class="cn-mark">*</span> For a real example, consider Yves Klein’s <em>Blue Monochrome</em> (1961), in the Museum of Modern Art’s collection <sup class="cite-ref"><a href="#wc-2-5-decision-3" aria-label="citation 3">3</a></sup>.<span class="cite-note"><span class="cn-mark">3.</span> Museum of Modern Art, <em><span>Yves Klein. Blue Monochrome. 1961</span></em>, n.d., <a href="https://www.moma.org/collection/works/80103">https://www.moma.org/collection/works/80103</a>.</span></span> What matters is the image’s contribution to the document, not merely what it depicts. A classifier can supply evidence about that role. The decision rule must say when the evidence warrants omitting a description and what to do when the role is uncertain.</p>
+
+</div>
+
+<h3 id="decision-properties-and-analyses">Properties and Analyses</h3>
+<div class="wrap">
+
+<p>A decision table is <strong>complete</strong> if it prescribes an outcome for every case in its declared scope. To check <a class="xref" href="2.5-decision.html#tbl-2-5-1">Table&nbsp;2.5-1</a>, examine the balance below, exactly at, and above the requested amount. If the finite rows used only strict inequalities, a customer with exactly five credits requesting five credits would match neither row. <strong>Consistency</strong> asks whether applicable rules can prescribe incompatible outcomes. If both rows included equality, that customer would match both the admitting and rejecting rows unless a precedence rule settled the conflict. A request covered by several entitlements presents a different issue: the table assumes one. Extending the policy to such requests requires deciding how the entitlements combine.</p>
+<p>For a quantitative decision, first check <strong>admissibility</strong>: does an alternative satisfy every applicable constraint? Suppose a deployment must fit in 8 GB of memory and respond within 200 ms. A candidate requiring 9 GB is out, however fast or inexpensive it may be. Of the candidates that meet both limits, which costs least? That is an <strong>optimality</strong> question. A constraint solver can search for a feasible assignment; ranking feasible candidates by cost also requires an objective and comparable cost estimates. The least expensive candidate among those examined is an optimum over that set. A claim about all possible deployments needs a correspondingly wider analysis.</p>
+<p>Checking <strong>conformance</strong> asks whether a particular decision or observed action agrees with the declared policy. For the service graph, compare the observed edges with the permitted set. For the entitlement table, use the inputs to select a row and compare its verdict with the service’s actual response. Neither comparison settles whether the policy expresses the right judgment. A consistent policy could permit the very call the architect meant to exclude, just as an optimizer could minimize cost while omitting a requirement users care about. Engineers must examine the choice of inputs and criteria as well as the decisions made from them.</p>
+
+</div>
+
+<h2 id="docable-policies-and-decisions"><span class="sec-num">2.5.2</span> DocAble: Policies and Decisions</h2>
+<div class="wrap">
+
+<p>DocAble uses decision models for several purposes: deciding whether an image needs a description, declaring which services may communicate, and determining whether a user may upload a document. The representations differ because the decisions depend on different information. Each must preserve the distinctions that can change its answer.</p>
+<p><strong>When is an image decorative?</strong></p>
+<p>Accessibility remediation must distinguish images that convey information from those that are merely decorative. As <a href="2.5-decision.html#conditions-alternatives-and-decision-analysis">the worked example</a> illustrated, the same image can serve either purpose depending on its context. DocAble supplies a rendered slide to a vision-language model (VLM), which classifies each image or shape as clearly decorative, uncertain, or informational. The classification supplies evidence; the decision policy determines what to do with it. Only a clearly decorative verdict permits suppressing a description. An uncertain or missing verdict preserves the image’s informational role. This asymmetry is deliberate: an unnecessary description is audible, while wrongly hiding information can leave a screen-reader user unaware that anything was omitted.</p>
+<p>The need for an explicit uncertainty policy emerged from evaluation. Earlier classifiers had marked content-bearing images as decorative, particularly in visualization-heavy documents. We tightened the policy by representing uncertainty explicitly and making its conservative interpretation common to the classification paths. The decision model now states how uncertain evidence affects remediation without prescribing which VLM must supply that evidence. A different VLM can make the semantic judgment; it does not redefine the policy for acting on it.</p>
+<p>The remaining two DocAble examples concern permission. The system accepts documents for accessibility remediation, sends work among internal services, and returns corrected artifacts. Two decisions arise at different boundaries: which service may call another, and whether a user's entitlement permits a requested upload. Both can be modeled as permission, but they need different representations.</p>
+<p><strong>Which services may communicate?</strong></p>
+<p>DocAble distributes document remediation across several services. The public web tier receives requests, while internal services perform document editing, generation, rendering, OCR, and other work. Rather than specifying the permitted connections independently in deployment configuration, DocAble records them in a service-flow model. Each directed edge declares that one service may invoke another; an absent edge excludes that relationship from the declared policy.</p>
+<p><strong>Service-flow model · Decision</strong></p>
+<ul><li><strong>Engineering question</strong> — Which service may call which, and what may be reached from outside?</li></ul>
+<ul><li><strong>Model</strong> — a declared graph of services and the permitted edges between them; the deployment is wired from the graph rather than the graph inferred from the deployment.</li></ul>
+<ul><li><strong>Property</strong> — internal communication is permitted only along a declared edge; one declared node is the public entry.</li></ul>
+<ul><li><strong>Quality attribute</strong> — least privilege; architectural integrity; security.</li></ul>
+<p><a class="xref" href="2.5-decision.html#fig-2-5-2">Figure&nbsp;2.5-2</a> shows a reduced view of the service-invocation policy. The web tier is the only publicly reachable service. Its declared outgoing edges permit calls to selected internal services. Separately, the worker may invoke generation, rendering, and OCR services. The arrows express permissions, not observed traffic or a requirement that every permitted call occur. Asynchronous job dispatch is omitted from this selected view; absence here does not imply prohibition by the full policy.</p>
+<p>The declared graph answers whether a proposed service invocation is permitted: look for the corresponding directed edge. It also supports reachability questions, such as which services the public web tier can reach through permitted calls. DocAble treats this graph as the source of truth for service-flow relationships and generates deployment configuration from its declared edges. A completeness check requires each gated edge to contain the information needed for deployment. These checks establish properties of the declaration and its generated configuration, not whether runtime traffic follows the intended policy.</p>
+<figure id="fig-2-5-2" class="book-figure" data-label="service-flow-model" style="--fig-natural:782px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 782 345" role="img"><title>Selected declared service invocations in DocAble</title><defs><marker id="f-service-flow-model-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L8 4 L0 8 Z" fill="#222"/></marker></defs><style>text {font-family:"Source Sans 3","Source Sans Pro",sans-serif;fill:#111} .edge {fill:none;stroke:#222;stroke-width:1.2;marker-end:url(#f-service-flow-model-arrow)}</style><rect x="0" y="0" width="782" height="345" fill="white"/><rect x="120" y="15" width="140" height="55" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="190.0" y="49.5" text-anchor="middle" style="font-size:20px;">Internet</text><rect x="120" y="120" width="140" height="55" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="190.0" y="154.5" text-anchor="middle" style="font-size:20px;">web</text><path d="M190,70 V120" class="edge"/><rect x="515" y="120" width="150" height="55" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="590.0" y="154.5" text-anchor="middle" style="font-size:20px;">worker</text><rect x="15" y="260" width="160" height="64" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="95.0" y="287.5" text-anchor="middle" style="font-size:20px;">document</text><text x="95.0" y="310.5" text-anchor="middle" style="font-size:20px;">editor</text><rect x="215" y="260" width="140" height="64" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="285.0" y="299.0" text-anchor="middle" style="font-size:20px;">others</text><path d="M190,175 V225 M95,225 H285" fill="none" stroke="#222" stroke-width="1.2"/><path d="M95,225 V260" class="edge"/><path d="M285,225 V260" class="edge"/><rect x="405" y="260" width="145" height="64" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="477.5" y="299.0" text-anchor="middle" style="font-size:20px;">generation</text><rect x="575" y="260" width="100" height="64" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="625.0" y="299.0" text-anchor="middle" style="font-size:20px;">render</text><rect x="700" y="260" width="70" height="64" rx="4" fill="#e5edf5" stroke="#333" stroke-width="1.2"/><text x="735.0" y="299.0" text-anchor="middle" style="font-size:20px;">OCR</text><path d="M590,175 V225 M477.5,225 H735" fill="none" stroke="#222" stroke-width="1.2"/><path d="M477.5,225 V260" class="edge"/><path d="M625,225 V260" class="edge"/><path d="M735,225 V260" class="edge"/></svg><figcaption data-short="DocAble’s service-flow model"><span class="fig-label">Figure 2.5-2.</span> <em>DocAble’s service-flow model.</em> Arrows show selected permitted service invocations; asynchronous job dispatch is omitted. The web tier is the sole public entry point. Deployment configuration is generated from the full model, while runtime conformance requires separate enforcement.</figcaption></figure>
+<p>The declared graph can also serve as the policy against which observed service calls are checked. DocAble does not currently reconcile runtime traffic against that declaration. Whether to add such a check, and what consequences a violation should have, are Alignment decisions taken up in Chapter 3.</p>
+<p><strong>Which entitlement authorizes an upload?</strong></p>
+<p>The service-flow model determines which calls are permitted. Upload admission presents a different decision: whether a user’s entitlements authorize a particular document. This became a modeling problem when DocAble added unlimited-use groups to a system originally designed around finite credits.</p>
+<p><a class="xref" href="2.5-decision.html#tbl-2-5-1">Table&nbsp;2.5-1</a> assumed that exactly one entitlement applied to a request. DocAble’s domain is more complex: a user may belong to several groups, each with its own entitlement. The upload decision must account for the available finite credits and whether any applicable group grants unlimited use (<a class="xref" href="2.5-decision.html#fig-2-5-3">Figure&nbsp;2.5-3</a>). The production failure arose when these facts traveled separately through the system.</p>
+<figure id="fig-2-5-3" class="book-figure" data-label="entitlement-domain" style="--fig-natural:270px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 298" role="img" aria-labelledby="f-entitlement-domain-entDomT f-entitlement-domain-entDomD" font-family="&quot;Source Sans 3&quot;, sans-serif"><ns0:title xmlns:ns0="http://www.w3.org/2000/svg" id="f-entitlement-domain-entDomT">The upload-entitlement domain: users, groups, finite and unlimited entitlement, and the admission decision</ns0:title>
+  <ns0:desc xmlns:ns0="http://www.w3.org/2000/svg" id="f-entitlement-domain-entDomD">A user belongs to one or more groups. A group is either a finite-credit group, carrying remaining credits, or an unlimited group, carrying no credit limit. Both kinds feed the upload decision, which must preserve both facts and ends in admit or reject.</ns0:desc>
+  <defs><marker id="f-entitlement-domain-a2f5169" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#2f5169"/></marker><marker id="f-entitlement-domain-a57534e" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#57534e"/></marker><marker id="f-entitlement-domain-a086438" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#086438"/></marker><marker id="f-entitlement-domain-a1c1917" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#1c1917"/></marker></defs>
+<text x="135" y="12.0" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">Upload entitlement —</text>
+<text x="135" y="22.799999999999997" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">the domain the decision must preserve</text>
+<rect x="107" y="37" width="56" height="23" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<text x="135" y="53.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">User</text>
+<path d="M135,60 L135,88" fill="none" stroke="#57534e" stroke-width=".8" marker-end="url(#f-entitlement-domain-a57534e)"/>
+<text x="141" y="74.0" text-anchor="start" font-size="9" fill="#1c1917" font-style="italic">belongs to</text>
+<text x="141" y="84.8" text-anchor="start" font-size="9" fill="#1c1917" font-style="italic">one or more</text>
+<rect x="103" y="89" width="64" height="23" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<text x="135" y="105.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Groups</text>
+<path d="M135,112 L135,124 L69,124 L69,138" fill="none" stroke="#57534e" stroke-width=".8" marker-end="url(#f-entitlement-domain-a57534e)"/>
+<path d="M135,112 L135,124 L202,124 L202,138" fill="none" stroke="#57534e" stroke-width=".8" marker-end="url(#f-entitlement-domain-a57534e)"/>
+<rect x="6" y="139" width="126" height="36" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="69" y="154.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Finite-credit group</text>
+<text x="69" y="167.0" text-anchor="middle" font-size="9" fill="#1c1917" font-style="italic">a remaining credit balance</text>
+<rect x="139" y="139" width="126" height="36" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="202" y="154.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Unlimited group</text>
+<text x="202" y="167.0" text-anchor="middle" font-size="9" fill="#1c1917" font-style="italic">no credit limit</text>
+<text x="69" y="190.0" text-anchor="middle" font-size="9" fill="#086438" font-style="italic">how many credits</text>
+<text x="69" y="200.8" text-anchor="middle" font-size="9" fill="#086438" font-style="italic">remain?</text>
+<text x="202" y="190.0" text-anchor="middle" font-size="9" fill="#086438" font-style="italic">is any entitlement</text>
+<text x="202" y="200.8" text-anchor="middle" font-size="9" fill="#086438" font-style="italic">unlimited?</text>
+<path d="M20,175 L20,211 L112,211 L112,224" fill="none" stroke="#086438" stroke-width=".8" marker-end="url(#f-entitlement-domain-a086438)"/>
+<path d="M250,175 L250,211 L158,211 L158,224" fill="none" stroke="#086438" stroke-width=".8" marker-end="url(#f-entitlement-domain-a086438)"/>
+<rect x="81" y="225" width="108" height="24" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="135" y="241.0" text-anchor="middle" font-size="10" fill="#086438" font-weight="700">Upload decision</text>
+<path d="M135,249 L135,261 L79,261 L79,273" fill="none" stroke="#57534e" stroke-width=".8" marker-end="url(#f-entitlement-domain-a57534e)"/>
+<rect x="51" y="273" width="56" height="21" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<text x="79" y="287.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">ADMIT</text>
+<path d="M135,249 L135,261 L191,261 L191,273" fill="none" stroke="#57534e" stroke-width=".8" marker-end="url(#f-entitlement-domain-a57534e)"/>
+<rect x="163" y="273" width="56" height="21" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<text x="191" y="287.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">REJECT</text>
+</svg><figcaption data-short="The upload-entitlement domain"><span class="fig-label">Figure 2.5-3.</span> <em>The upload-entitlement domain.</em> A finite balance alone cannot determine admission: the model must also preserve whether any applicable group grants unlimited use.</figcaption></figure>
+<p>The original client upload rule was easy to understand from the code: if the user’s credits covered the upload cost, allow the upload; otherwise, reject it. Box (1) in <a class="xref" href="2.5-decision.html#fig-2-5-4">Figure&nbsp;2.5-4</a> shows this balance-based check. A separate decision model would have added little to understanding that simple rule.</p>
+<p>Unlimited groups changed what the upload decision had to account for. As box (2) shows, a group could authorize an upload without contributing finite credits to the balance. The server’s balance calculation, the client’s check before sending an upload, and the server admission gate represented entitlement in different ways. Understanding and updating the intended policy now required checking how each part of the implementation handled both finite and unlimited entitlement.</p>
+<p>Box (3) traces the production failure. In August 2026, a user whose personal group provided unlimited use was blocked from uploading a thirty-eight-page presentation: <em>the upload needs 38 credits, and you have 0</em>. The legacy server function read each group’s unlimited flag twice: once to exclude unlimited groups from the credit sum, and once to compute a display class. For this user it returned zero credits and the class <em>individual</em>. The login response omitted the detailed group records but carried a separate unlimited-status flag. The client upload check ignored that flag, compared the zero balance with the required 38 credits, and rejected the upload before sending the file. The server’s admission logic, which handled this entitlement correctly, was never reached. The failure came from using the finite-credit total as an admission decision even though other system representations retained the unlimited entitlement.</p>
+<p>The immediate fix made the client consult the unlimited-status flag it had been ignoring. That repaired the observed failure, but left the admission policy represented separately across the client and server. We therefore introduced the entitlement decision model shown in box (4): given the user’s group entitlements and the requested work, should the upload be admitted, and under which entitlement? Property tests checked the model, a cross-runtime parity corpus checked shared policy cases in the server and client, and another check validated the model’s shape. The display code derived its values from the model, while server admission delegated the policy decision to it.</p>
+<p><strong>Entitlement decision model · Decision</strong></p>
+<ul><li><strong>Engineering question</strong> — May this user upload this document, and under which entitlement?</li></ul>
+<ul><li><strong>Model</strong> — per-group entitlements that keep finite and unlimited as distinct cases; the output is a structured admission decision: admitted or not, the group that authorizes it, and the ordered plan by which the verdict was reached.</li></ul>
+<ul><li><strong>Property</strong> — an uncapped unlimited group can authorize an upload with zero finite credits; the display projection does not decide admission.</li></ul>
+<ul><li><strong>Quality attribute</strong> — decision correctness; fidelity between the domain and its representations.</li></ul>
+<p>The repaired model preserves the distinction that the earlier admission check lost. For the same uncapped unlimited group and 38-page request, it admits the upload and records the authorizing group and an <em>admit_unlimited</em> plan step, even though the finite credit balance remains zero. The display projection answers a different question: it returns a special numeric value for unlimited use, or a finite credit sum when all groups are finite. That display value cannot determine admission. The model can therefore be tested against cases involving finite credits, unlimited entitlement, and their combinations without treating a display value as the decision itself.</p>
+<figure id="fig-2-5-4" class="book-figure" data-label="entitlement-model-evolution" style="--fig-natural:1064px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1064 1043" role="img" aria-labelledby="f-entitlement-model-evolution-entT f-entitlement-model-evolution-entD" font-family="&apos;Source Sans 3&apos;, Arial, sans-serif">
+<title id="f-entitlement-model-evolution-entT">From a credit balance to an explicit upload-admission decision</title>
+<desc id="f-entitlement-model-evolution-entD">Four numbered panels explain a legacy balance check, the addition of unlimited entitlement, the actual client upload-check failure, and the later model. There are no arrows between panels. In panel 3, the server excludes the unlimited group from a finite-credit sum; the client compares zero with thirty-eight while ignoring a separate unlimited signal, then rejects before POST. In panel 4, the same uncapped group feeds an admission decision that admits and a separate display projection that returns an unlimited sentinel. The display value is not an admission input.</desc>
+<defs><marker id="f-entitlement-model-evolution-ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10z" fill="#1c1917"/></marker></defs>
+<rect width="100%" height="100%" fill="#fdfcf9"/>
+<rect x="14" y="14" width="504" height="322" rx="12" fill="none" stroke="#d0ccc5" stroke-width="2"/>
+<rect x="546" y="14" width="504" height="322" rx="12" fill="none" stroke="#d0ccc5" stroke-width="2"/>
+<rect x="14" y="364" width="504" height="665" rx="12" fill="none" stroke="#9a3f12" stroke-width="2" stroke-dasharray="7 5"/>
+<rect x="546" y="364" width="504" height="665" rx="12" fill="none" stroke="#155c38" stroke-width="2"/>
+<text x="266" y="45.5" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="#1c1917">(1) Legacy balance-based check</text>
+<text x="266" y="77" text-anchor="middle" dominant-baseline="central" font-size="23" font-style="italic" fill="#1c1917">Only finite credit is represented</text>
+<text x="798" y="45.5" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="#1c1917">(2) Unlimited groups are added</text>
+<text x="798" y="77" text-anchor="middle" dominant-baseline="central" font-size="23" font-style="italic" fill="#1c1917">Entitlement now has two cases</text>
+<text x="798" y="255.7" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">A finite balance does not</text>
+<text x="798" y="283.3" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">identify unlimited use.</text>
+<text x="266" y="395.5" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="#1c1917">(3) Client rejects the upload</text>
+<text x="266" y="430.5" text-anchor="middle" dominant-baseline="central" font-size="23" font-style="italic" fill="#1c1917">38-page Office upload</text>
+<text x="266" y="980" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">Server admission code is never reached.</text>
+<text x="798" y="395.5" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="#1c1917">(4) Separate admission and display</text>
+<text x="798" y="430.5" text-anchor="middle" dominant-baseline="central" font-size="23" font-style="italic" fill="#1c1917">Same group and request; no cap</text>
+<text x="798" y="910.2" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">Admission uses the decision.</text>
+<text x="798" y="937.8" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">The display value does not decide permission.</text>
+<rect x="63" y="91" width="406" height="49" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="266" y="115.5" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Finite group balances</text>
+<rect x="154" y="175" width="224" height="42" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="266" y="196" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Sum of balances</text>
+<rect x="63" y="248.5" width="406" height="63" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="266" y="265.6" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Client compares</text>
+<text x="266" y="294.4" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">balance with request cost</text>
+<rect x="658" y="91" width="280" height="49" rx="10" fill="#fdfcf9" stroke="#1c1917" stroke-width="2"/>
+<text x="798" y="115.5" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Group entitlement</text>
+<rect x="577.5" y="168" width="196" height="56" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="675.5" y="196" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Finite balance</text>
+<rect x="822.5" y="168" width="196" height="56" rx="10" fill="#e3f0e7" stroke="#1f7a4d" stroke-width="2"/>
+<text x="920.5" y="196" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Unlimited mode</text>
+<rect x="63" y="455" width="406" height="77" rx="10" fill="#fdfcf9" stroke="#1c1917" stroke-width="2"/>
+<text x="266" y="479.1" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">One unlimited personal group</text>
+<text x="266" y="507.9" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">finite balance = 0</text>
+<rect x="63" y="563.5" width="406" height="84" rx="10" fill="#f6e8e0" stroke="#9a3f12" stroke-width="2"/>
+<text x="266" y="591.1" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Server sums finite balances</text>
+<text x="266" y="619.9" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">and excludes unlimited groups</text>
+<rect x="133" y="679" width="266" height="49" rx="10" fill="#f6e8e0" stroke="#9a3f12" stroke-width="2"/>
+<text x="266" y="703.5" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">credit_balance = 0</text>
+<rect x="63" y="763" width="406" height="84" rx="10" fill="#f6e8e0" stroke="#9a3f12" stroke-width="2"/>
+<text x="266" y="790.6" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Client upload check: 0 &lt; 38</text>
+<text x="266" y="819.4" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">ignores separate unlimited signal</text>
+<rect x="101.5" y="882" width="329" height="49" rx="10" fill="#9a3f12" stroke="#9a3f12" stroke-width="2"/>
+<text x="266" y="906.5" text-anchor="middle" dominant-baseline="central" font-size="24" font-weight="700" fill="#fdfcf9">REJECT before POST</text>
+<rect x="595" y="455" width="406" height="77" rx="10" fill="#e3f0e7" stroke="#1f7a4d" stroke-width="2"/>
+<text x="798" y="479.1" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Per-group entitlement</text>
+<text x="798" y="507.9" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">unlimited mode; finite balance = 0</text>
+<rect x="567" y="588" width="217" height="77" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="675.5" y="612.1" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Admission rules</text>
+<text x="675.5" y="640.9" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">+ upload request</text>
+<rect x="812" y="588" width="217" height="77" rx="10" fill="#e8eef3" stroke="#2f5169" stroke-width="2"/>
+<text x="920.5" y="612.1" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">Display</text>
+<text x="920.5" y="640.9" text-anchor="middle" dominant-baseline="central" font-size="24" fill="#1c1917">projection</text>
+<rect x="567" y="705.25" width="217" height="115.5" rx="10" fill="#fdfcf9" stroke="#1c1917" stroke-width="2"/>
+<text x="675.5" y="735.4" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917" font-weight="700">admit = True</text>
+<text x="675.5" y="763" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">selected group</text>
+<text x="675.5" y="790.6" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">admit_unlimited</text>
+<rect x="812" y="705.25" width="217" height="115.5" rx="10" fill="#fdfcf9" stroke="#1c1917" stroke-width="2"/>
+<text x="920.5" y="749.2" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">Unlimited sentinel</text>
+<text x="920.5" y="776.8" text-anchor="middle" dominant-baseline="central" font-size="23" fill="#1c1917">(display-only)</text>
+<path d="M266,140 L266,175" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M266,217 L266,248.5" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M266,532 L266,563.5" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M266,647.5 L266,679" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M266,728 L266,763" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M266,847 L266,882" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M675.5,665 L675.5,705.25" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M920.5,665 L920.5,705.25" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M798,140 V154 H675.5 V168" fill="none" stroke="#1c1917" stroke-width="2"/>
+<path d="M798,140 V154 H920.5 V168" fill="none" stroke="#1c1917" stroke-width="2"/>
+<path d="M798,532 V560 H675.5 V588" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+<path d="M798,532 V560 H920.5 V588" fill="none" stroke="#1c1917" stroke-width="2" marker-end="url(#f-entitlement-model-evolution-ah)"/>
+</svg><figcaption data-short="The admission check must preserve unlimited entitlement"><span class="fig-label">Figure 2.5-4.</span> <em>The admission check must preserve unlimited entitlement.</em> Panels (1)–(4) explain the old representation, domain change, failure, and repair; they are not one runtime pipeline. In (3), the client uses the finite-credit total and ignores a separate unlimited signal. In (4), the same uncapped entitlement produces an admitting decision and a separate display value for unlimited use.</figcaption></figure>
+<p>A note in the first person: I changed the domain in one place — groups could now be unlimited — and did not carry the change into every representation of the same decision. An explicit model would not have made the change automatically correct; it would have made the inconsistency visible as an engineering obligation. When the domain contains a consequential distinction, every representation used to reason about that decision must be capable of expressing it. Chapter 3 gives the recurring pattern here — a failure converted into explicit structure that later work inherits — a name.</p>
+<p>The three decision models preserve different kinds of information: evidence about an image’s role, permitted relationships between services, and the entitlements that authorize an upload. Each makes a decision inspectable by separating the information used to make it from the criteria governing the outcome. That separation also makes it possible to revise a classifier, service topology, or entitlement scheme without silently redefining the decision policy.</p>
+<p>Decision models make the criteria for a choice explicit, whether the choice concerns permission or what to do next. The final section steps back from one representation to ask how a family of models can answer questions together.</p><section class="works-cited" aria-labelledby="wc-2-5-decision-h"><h2 id="wc-2-5-decision-h" class="wc-h">Works Cited</h2><ol class="wc-list"><li id="wc-2-5-decision-1">Lampson, Butler W. <span>“<span>Protection</span>.”</span> <em><span>ACM SIGOPS Operating Systems Review</span></em> 8, no. 1 (1974): 18–24. <a href="https://doi.org/10.1145/775265.775268">https://doi.org/10.1145/775265.775268</a>.</li><li id="wc-2-5-decision-2">World Wide Web Consortium. <em><span>Web Content Accessibility Guidelines (<span>WCAG</span>) 2.1</span></em>. 2018. <a href="https://www.w3.org/TR/2018/REC-WCAG21-20180605/">https://www.w3.org/TR/2018/REC-WCAG21-20180605/</a>.</li><li id="wc-2-5-decision-3">Museum of Modern Art. <em><span>Yves Klein. Blue Monochrome. 1961</span></em>. n.d. <a href="https://www.moma.org/collection/works/80103">https://www.moma.org/collection/works/80103</a>.</li></ol></section><nav class="chapnav" aria-label="Book navigation"><div class="chapnav-back"><a href="index.html" aria-label="Table of contents">« Table of contents</a><a href="part-2-intro.html" aria-label="Beginning of Chapter 2 — Modeling">« Beginning of chapter</a><a href="2.4-behavioral.html" aria-label="Previous section — §2.4 · Behavioral Models: What May Happen?">« Previous section</a></div><span class="chapnav-here" title="§2.5 · Decision Models: What Should Happen Next?">§2.5 · Decision Models: What Should Happen Next?</span><div class="chapnav-fwd"><a href="2.6-system-knowledge.html" aria-label="Next section — §2.6 · System Knowledge: Connecting the Models">Next section »</a><a href="part-3-intro.html" aria-label="Next chapter — Chapter 3 — Alignment">Next chapter »</a><a href="book-index.html" aria-label="Index of terms">Index »</a></div></nav><div class="book-foot">© James C. Davis, 2026–present</div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

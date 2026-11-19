@@ -1,0 +1,3512 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Case Study in Software Engineering — web edition.">
+      
+      
+      
+      
+        <link rel="prev" href="7.3-agentic-engineering-beyond-software.html">
+      
+      
+        <link rel="next" href="7.5-what-cannot-be-delegated.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>§7.4 · The Engineer - Model-Based Agentic Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/mage-family.css">
+    
+      <link rel="stylesheet" href="assets/mage-book.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="citation_title" content="The Engineer"><meta name="citation_author" content="James C. Davis"><meta name="citation_book_title" content="Model-Based Agentic Engineering"><meta name="citation_publication_date" content="2026"><meta name="citation_fulltext_html_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/7.4-the-engineer.html"><meta name="citation_pdf_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/mage-book.pdf"><meta name="citation_reference" content="citation_title=The Social Function of Engineering: A Current Assessment;citation_author=George Bugliarello;citation_publication_date=1991"><meta name="citation_reference" content="citation_title=Building Resilience into the Nation&#x27;s Medical Product Supply Chains;citation_author=Engineering, National Academies of Sciences;citation_author=Medicine;citation_publication_date=2022"><meta name="citation_reference" content="citation_title=Personnel Qualifications;citation_author=U.S. Food;citation_author=Drug Administration"><meta name="citation_reference" content="citation_title=;citation_author=Drug, Federal Food;citation_author=21 U.S.C. § 356c(j) Cosmetic Act § 506C(j)"><meta name="citation_reference" content="citation_title=Emergency Preparedness and Medical Devices: Supply Chain Recommendations for Health Care Providers and Medical Device Manufacturers;citation_author=U.S. Food;citation_author=Drug Administration"><meta name="citation_reference" content="citation_title=Report of the Presidential Commission on the Space Shuttle Challenger Accident, Volume 1;citation_author=Presidential Commission on the Space Shuttle Challenger Accident;citation_publication_date=1986"><meta name="citation_reference" content="citation_title=Columbia Accident Investigation Board Report, Volume 1;citation_author=Columbia Accident Investigation Board;citation_publication_date=2003"><meta name="citation_reference" content="citation_title=Volkswagen Engineer Pleads Guilty (2016) and Is Sentenced to 40 Months in Prison (2017) for His Role in the Conspiracy to Cheat U.S. Emissions Tests;citation_author=Office of Public Affairs U.S. Department of Justice;citation_publication_date=2017"><meta name="citation_reference" content="citation_title=Protecting Kids Online: Facebook, Instagram, and Mental Health Harm;citation_author=Science, U.S. Senate Committee on Commerce;citation_author=Transportation;citation_publication_date=2021"><meta name="citation_reference" content="citation_title=Social Media and the Teen Mental Health Crisis;citation_author=U.S. Senate Committee on the Judiciary;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=The Impact of AI Coding Assistants on Software Engineering: A Longitudinal Study;citation_author=Annie Vella;citation_author=Kelly Blincoe;citation_publication_date=2026"><meta name="citation_reference" content="citation_title=No Silver Bullet: Essence and Accidents of Software Engineering;citation_author=Frederick P. Brooks;citation_publication_date=1987"><meta name="citation_reference" content="citation_title=2024 Stack Overflow Developer Survey;citation_author=Stack Overflow;citation_publication_date=2024"><meta name="citation_reference" content="citation_title=The Software Engineering Handbook: A Judgment and Decision-Making Approach;citation_author=James C. Davis;citation_publication_date=2026"><meta name="citation_reference" content="citation_title=Responsible Charge;citation_author=National Society of Professional Engineers;citation_publication_date=2024"><meta name="citation_reference" content="citation_title=Licensure Exemptions;citation_author=National Society of Professional Engineers;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Pause Giant AI Experiments: An Open Letter;citation_author=Future of Life Institute;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Dune;citation_author=Frank Herbert;citation_publication_date=1965"><meta name="citation_reference" content="citation_title=Criteria for Accrediting Engineering Programs, 2025--2026;citation_author=ABET Engineering Accreditation Commission;citation_publication_date=2025"><meta name="citation_reference" content="citation_title=Criteria for Accrediting Computing Programs, 2025--2026;citation_author=ABET Computing Accreditation Commission;citation_publication_date=2025">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#741-authority-follows-competence-and-responsibility" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-header__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a class="md-header__brandlink" href="index.html" title="Model-Based Agentic Engineering">Model-Based Agentic Engineering</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              §7.4 · The Engineer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <nav class="md-header__family" aria-label="MAGE publishing family">
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/">MAGE homepage</a>
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/teach/">Teach with MAGE</a>
+        
+      </nav>
+    
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-nav__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Model-Based Agentic Engineering
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  
+    <a class="md-nav__pdf" href="mage-book.pdf" title="Read the PDF edition" aria-label="Read the PDF edition"><svg class="dl-ico" viewBox="0 0 16 16" width="1.05em" height="1.05em" style="vertical-align:-0.18em;margin-right:0.45em" aria-hidden="true" focusable="false"><path d="M9.4 1.3H4.3a1 1 0 0 0-1 1v11.4a1 1 0 0 0 1 1h7.4a1 1 0 0 0 1-1V4.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.3v3.3h3.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><text x="8" y="12.1" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="4.8" font-weight="700" letter-spacing="-0.1" fill="currentColor">PDF</text></svg>Read the PDF&nbsp;&#8595;
+    </a>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Orientation and Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.0-acknowledgments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acknowledgments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contents.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.3-authors-note.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Author’s Note
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.5-preface.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.1-how-to-read-this-book.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Read This Book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.2-what-this-book-argues.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What This Book Argues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.4-the-books-language.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-1-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.1-the-printer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.1 · The Printer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.2-the-engineering-object.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.2 · The Engineering Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.3-mage-by-example.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.3 · MAGE by Example: DocAble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.4-the-agentic-substrate.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.5-the-new-engineering-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.5 · Two Engineering Problems, One Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Modeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Modeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-2-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.1-context-is-the-first-modeling-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.1 · From Context to Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.2-constructing-and-using-engineering-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.2 · Constructing and Using Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.3-structural.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.3 · Structural Models: What Is Connected to What?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.4-behavioral.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.4 · Behavioral Models: What May Happen?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.5-decision.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.6-system-knowledge.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.7-modeling-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.7 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 3 — Alignment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 3 — Alignment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-3-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.1-where-obligations-can-be-enforced.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.1 · Where Obligations Can Be Enforced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.2-models-and-the-semantic-gap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.2 · From Engineering Intent to Enforceable Obligation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.3-constraints-sensors-validators-gates.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.3 · Governance Mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.4-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.4 · Growing the Governed Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.5-when-guardrails-collide.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.5 · When Controls Become a System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.6-alignment-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.6 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-4-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.1-the-dynamics-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.1 · The Dynamics of MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.2-one-problem-many-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.3-brownfield-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.3 · Brownfield Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.4-engineering-the-environment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.4 · Engineering the Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.5-mage-in-motion-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-5-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.1-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.1 · The Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.2-inside-docables-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.2 · Inside DocAble's Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.3-evaluating-docable.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.3 · Evaluating the Product and Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.4-other-agentic-software-factories.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.4 · Other Agentic Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.5-engineering-the-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.5 · Coda: Engineering the Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 6 — The Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 6 — The Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-6-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.1-toward-a-theory-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.1 · From Production to Cumulative Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.2-what-the-theory-predicts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.2 · What the Theory Predicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.3-scope-conditions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.3 · Scope Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.4-research-agenda.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.4 · Research Agenda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.5-what-the-theory-claims.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 7 — The Profession
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 7 — The Profession
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-7-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Profession
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.1-reorganization-of-se.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.1 · The Reorganization of Software Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.2-software-rejoins-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.2 · Back to Models, but Not Back to Waterfall
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.3-agentic-engineering-beyond-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.3 · Agentic Engineering Beyond Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="7.4-the-engineer.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#741-authority-follows-competence-and-responsibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.1 Authority Follows Competence and Responsibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4.1 Authority Follows Competence and Responsibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#professional-authority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Professional authority
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-judgment-frontier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The judgment frontier
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#742-sign-off-moves-toward-models-and-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.2 Sign-Off Moves Toward Models and Evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#743-from-full-stack-to-full-system-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.3 From Full-Stack to Full-System Engineering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#744-what-should-we-teach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.4 What Should We Teach?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4.4 What Should We Teach?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-there-software-engineering-knowledge-you-cannot-just-figure-out-for-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is there software engineering knowledge you cannot just figure out for yourself?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-shouldnt-software-engineers-have-to-figure-out-for-themselves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What shouldn't software engineers have to figure out for themselves?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shift-the-emphasis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift the emphasis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#change-what-students-demonstrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change what students demonstrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#745-the-entry-rung-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.5 The Entry-Rung Problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.5-what-cannot-be-delegated.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Must Not Be Delegated?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="9.1-the-part-that-stays-yours.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-handbook.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-engineering-moves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.1 Engineering Moves: A Field Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-model-coherence.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.2 Model Coherence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.3 Governance Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governed-delegation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.4 Governed Delegation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix B — Practicing MAGE
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-practicing-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.1 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-brownfield-migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.2 Brownfield Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-operating-a-gee.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.3 Operating a GEE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-measuring-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.4 Measuring MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Back Matter
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Back Matter
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="colophon.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colophon — Dogfooding MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about-the-author.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About the Author
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Index
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="book-index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index (terms)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures Gallery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="list-of-figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List of Figures and Tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#741-authority-follows-competence-and-responsibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.1 Authority Follows Competence and Responsibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4.1 Authority Follows Competence and Responsibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#professional-authority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Professional authority
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-judgment-frontier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The judgment frontier
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#742-sign-off-moves-toward-models-and-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.2 Sign-Off Moves Toward Models and Evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#743-from-full-stack-to-full-system-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.3 From Full-Stack to Full-System Engineering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#744-what-should-we-teach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.4 What Should We Teach?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4.4 What Should We Teach?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-there-software-engineering-knowledge-you-cannot-just-figure-out-for-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is there software engineering knowledge you cannot just figure out for yourself?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-shouldnt-software-engineers-have-to-figure-out-for-themselves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What shouldn't software engineers have to figure out for themselves?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shift-the-emphasis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shift the emphasis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#change-what-students-demonstrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Change what students demonstrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#745-the-entry-rung-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.5 The Entry-Rung Problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+<div class="wrap">
+<header class="chap"><div class="kicker"><a href="part-7-intro.html" aria-label="Beginning of Chapter 7 — The Profession">Chapter 7 — The Profession</a> &nbsp;::&nbsp; <a href="index.html" aria-label="Book contents — jump to the table of contents">§7.4</a></div><h1><span class="chap-num">§7.4</span> The Engineer</h1></header><p>The broader theory sharpens the question this chapter began with. If agents can increasingly implement changes, maintain models, run analyses, and propose engineering moves, what remains the engineer's work?</p>
+<p>The answer is decidedly not whatever tasks machines happen to perform poorly today. A profession cannot define its purpose by the temporary limitations of its tools. Commodity intelligence expands the implementation capability available to engineers; it does not itself determine who is entitled to authorize the work or accept the result. <strong><em>The engineer must retain informed control over the resulting system and remain responsible for it</em></strong>. The professional question is what competence and authority that responsibility requires when much of the work is delegated.</p>
+<p>Software engineers have often performed technical work, exercised decision authority, and borne responsibility for the resulting system within the same role. Engineering organizations have long distributed these functions across people and teams, as when technical leads and managers direct implementation they did not personally produce. Commodity intelligence can make this arrangement more routine for individual engineers: an engineer can delegate implementation to agents while defining the intended result and evaluating the evidence for acceptance.</p>
+<p>That wider scope for delegation requires engineers to distinguish the functions explicitly. Work performed refers to the activities carried out by people or agents. Authority exercised refers to the decisions a person or mechanism is permitted to make, while responsibility retained refers to accountability for the consequences of the whole engineering arrangement. Delegating an activity does not by itself confer authority to accept its result. An agent or other mechanism can also exercise explicitly delegated authority without thereby discharging the engineer's responsibility for the system.</p>
+
+</div>
+
+<h2 id="741-authority-follows-competence-and-responsibility"><span class="sec-num">7.4.1</span> Authority Follows Competence and Responsibility</h2>
+<div class="wrap">
+
+<p>MAGE increases both the leverage of engineering knowledge and the consequences of getting it wrong. An agent can increasingly carry much of the method itself: recognize a modeling opportunity, choose among known model families, construct a state machine, query a dependency graph, propose an invariant, or suggest that recurring inspection become machinery. As the repertoire becomes machine-readable, the engineer is distinguished less by recalling the available moves than by judging where they apply. An agent's command of the repertoire does not establish that a chosen abstraction captures what matters, that a proposed invariant expresses the intended property, or that the resulting tradeoff is acceptable. Those judgments remain engineering work.</p>
+
+</div>
+
+<h3 id="professional-authority">Professional authority</h3>
+<div class="wrap">
+
+<p>Engineering authority extends beyond technical capability. Societies entrust engineers with consequential decisions because engineers are expected to understand the systems they certify and to stand behind them. The institutional details differ across domains, but the principle holds: the authority to make consequential engineering decisions requires both sufficient control over the system and responsibility for the decisions made. Engineers can carry legal, professional, and sometimes personal liability for the decisions they sign. An AI system can generate an artifact or assemble evidence. It cannot assume the professional responsibility attached to an engineer's judgment.</p>
+<p>Other engineering professions make answerability institutionally explicit through professional licensure. In U.S. professional-engineering practice, the concept of responsible charge attaches authority to the engineer exercising direct control and supervision over consequential engineering work; licensed engineers are also subject to enforceable ethical and legal duties directed toward public health, safety, and welfare.<sup class="note-ref"><a href="#note-7-4-the-engineer-fn-nspe" role="doc-noteref" aria-label="note 1">*</a></sup><span class="editorial-note" id="note-7-4-the-engineer-fn-nspe"><span class="cn-mark">*</span> On responsible charge — direct control and supervision by the engineer exercising professional judgment — see National Society of Professional Engineers (NSPE) Position Statement No. 10-1778 (rev. May 2024); <sup class="cite-ref"><a href="#wc-7-4-the-engineer-15" aria-label="citation 15">15</a></sup><span class="cite-note"><span class="cn-mark">15.</span> National Society of Professional Engineers, <span>“<span>Responsible Charge</span>,”</span> NSPE, 2024.</span> on the statutory duties and practice exemptions that bound where licensed authority is required, NSPE Position Statement No. 09-0173 (rev. November 2023) <sup class="cite-ref"><a href="#wc-7-4-the-engineer-16" aria-label="citation 16">16</a></sup>.<span class="cite-note"><span class="cn-mark">16.</span> National Society of Professional Engineers, <span>“<span>Licensure Exemptions</span>,”</span> NSPE, 2023.</span></span></p>
+<p>The ability to understand and challenge agentic decisions is therefore part of the basis on which consequential engineering authority can legitimately be exercised. The converse matters too. If engineers cannot retain sufficient control over a system making consequential decisions to exercise that authority responsibly, withholding the authority is itself a legitimate—and sometimes necessary—engineering outcome.</p>
+<p>Agentic production also changes what the competence behind that authority must cover: the production system itself becomes something the engineer must be able to evaluate. Someone who understands the application domain but cannot evaluate the production system may be poorly equipped to authorize its outputs. Conversely, expertise in agent orchestration alone does not establish competence to judge whether the resulting software satisfies its obligations. Authority to accept the work requires both: enough command of the production system to know what its evidence establishes, and enough command of the domain to know what that evidence must show.</p>
+
+</div>
+
+<h3 id="the-judgment-frontier">The judgment frontier</h3>
+<div class="wrap">
+
+<p>One social purpose of the engineer is to be entrusted with, and answerable for, technical work too complex or consequential for ordinary individuals to undertake for themselves <sup class="cite-ref"><a href="#wc-7-4-the-engineer-1" aria-label="citation 1">1</a></sup>.<span class="cite-note"><span class="cn-mark">1.</span> George Bugliarello, <span>“<span>The Social Function of Engineering: A Current Assessment</span>,”</span> in <em><span>Engineering as a Social Enterprise</span></em> (National Academy Press, 1991).</span> A small bridge across the ditch in my parents' yard allowed the neighborhood kids to visit more easily, but a few boards crossing a span of three feet did not call for a structural engineer. The Golden Gate Bridge did. Large engineering organizations extend the same principle internally: a chief engineer may be answerable for a system assembled through layers of engineers and specialists, below which lie tasks simple enough that engineering expertise is no longer needed either to perform the work or to establish that it was done correctly. GenAI can push that boundary downward. If machine intelligence can reliably perform more of the work, fewer human engineers may be needed to build the same system. Nothing about engineering requires preserving jobs that no longer require engineering judgment.</p>
+<p>But there is another boundary: the judgment frontier. Chapter 6 showed that some obligations cannot yet be reduced to mechanical checks. A capable reasoner must still decide whether the evidence is enough, whether a tradeoff is acceptable, or whether something is simply right for its purpose. Better GenAI will move this frontier too. We may entrust machine intelligence with judgments that in 2026 we reserve for experienced engineers, including increasingly contextual and qualitative ones. Yet technical capability and social authority are different things. Society may accept an engineering organization with far fewer human engineers before it accepts one with none: no human professional entrusted with the work, no human being who can be called to account for its judgments, and only machine intelligence standing behind the result.<sup class="note-ref"><a href="#note-7-4-the-engineer-fn-judgment-frontier" role="doc-noteref" aria-label="note 2">†</a></sup><span class="editorial-note" id="note-7-4-the-engineer-fn-judgment-frontier"><span class="cn-mark">†</span> Contemporary calls for greater social control over advanced AI have argued that decisions about powerful systems should not be left solely to the organizations developing them, but should reflect broader social judgment <sup class="cite-ref"><a href="#wc-7-4-the-engineer-17" aria-label="citation 17">17</a></sup>.<span class="cite-note"><span class="cn-mark">17.</span> Future of Life Institute, <em><span>Pause Giant AI Experiments: An Open Letter</span></em>, Open letter, 2023.</span> Frank Herbert imagined an extreme version of such a choice in Dune: after the Butlerian Jihad, its fictional society prohibits "thinking machines" and deliberately preserves human capacities to perform work that machines might otherwise perform <sup class="cite-ref"><a href="#wc-7-4-the-engineer-18" aria-label="citation 18">18</a></sup>.<span class="cite-note"><span class="cn-mark">18.</span> Frank Herbert, <em><span>Dune</span></em> (Chilton Book Company, 1965).</span> Herbert's answer is extreme, but the underlying question is real: societies must decide not only what machine intelligence can do, but what roles they are willing to surrender to it and what human capacity they wish to preserve.</span> The frontier is therefore not only what machines can judge. It is what society is willing to let them judge on our behalf.</p>
+<p>Resilience gives another reason to preserve the human side of that frontier. A society whose engineering capacity exists only through machine intelligence has made that intelligence critical infrastructure. If the foundation models become unavailable, untrustworthy, compromised, or controlled by someone else, the society has no independent engineering capacity to fall back on. Some human engineering competence may therefore remain valuable even when it is no longer the cheapest way to produce engineering work.</p>
+<p>Other industries have learned the same lesson about efficiency and reserve capacity. Systems optimized around lean inventories and just-in-time supply can be highly efficient in ordinary conditions while leaving too little cushion when a common disruption arrives. The COVID-19 pandemic made that tradeoff unusually visible <sup class="cite-ref"><a href="#wc-7-4-the-engineer-2" aria-label="citation 2">2</a></sup>.<span class="cite-note"><span class="cn-mark">2.</span> National Academies of Sciences, Engineering, and Medicine, <em><span>Building Resilience into the Nation’s Medical Product Supply Chains</span></em> (National Academies Press, 2022), <a href="https://doi.org/10.17226/26420">https://doi.org/10.17226/26420</a>.</span> In consequential industries, resilience can go beyond prudent management and become an explicit engineering obligation. U.S. pharmaceutical manufacturing rules require an "adequate number of qualified personnel" to perform and supervise drug production, with personnel qualified for their assigned functions <sup class="cite-ref"><a href="#wc-7-4-the-engineer-3" aria-label="citation 3">3</a></sup>.<span class="cite-note"><span class="cn-mark">3.</span> U.S. Food and Drug Administration, <span>“<span>Personnel Qualifications</span>,”</span> 21 C.F.R. § 211.25.</span> Federal law separately requires manufacturers of certain drugs and related products to maintain redundancy risk-management plans addressing threats to supply, <sup class="cite-ref"><a href="#wc-7-4-the-engineer-4" aria-label="citation 4">4</a></sup><span class="cite-note"><span class="cn-mark">4.</span> Federal Food, Drug, and Cosmetic Act § 506C(j), 21 U.S.C. § 356c(j).</span> and FDA guidance recommends that medical-device manufacturers plan for continuity by ensuring additional production capacity and identifying alternative sources <sup class="cite-ref"><a href="#wc-7-4-the-engineer-5" aria-label="citation 5">5</a></sup>.<span class="cite-note"><span class="cn-mark">5.</span> U.S. Food and Drug Administration, <span>“<span>Emergency Preparedness and Medical Devices: Supply Chain Recommendations for Health Care Providers and Medical Device Manufacturers</span>,”</span> accessed September 11, 2026.</span></p>
+<p>The analogy to machine intelligence should not be pushed too far: these rules do not require pharmaceutical manufacturers to keep redundant workers idle in case ordinary production fails. But they embody a useful engineering principle. A critical productive capability should not be evaluated only by how efficiently it operates under ordinary conditions; its dependencies, qualified capacity, and ability to continue under disruption matter too. The judgment frontier is therefore partly about trust and accountability, but also about preserving the ability to act without the machine.</p>
+<p>Resilience need not mean preserving only human reserve capacity. It may also favor diversity in where machine intelligence resides. If consequential engineering increasingly depends on foundation models available only through a small number of remote providers, access to those providers becomes part of the engineering infrastructure on which individuals, firms, and societies depend. Smaller local or on-device foundation models could provide another layer of reserve capacity: perhaps less capable than frontier systems, but inexpensive, independently operable, and sufficient when paired with strong representations, tools, and evidence. Whether that capability becomes technically or economically competitive is uncertain. The engineering principle is not. A resilient system should be wary of concentrating an essential productive capability behind a dependency it cannot itself control.</p>
+<p>Cheaper implementation can reduce the human effort needed to produce a given system. It does not follow that a resilient society should allow independent human engineering capacity to disappear.</p>
+<p>Engineering has always required moving between levels of abstraction: choosing the level that exposes the property at issue and descending when the current abstraction no longer answers the question. Working with agents extends that practice. Natural-language programming—say what you want and receive code—captures only the realization interface. As agents acquire more of the technical repertoire, the engineer's leverage moves upstream—from supervising individual actions toward authoring and judging the environment in which those actions occur.</p>
+<p>My own experience building DocAble was not one of deskilling. I needed every ounce of my software-engineering knowledge to make the system work. What changed was where I spent that expertise. I spent less of it realizing individual implementation decisions and more of it deciding what needed to be represented, constrained, measured, and preserved. I found that shift delightful: cheaper realization let me use engineering judgment on a system substantially larger than I could otherwise have built.</p>
+<p>That upstream work can outlast the individual judgment. A well-chosen abstraction, a binding constraint, or a reliable validator can continue carrying part of an engineer's reasoning into work performed by other people and agents. This is one reason the environment can accumulate engineering capital. It is also why authoring the environment carries unusual leverage: a consequential judgment made well once may shape thousands of later changes. But inheritance is not abdication. Someone must still recognize when the environment no longer fits the system, when an old distinction has stopped mattering, or when a new obligation lies outside what the existing machinery can see. The expert contribution moves toward creating, evaluating, and revising durable structure; it does not disappear once that structure exists. Engineers must also be able to make their knowledge and objections available to those who have authority to act.</p>
+<blockquote class="concept-inset"><p class="inset-title" id="inset-frontier-authority">Inset — Engineering at the frontier of authority</p>
+<p>Engineers advising those with authority to proceed must make their expertise count. They remain responsible for making the engineering case legible: what is understood, what can be assured, what remains uncertain, and what risk a decision would accept.</p>
+<p>Engineering history shows what happens when technical knowledge and decision authority become disconnected. Before the Challenger launch, Morton Thiokol engineers recommended against launching at the expected temperatures, but management reversed the recommendation; the Rogers Commission later reconstructed the disagreement and the decision process <sup class="cite-ref"><a href="#wc-7-4-the-engineer-6" aria-label="citation 6">6</a></sup>.<span class="cite-note"><span class="cn-mark">6.</span> Presidential Commission on the Space Shuttle Challenger Accident, <em><span>Report of the Presidential Commission on the Space Shuttle Challenger Accident, Volume 1</span></em> (U.S. Government Printing Office, 1986).</span> Before Columbia's loss, engineers raised concerns about the foam strike and sought additional imagery, but their uncertainties did not reach decision-makers with sufficient force <sup class="cite-ref"><a href="#wc-7-4-the-engineer-7" aria-label="citation 7">7</a></sup>.<span class="cite-note"><span class="cn-mark">7.</span> Columbia Accident Investigation Board, <em><span>Columbia Accident Investigation Board Report, Volume 1</span></em> (National Aeronautics; Space Administration, 2003).</span> Volkswagen's emissions scandal illustrates a different failure: engineers participated in implementing software that concealed regulatory violations, and the subsequent legal record established individual accountability <sup class="cite-ref"><a href="#wc-7-4-the-engineer-8" aria-label="citation 8">8</a></sup>.<span class="cite-note"><span class="cn-mark">8.</span> U.S. Department of Justice, Office of Public Affairs, <em><span>Volkswagen Engineer Pleads Guilty (2016) and Is Sentenced to 40 Months in Prison (2017) for His Role in the Conspiracy to Cheat U.S. Emissions Tests</span></em>, U.S. Department of Justice press releases, 2017.</span> The disclosures of Frances Haugen and Arturo Béjar concerning harms on Facebook's platforms illustrate another form of the problem: internal measurements and warnings can exist without producing an adequate organizational response <sup class="cite-ref"><a href="#wc-7-4-the-engineer-9" aria-label="citation 9">9</a></sup><sup class="cite-ref"><a href="#wc-7-4-the-engineer-10" aria-label="citation 10">10</a></sup>.<span class="cite-note"><span class="cn-mark">9.</span> U.S. Senate Committee on Commerce, Science, and Transportation, <em><span>Protecting Kids Online: Facebook, Instagram, and Mental Health Harm</span></em>, 117th Cong., 1st sess., S. Hrg. 117-719, 2021.</span><span class="cite-note"><span class="cn-mark">10.</span> U.S. Senate Committee on the Judiciary, <em><span>Social Media and the Teen Mental Health Crisis</span></em>, 118th Cong., 1st sess., testimony of Arturo Béjar, 2023.</span></p>
+<p>These cases suggest a simple professional test. When consequential harm occurs, the engineering record should show what engineers knew, what they did not know, what they warned about, and who chose to proceed. This is not merely defensive documentation. Making knowledge, uncertainty, disagreement, and evidence explicit is part of how engineering informs consequential decisions and makes those decisions answerable.</p>
+<p>The distinction matters increasingly as software agents become capable of consequential action. Retaining engineering control does not require engineers to make every decision an agent makes. It requires them to establish the relevant bounds: what authority has been delegated, what properties are assured within it, what evidence supports those claims, what departures can be detected, and where the limits of that assurance lie.</p>
+<p>Sometimes the available evidence will not establish the desired bound. Engineers are not always the final decision-makers. Executives, military commanders, regulators, political leaders, and societies may have legitimate reasons to proceed despite engineering uncertainty: the consequences of inaction may themselves be severe, and competitive or geopolitical pressures may make accepting substantial risk rational. Engineering's responsibility is to preserve the distinction. A decision to accept an inadequately bounded risk does not make the risk bounded. The record should make clear what engineering could establish, what it could not, and who possessed the authority to proceed anyway.</p>
+<p>That answerability matters after the decision as well. Society needs identifiable people and institutions from whom an account can be demanded and to whom consequences can attach. Professional licenses can be revoked, certifications withdrawn, organizations sanctioned, and individuals held legally responsible. A machine cannot become the terminus of that chain of responsibility. Delegating a decision to a machine does not delegate the responsibility that justified the human or institutional authority to make it.</p>
+<p>Better engineering environments can expand the domain over which engineers responsibly delegate action. At this frontier, their value is measured by what people and institutions can understand, constrain, assure, and govern—and by whether they can answer for the consequences.</p></blockquote>
+<p><a class="xref" href="7.4-the-engineer.html#tbl-7-4-1">Table&nbsp;7.4-1</a> names this authorship division.</p>
+<table id="tbl-7-4-1" class="book-table" data-label="authorship-division"><caption data-short="The authorship division"><span class="tbl-label">Table 7.4-1.</span> <em>The authorship division.</em> Self-Governance can recognize and propose engineering moves; the engineer remains answerable for the significance, intended meaning, authority, and tradeoffs those moves serve.</caption><thead><tr><th>Self-Governance carries</th><th>The engineer remains answerable for</th></tr></thead><tbody><tr><td>recognizing a modeling opportunity</td><td>determining its significance</td></tr><tr><td>proposing a representation</td><td>establishing what it means</td></tr><tr><td>extracting candidate concepts</td><td>choosing the consequential abstraction</td></tr><tr><td>finding an inconsistency</td><td>adjudicating the intent behind it</td></tr><tr><td>formalizing a known property</td><td>deciding what property should hold</td></tr><tr><td>proposing a governance mechanism</td><td>deciding what it should enforce</td></tr><tr><td>identifying a recurring failure</td><td>determining acceptable risk and tradeoff</td></tr></tbody></table>
+<p>Organizations may distribute these responsibilities across engineers, platform teams, review boards, or other accountable roles. The allocation should be explicit and governed.</p>
+<p><strong>Natural language may be one interface to the work. It is not the engineering method.</strong></p>
+
+</div>
+
+<h2 id="742-sign-off-moves-toward-models-and-evidence"><span class="sec-num">7.4.2</span> Sign-Off Moves Toward Models and Evidence</h2>
+<div class="wrap">
+
+<p>In the factory Chapter 5 examined, the fleet constructed most of the implementation, maintained selected engineering representations, ran validators, and assembled evidence for the claims the design was supposed to satisfy. In its highest-throughput week, the admission gate landed nearly six hundred changes on regenerated evidence, while I read none of the diffs. My review looked less like authorship of the implementation and more like technical acceptance: inspecting representations, challenging assumptions, examining evidence, requesting deeper analysis where necessary, and deciding whether the result was fit to accept. Whether this arrangement generalizes beyond the case remains to be established.</p>
+<p>The intermediate review surfaces developed in §7.1 change what the engineer is asked to accept. A model exposes a consequential claim; independent evidence bears on whether it holds. Neither is sufficient alone.</p>
+<blockquote class="quote-inline"><p><strong>Models</strong> state selected claims about the system and the properties that matter. <strong>Evidence</strong> says why we should believe those claims. <strong>Governance</strong> says what evidence is required and what decisions that evidence can authorize. <strong>The engineer</strong> remains answerable for whether those are the right claims, representations, tradeoffs, and standards of evidence.</p></blockquote>
+<p>The object of review moves; accountability does not. An engineer has never needed to hand-implement every consequential choice to remain answerable for the resulting system. Agentic systems extend this arrangement across more of the system. The engineer delegates the keystrokes and stays answerable down to the code and past it — to the properties a model names and the evidence a validator produces.</p>
+<p>Early evidence describes a related change in engineers' experience. In questionnaires administered six months apart, Vella and Blincoe found that most respondents reported spending less time writing code, with the relative balance of work shifting toward verification. Their qualitative accounts describe <em>supervisory engineering work</em>: directing, evaluating, and correcting AI output. Perceived productivity remained positive. Ratings of flow and cognitive-load benefits declined in the matched cohort, but those declines were not statistically significant <sup class="cite-ref"><a href="#wc-7-4-the-engineer-11" aria-label="citation 11">11</a></sup>.<span class="cite-note"><span class="cn-mark">11.</span> Annie Vella and Kelly Blincoe, <em><span>The Impact of AI Coding Assistants on Software Engineering: A Longitudinal Study</span></em>, arXiv preprint arXiv:2605.23135, 2026, <a href="https://arxiv.org/abs/2605.23135">https://arxiv.org/abs/2605.23135</a>.</span> These are reports of experience, not measurements of output. MAGE's proposal is to give that supervision better reasoning surfaces through explicit models and evidence.</p>
+<p>Let me raise a concern about where this leaves the engineer. Is supervising agents necessarily a higher-skilled activity, or merely a more tedious one? There is nothing inherently satisfying about inspecting work one could have done oneself, finding mistakes, and asking for another attempt. Nor does spending less time writing code automatically mean spending more time exercising engineering judgment.</p>
+<p>As implementation becomes cheaper, organizations have a choice. They can ask their engineers to <strong>shift left</strong>, toward requirements, specification, design, and the consequential decisions that shape a system. Or they can ask them to <strong>shift right</strong>, toward endless reviews of agent-generated work. The former offers an opportunity to exercise engineering judgment over larger systems; the latter risks turning engineers into full-time inspectors of machine output. I suspect that sustained professional satisfaction will depend on which direction organizations choose. MAGE offers a way to make the first path practical: improve the engineering environment so that recurring mistakes no longer require repeated human intervention.</p>
+<p>Real answerability requires competence and authority. The reviewer has to distinguish local defects from structural problems, and a structural diagnosis needs a path to the architecture, models, mechanisms, or infrastructure that can address it. Otherwise responsibility becomes nominal: the engineer can see the problem but cannot change the environment that produces it.</p>
+<p>The correspondence discipline of Chapter 2 applies to the review surface too. The engineer must ask what evidence connects a model's claims to the realized system; an orderly representation alone is no basis for sign-off.</p>
+<p>Better realization does not establish that the encoded obligations were right. For an ordinary database interaction, a familiar algorithm, or a conventional architectural pattern, a capable agent can supply much of what the engineer left unsaid. This is enormously useful for exploration and prototyping.</p>
+<p>Production raises a different question. A familiar pattern may make the agent likely to do the right thing without making the right thing explicit enough to check. Where the distinction is consequential, "the agent probably knows what we mean" is not an engineering control. The relevant property must be represented well enough that the environment can evaluate whether the realization actually preserves it. Familiarity can reduce the specification needed to produce software; it does not necessarily reduce the specification needed to assure it.</p>
+<p>The trouble is the requirements. In software engineering, it always has been <sup class="cite-ref"><a href="#wc-7-4-the-engineer-12" aria-label="citation 12">12</a></sup>.<span class="cite-note"><span class="cn-mark">12.</span> Frederick P. Brooks, <span>“<span>No Silver Bullet: Essence and Accidents of Software Engineering</span>,”</span> <em><span>Computer</span></em> 20, no. 4 (1987): 10–19.</span> Agents promise to get us to that discovery more quickly, and that is good news: one expensive part of engineering has become dramatically cheaper. The opportunity now is to represent consequential intent well enough to use this capacity. Capable agents allow many realization choices to remain open; engineers must establish which properties must survive that freedom.</p>
+<p>Moving review toward models and evidence does not reduce the expertise required of the engineer. It changes the questions that expertise must answer.</p>
+
+</div>
+
+<h2 id="743-from-full-stack-to-full-system-engineering"><span class="sec-num">7.4.3</span> From Full-Stack to Full-System Engineering</h2>
+<div class="wrap">
+
+<p>Software has used full-stack engineer to describe someone able to work across multiple implementation layers: interface, application logic, data, infrastructure, and deployment. Commodity intelligence may make that breadth easier to obtain. An engineer assisted by capable agents can increasingly construct and modify artifacts across layers without personally possessing the implementation fluency that each layer once demanded.</p>
+<p>MAGE suggests a broader requirement. Retaining engineering control can require reasoning across the full system and its lifecycle, beyond the layers of the implementation stack. A representation chosen during design determines what later implementation can express; an architectural boundary determines what can be validated independently; operational evidence can reveal that an earlier abstraction was wrong; a recurring failure may justify changing the model, mechanism, or environment inherited by every subsequent change. These are not separate concerns merely because organizations have historically assigned them to separate roles.</p>
+<p>Building DocAble made this breadth concrete for me. The work crossed regulatory obligations (the ADA, WCAG) and product judgment about usability, user expectations, and the limits of existing accessibility tools. It required knowledge of document formats and their representations (PDF, Office, LibreOffice, LaTeX, Typst), alongside accessibility semantics such as reading order, alternative text, tables, and structure. Those concerns shaped the architecture and structured models through which documents could be changed safely, the boundaries placed on agent behavior, and the validation needed to separate plausible output from conforming output. The same system also had to meet the memory, performance, deployment, and operational demands of a cloud service.</p>
+<p>The consequential decisions were the ones that crossed these domains. The decision record of Chapter 5 shows the shape. Retiring accessibility-checker scores in favor of validation grounded in the standards required three judgments together: a regulatory reading of what the obligations actually require, a product observation that users' documents passed the checkers while losing meaning, and a change to the validation architecture. None of the three could have settled it alone.</p>
+<p>Supporting additional document formats did different work: an architectural probe rather than simply an expansion of the product. Each format tested whether the architecture captured general properties of document remediation or assumptions inherited from the formats supported first. Cheap implementation made those experiments economical even when the additional formats were not immediate product requirements. Implementation can be selected for the knowledge it produces, not only the functionality it delivers. Neither decision belonged to any layer of an implementation stack.</p>
+<p>There is also a personal side to this change. Many software engineers enjoy programming. I do too. There is satisfaction in finding a clean abstraction, writing a good algorithm, or making a difficult implementation work. Delegating implementation means giving up some of that experience, and I would not dismiss the loss. But I have found a different source of satisfaction in its place. I can spend less time deciding what to name a variable or working through routine implementation details, and more time asking what the system should do, exploring alternative designs, and discovering why something that seemed reasonable does not work. The agents make it possible to try ideas that I might previously have abandoned because implementing them would take too long. That part is amazing.</p>
+<p>This is the implementation amplification described in Chapter 4: I can form a hypothesis, model it, implement it, measure what happens, discover where my understanding was wrong, and repeat the cycle many times in the time a conventional implementation might once have taken. That compressed exploration also produces connection amplification. Consequences that conventional development might have separated by days or weeks arrive close enough together for their relationships to become visible.</p>
+<p>I have found that this process develops the engineer as well as the system. The engineer goes through the loop too. Repeatedly choosing representations, confronting predictions with evidence, finding the proper level of a failure, and deciding what knowledge should become durable machinery forces the engineer to learn. Abundant implementation can deskill an engineer who merely consumes its output and loses the feedback through which expertise develops; used this way, it can instead become an unusually powerful medium for developing engineering judgment.</p>
+<p>This is systems thinking applied to software engineering under agentic leverage. Local implementation can increasingly be delegated, but consequential judgment often requires following a property across requirements, models, architecture, implementation, validation, deployment, operation, and maintenance. The engineer need not personally perform every activity or master every technology. The requirement is sufficient command: enough understanding of each relevant domain to recognize how decisions made in one part of the system constrain, enable, or invalidate reasoning elsewhere, and to intervene when those relationships threaten consequential properties.</p>
+<p>The professional trajectory may therefore be from full-stack toward full-system engineering. Full-stack breadth crosses implementation layers. Full-system breadth crosses domains, abstractions, and lifecycle boundaries. As agents make implementation expertise cheaper to apply, the latter may become the scarcer and more consequential form of engineering competence.</p>
+
+</div>
+
+<h2 id="744-what-should-we-teach"><span class="sec-num">7.4.4</span> What Should We Teach?</h2>
+<div class="wrap">
+
+<p>If engineers increasingly review systems through representations and evidence rather than reconstructing every property from implementation, education should shift accordingly. This book is not an education study, so the argument is a professional hypothesis rather than a curricular finding.</p>
+
+</div>
+
+<h3 id="is-there-software-engineering-knowledge-you-cannot-just-figure-out-for-yourself">Is there software engineering knowledge you cannot just figure out for yourself?</h3>
+<div class="wrap">
+
+<p>The question for software engineering education is whether there is important software engineering knowledge that practitioners cannot reasonably be expected to figure out for themselves, or whether software engineering is distinct among the engineering disciplines in being predicated on adaptability more than specific expertise. Perhaps software changes so quickly that what matters most is the ability to learn whatever comes next. In that case, we should stop pretending that software engineering has a durable body of technical knowledge. We should abandon software engineering as a discipline and retreat toward a liberal-arts education in critical reasoning, analysis, synthesis, and communication, supplemented by enough practical experience to learn the technologies of the moment.</p>
+<p>That conclusion would make software engineering unusual among mature engineering disciplines. No one would seriously propose that mechanical engineers are simply clever people who can acquire the necessary engineering knowledge through curiosity and experience on the job. Something closer to that proposition may have been plausible 200 years ago, when much of mechanical engineering could be learned through machinery, craft, and apprenticeship. It is not plausible when an engineer must reason about fluid mechanics, heat transfer, materials, dynamics, and control. Engineering accumulated bodies of knowledge that practitioners cannot reasonably be expected to rediscover for themselves. Formal education is one way we transmit that accumulated expertise.</p>
+<p>The skeptical case is stronger in software. Consider some of the principles routinely presented as software-engineering wisdom: Don't Repeat Yourself. Separate concerns. Hide implementation details. Prefer small interfaces. SOLID. Refactor duplicated or poorly structured code. Test your work. Talk to users before building the wrong thing. These are useful ideas, but it would be absurd to claim that someone needs a four-year university education to understand them. Much of the familiar literature of software practice is deliberately accessible to working programmers, and much of its advice can be learned through experience—sometimes painfully, but effectively. A capable programmer can encounter a tangled dependency, suffer its consequences, learn why modularity matters, and carry that lesson to the next system without ever taking a university course called Software Engineering.</p>
+<p>The profession itself makes the challenge harder to dismiss. Many successful software professionals entered the field without formal education in software engineering or computer science, and even developers with university degrees commonly report learning programming through other routes. The 2024 Stack Overflow Developer Survey reflects this mixture: 66 percent of respondents reported holding a bachelor's or master's degree, while 49 percent reported learning to code at school and 82 percent reported using online resources to learn <sup class="cite-ref"><a href="#wc-7-4-the-engineer-13" aria-label="citation 13">13</a></sup>.<span class="cite-note"><span class="cn-mark">13.</span> Stack Overflow, <span>“<span>2024 Stack Overflow Developer Survey</span>,”</span> Stack Overflow, 2024, <a href="https://survey.stackoverflow.co/2024/">https://survey.stackoverflow.co/2024/</a>.</span> If people can become successful software professionals this way, perhaps adaptability and experience really are the expertise. Perhaps there is no software-engineering equivalent of fluid mechanics.</p>
+
+</div>
+
+<h3 id="what-shouldnt-software-engineers-have-to-figure-out-for-themselves">What shouldn't software engineers have to figure out for themselves?</h3>
+<div class="wrap">
+
+<p>I would concede some of this ground. Parts of software engineering really can be learned through practice. MAGE's Alignment Principle is a useful example. If a property matters, do not rely only on someone—or something—remembering to respect it. Check it, constrain it, or otherwise make violations harder to admit. Experienced software practitioners have been turning recurring mistakes into tests, linters, schemas, permissions, review rules, and automation for decades. MAGE systematizes that move and extends it to probabilistic implementors, but its basic intuition does not require a university education to discover.</p>
+<p>But that concession does not extend to the foundations of computing. Beneath changing software technologies lies accumulated knowledge about how information can be represented, manipulated, transformed, constrained, and reasoned about—and about what guarantees can and cannot be established over those processes. Data structures expose the consequences of choosing one representation over another. Algorithms establish how information can be transformed and at what cost. Programming languages and type systems make selected distinctions explicit and constrain permissible operations. Operating systems expose problems of concurrency, isolation, resource management, and failure. Databases and distributed systems make persistence, consistency, coordination, and partial failure unavoidable. Security asks what can be trusted when other actors may actively work against the system. Specifications, architectural models, and formal methods provide still other representations through which engineers can state and reason about consequential properties.</p>
+<p>The important expertise is understanding more than the existence of these subjects or techniques: the abstractions they provide, the questions those abstractions make tractable, the conclusions that follow, and where those conclusions stop. An asymptotic bound says something precise about computational growth without saying whether a system will meet its latency target. A type system can exclude a class of invalid programs without establishing that a program does what its users need. A test can provide evidence about executions without proving the absence of untested behavior. A formal specification can support strong guarantees about the properties it states while saying nothing about an important property that was omitted. An architectural view can make a dependency visible while abstracting away behavior that matters for another engineering question. These limits are not defects. They are consequences of abstraction, and understanding them is part of engineering expertise.</p>
+<p>MAGE rests on these foundations rather than replacing them. Its Modeling Principle particularly depends on the representational part of this knowledge: what information a representation preserves, what it leaves out, how it corresponds to the realized system, and what claims it can legitimately support. Commodity intelligence changes who performs more of the implementation; it does not repeal the bodies of knowledge needed to understand what that implementation means, how it behaves, or what can be established about it.</p>
+<p>This is technical knowledge that practitioners cannot reasonably be expected to rediscover for themselves. Commodity intelligence may make particular languages, frameworks, APIs, and implementation techniques cheaper to learn and quicker to replace. Delegating more realization makes the foundations more consequential: engineers increasingly judge systems whose detailed implementation they did not personally construct.</p>
+<p>The curriculum therefore remains substantially recognizable. Programming does not disappear, nor does software engineering, and neither do the computing foundations on which they depend. Engineers still need enough implementation fluency to understand the systems they build, diagnose failures, evaluate generated work, and descend through abstractions when necessary.</p>
+<p>Diagnosing a failure may require examining the realized system and then translating what was learned into a change to its governing models. The engineer must be able to move between the behavior of the implementation and the representations that direct subsequent work. This does not require personally producing every implementation, but it does require enough technical understanding to recognize when the governing abstractions are inadequate. Engineers still need the disciplinary foundations that make those judgments possible.</p>
+<p>What changes is the allocation of attention. Routine implementation is already becoming cheap enough to alter the engineering problem. Specification, validation, coordination, and judgment have not become correspondingly abundant. Education should reflect that shift. The question is therefore less what subjects disappear than which competencies deserve more or less practice.</p>
+<p>Chapter 6 explains why these competencies matter, and the four trajectories in <a class="xref" href="7.1-reorganization-of-se.html#tbl-7-1-1">Table&nbsp;7.1-1</a> explain why their relative importance may continue to move. They may advance unevenly. Education must prepare engineers to judge that changing allocation of work, rather than train them for one presumed destination.</p>
+
+</div>
+
+<h3 id="shift-the-emphasis">Shift the emphasis</h3>
+<div class="wrap">
+
+<p>Less educational effort may need to go toward producing routine implementation by hand, and more toward selecting abstractions, specifying properties, measuring systems, validating claims, reasoning about quality attributes, and governing autonomous work. Modeling, specification, architecture, measurement, programming languages, and formal methods deserve more room because these fields teach durable ways to choose abstractions, state properties precisely, make invalid states harder to express, and separate a claim from the evidence that establishes it. Students should also learn to distinguish improving a reasoner's context from improving the representation of the engineering problem itself. This does not require every engineer to become a language theorist, systems modeler, or verification specialist.</p>
+<p>Coordination deserves greater emphasis as well. An engineer directing several autonomous workstreams must decompose a larger objective, identify dependencies and integration points, sequence work where necessary, monitor progress and risk, and reconcile independently produced results. These are familiar project-management competencies, but agentic capacity changes the scale at which they become technical concerns: an individual engineer may command enough parallel implementation capacity to face coordination problems that previously arose mainly at team scale. This does not make every software engineer a project manager. It makes decomposition, dependency management, sequencing, and integration part of the technical problem of converting abundant implementation capacity into coherent engineering progress.</p>
+<blockquote class="box-inset"><span class="box-badge">ENGINEERING EDUCATION</span><p class="inset-title" id="inset-se-handbook-curriculum">Inset — A software-engineering curriculum for the agentic era</p>
+<p>The curricular argument in this section is developed more concretely in <a href="https://davisjam.github.io/model-based-agentic-software-engineering/book/se-handbook/index.html">The Software Engineering Handbook: A Judgment and Decision-Making Approach</a>. The Handbook is intended as a companion to MAGE, but it starts from a different question. MAGE asks how software engineering changes when implementation can increasingly be delegated. The Handbook asks what software engineers need to know and what decisions they need to be able to make. Its subjects are deliberately traditional: process, teamwork, engineering knowledge, requirements, specification, architecture, design, validation, and research and development.</p>
+<p>Like MAGE, the Handbook treats software engineering as a discipline of engineering judgment rather than a recipe for producing implementation. Each subject is organized around the decisions it supports: what must be known, what should be made explicit, what should be fixed and what should remain open, which alternatives deserve consideration, what evidence bears on the choice, and when there is enough information to decide. Commodity intelligence does not make this curriculum obsolete. It makes the judgment underneath it more important.</p></blockquote>
+
+</div>
+
+<h3 id="change-what-students-demonstrate">Change what students demonstrate</h3>
+<div class="wrap">
+
+<p>A capstone should therefore demonstrate more than a working artifact. Ask students to bring the <strong>engineering case</strong>.<sup class="note-ref"><a href="#note-7-4-the-engineer-fn-abet-capstone" role="doc-noteref" aria-label="note 3">‡</a></sup><span class="editorial-note" id="note-7-4-the-engineer-fn-abet-capstone"><span class="cn-mark">‡</span> Existing accreditation already asks for a culminating design experience that integrates standards and multiple constraints and builds on earlier coursework, with software-specific criteria adding requirements analysis, security, verification and validation, and processes for complex software systems <sup class="cite-ref"><a href="#wc-7-4-the-engineer-19" aria-label="citation 19">19</a></sup>.<span class="cite-note"><span class="cn-mark">19.</span> ABET Engineering Accreditation Commission, <span>“<span>Criteria for Accrediting Engineering Programs, 2025–2026</span>,”</span> ABET, 2025, <a href="https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/">https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/</a>.</span> Computing-accredited programs likewise require a major integrative project <sup class="cite-ref"><a href="#wc-7-4-the-engineer-20" aria-label="citation 20">20</a></sup>.<span class="cite-note"><span class="cn-mark">20.</span> ABET Computing Accreditation Commission, <span>“<span>Criteria for Accrediting Computing Programs, 2025–2026</span>,”</span> ABET, 2025, <a href="https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-computing-programs-2025-2026/">https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-computing-programs-2025-2026/</a>.</span> The open question is not whether students should integrate their knowledge but what should count as evidence that they have — which is why the capstone should carry the engineering case, not only the demo.</span> The artifact should be one component of that case, alongside requirements, models, tradeoffs, measurements, validation evidence, and an explicit argument for acceptance. Students should also demonstrate that they can organize substantial work: decompose an objective, manage dependencies and integration, coordinate parallel realization, and adapt the plan as engineering evidence arrives. This extends the integrative purpose of the capstone by asking students to show how they exercised informed control over the system. They should be able to explain which evidence supports its consequential properties, recognize the assumptions and tradeoffs behind that evidence, and justify accepting the result.</p>
+<p>Assessment must distinguish between work students performed themselves and work they directed and evaluated. A successful implementation can demonstrate that a production arrangement worked without establishing that the student understood its assumptions, recognized consequential decisions, or could intervene when the arrangement failed. Both direct technical work and the competent direction of delegated work are legitimate educational outcomes, but they require different evidence.</p>
+<p>Program objectives may need to change less than daily engineering work does. In my view, most engineering programs need little change in <strong>what they claim an engineer should become</strong>. The larger change is in how students practice and demonstrate those capabilities.</p>
+<p>The durable curriculum should not be organized around the current agent interface. Prompt conventions, harness architectures, model APIs, and context-management techniques matter in practice and students should use them, but they change too quickly to define the intellectual core. Teach the principles beneath them—finite reasoning and abstraction, representation and fidelity, action boundaries and authority, independent evidence, security, measurement, and the design of environments in which uncertain components can be used safely—and let students encounter current agents throughout the curriculum.</p>
+
+</div>
+
+<h2 id="745-the-entry-rung-problem"><span class="sec-num">7.4.5</span> The Entry-Rung Problem</h2>
+<div class="wrap">
+
+<p>The traditional path into software engineering runs through implementation. Junior engineers become useful by writing code, and through that work they encounter larger systems, learn why designs fail, and gradually acquire the judgment needed to take responsibility for more of the system. GenAI changes this apprenticeship model. If routine implementation requires fewer people, the profession loses some of the work through which it has historically trained its future senior engineers.</p>
+<p>This creates an entry-rung problem. Requirements discovery, modeling, security, systems reasoning, validation, and engineering judgment are harder to teach through a short framework-oriented path—and they are also the capabilities that become more valuable when implementation is abundant. Practitioners concentrated in implementation therefore need paths into architecture, assurance, modeling, and system responsibility. New entrants need ways to acquire those foundations even if the market demands less handwritten construction. The deeper educational problem is how students acquire the engineering judgment that routine implementation previously helped them develop through experience. The companion Software Engineering Handbook is one attempt to address this problem directly: it organizes an undergraduate software engineering core around judgment and decision-making rather than treating implementation technique as the center of the discipline <sup class="cite-ref"><a href="#wc-7-4-the-engineer-14" aria-label="citation 14">14</a></sup>.<span class="cite-note"><span class="cn-mark">14.</span> James C. Davis, <em><span>The Software Engineering Handbook: A Judgment and Decision-Making Approach</span></em>, 1st ed. (2026), <a href="https://davisjam.github.io/model-based-agentic-software-engineering/book/se-handbook/index.html">https://davisjam.github.io/model-based-agentic-software-engineering/book/se-handbook/index.html</a>.</span></p>
+<p>The profession cannot define itself by a stable residue of tasks left to humans; those tasks will continue to move as capabilities improve. Its educational challenge is to develop people who can take responsibility for the engineered whole, even when much of the work through which earlier generations learned is delegated.</p><section class="works-cited" aria-labelledby="wc-7-4-the-engineer-h"><h2 id="wc-7-4-the-engineer-h" class="wc-h">Works Cited</h2><ol class="wc-list"><li id="wc-7-4-the-engineer-1">Bugliarello, George. <span>“<span>The Social Function of Engineering: A Current Assessment</span>.”</span> In <em><span>Engineering as a Social Enterprise</span></em>. National Academy Press, 1991.</li><li id="wc-7-4-the-engineer-2">National Academies of Sciences, Engineering, and Medicine. <em><span>Building Resilience into the Nation’s Medical Product Supply Chains</span></em>. National Academies Press, 2022. <a href="https://doi.org/10.17226/26420">https://doi.org/10.17226/26420</a>.</li><li id="wc-7-4-the-engineer-3">U.S. Food and Drug Administration. <span>“<span>Personnel Qualifications</span>.”</span> 21 C.F.R. § 211.25.</li><li id="wc-7-4-the-engineer-4">Federal Food, Drug, and Cosmetic Act § 506C(j), 21 U.S.C. § 356c(j).</li><li id="wc-7-4-the-engineer-5">U.S. Food and Drug Administration. <span>“<span>Emergency Preparedness and Medical Devices: Supply Chain Recommendations for Health Care Providers and Medical Device Manufacturers</span>.”</span> Accessed September 11, 2026.</li><li id="wc-7-4-the-engineer-6">Presidential Commission on the Space Shuttle Challenger Accident. <em><span>Report of the Presidential Commission on the Space Shuttle Challenger Accident, Volume 1</span></em>. U.S. Government Printing Office, 1986.</li><li id="wc-7-4-the-engineer-7">Columbia Accident Investigation Board. <em><span>Columbia Accident Investigation Board Report, Volume 1</span></em>. National Aeronautics; Space Administration, 2003.</li><li id="wc-7-4-the-engineer-8">U.S. Department of Justice, Office of Public Affairs. <em><span>Volkswagen Engineer Pleads Guilty (2016) and Is Sentenced to 40 Months in Prison (2017) for His Role in the Conspiracy to Cheat U.S. Emissions Tests</span></em>. U.S. Department of Justice press releases, 2017.</li><li id="wc-7-4-the-engineer-9">U.S. Senate Committee on Commerce, Science, and Transportation. <em><span>Protecting Kids Online: Facebook, Instagram, and Mental Health Harm</span></em>. 117th Cong., 1st sess., S. Hrg. 117-719, 2021.</li><li id="wc-7-4-the-engineer-10">U.S. Senate Committee on the Judiciary. <em><span>Social Media and the Teen Mental Health Crisis</span></em>. 118th Cong., 1st sess., testimony of Arturo Béjar, 2023.</li><li id="wc-7-4-the-engineer-11">Vella, Annie, and Kelly Blincoe. <em><span>The Impact of AI Coding Assistants on Software Engineering: A Longitudinal Study</span></em>. arXiv preprint arXiv:2605.23135, 2026. <a href="https://arxiv.org/abs/2605.23135">https://arxiv.org/abs/2605.23135</a>.</li><li id="wc-7-4-the-engineer-12">Brooks, Frederick P. <span>“<span>No Silver Bullet: Essence and Accidents of Software Engineering</span>.”</span> <em><span>Computer</span></em> 20, no. 4 (1987): 10–19.</li><li id="wc-7-4-the-engineer-13">Stack Overflow. <span>“<span>2024 Stack Overflow Developer Survey</span>.”</span> Stack Overflow, 2024. <a href="https://survey.stackoverflow.co/2024/">https://survey.stackoverflow.co/2024/</a>.</li><li id="wc-7-4-the-engineer-14">Davis, James C. <em><span>The Software Engineering Handbook: A Judgment and Decision-Making Approach</span></em>. 1st ed. 2026. <a href="https://davisjam.github.io/model-based-agentic-software-engineering/book/se-handbook/index.html">https://davisjam.github.io/model-based-agentic-software-engineering/book/se-handbook/index.html</a>.</li><li id="wc-7-4-the-engineer-15">National Society of Professional Engineers. <span>“<span>Responsible Charge</span>.”</span> NSPE, 2024.</li><li id="wc-7-4-the-engineer-16">National Society of Professional Engineers. <span>“<span>Licensure Exemptions</span>.”</span> NSPE, 2023.</li><li id="wc-7-4-the-engineer-17">Future of Life Institute. <em><span>Pause Giant AI Experiments: An Open Letter</span></em>. Open letter, 2023.</li><li id="wc-7-4-the-engineer-18">Herbert, Frank. <em><span>Dune</span></em>. Chilton Book Company, 1965.</li><li id="wc-7-4-the-engineer-19">ABET Engineering Accreditation Commission. <span>“<span>Criteria for Accrediting Engineering Programs, 2025–2026</span>.”</span> ABET, 2025. <a href="https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/">https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/</a>.</li><li id="wc-7-4-the-engineer-20">ABET Computing Accreditation Commission. <span>“<span>Criteria for Accrediting Computing Programs, 2025–2026</span>.”</span> ABET, 2025. <a href="https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-computing-programs-2025-2026/">https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-computing-programs-2025-2026/</a>.</li></ol></section><nav class="chapnav" aria-label="Book navigation"><div class="chapnav-back"><a href="index.html" aria-label="Table of contents">« Table of contents</a><a href="part-7-intro.html" aria-label="Beginning of Chapter 7 — The Profession">« Beginning of chapter</a><a href="7.3-agentic-engineering-beyond-software.html" aria-label="Previous section — §7.3 · Agentic Engineering Beyond Software">« Previous section</a></div><span class="chapnav-here" title="§7.4 · The Engineer">§7.4 · The Engineer</span><div class="chapnav-fwd"><a href="7.5-what-cannot-be-delegated.html" aria-label="Next section — What Must Not Be Delegated?">Next section »</a><a href="9.1-the-part-that-stays-yours.html" aria-label="Next chapter — Conclusion">Next chapter »</a><a href="book-index.html" aria-label="Index of terms">Index »</a></div></nav><div class="book-foot">© James C. Davis, 2026–present</div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3543 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Case Study in Software Engineering — web edition.">
+      
+      
+      
+      
+        <link rel="prev" href="2.5-decision.html">
+      
+      
+        <link rel="next" href="2.7-modeling-summary.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>§2.6 · System Knowledge: Connecting the Models - Model-Based Agentic Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/mage-family.css">
+    
+      <link rel="stylesheet" href="assets/mage-book.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="citation_title" content="System Knowledge: Connecting the Models"><meta name="citation_author" content="James C. Davis"><meta name="citation_book_title" content="Model-Based Agentic Engineering"><meta name="citation_publication_date" content="2026"><meta name="citation_fulltext_html_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/2.6-system-knowledge.html"><meta name="citation_pdf_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/mage-book.pdf"><meta name="citation_reference" content="citation_title=Just Enough Software Architecture: A Risk-Driven Approach;citation_author=George Fairbanks;citation_publication_date=2010"><meta name="citation_reference" content="citation_title=Survey of Model-Based Systems Engineering (MBSE) Methodologies;citation_author=Jeff A. Estefan;citation_publication_date=2008"><meta name="citation_reference" content="citation_title=Model-Based Systems Engineering: Motivation, Current Status, and Research Opportunities;citation_author=Azad M. Madni;citation_author=Michael Sievers;citation_publication_date=2018"><meta name="citation_reference" content="citation_title=Program Development by Stepwise Refinement;citation_author=Niklaus Wirth;citation_publication_date=1971"><meta name="citation_reference" content="citation_title=OMG Systems Modeling Language (SysML), Version 2.0, OMG Document formal/26-03-02;citation_author=Object Management Group;citation_publication_date=2026">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#connecting-models-to-answer-engineering-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-header__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a class="md-header__brandlink" href="index.html" title="Model-Based Agentic Engineering">Model-Based Agentic Engineering</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              §2.6 · System Knowledge: Connecting the Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <nav class="md-header__family" aria-label="MAGE publishing family">
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/">MAGE homepage</a>
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/teach/">Teach with MAGE</a>
+        
+      </nav>
+    
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-nav__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Model-Based Agentic Engineering
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  
+    <a class="md-nav__pdf" href="mage-book.pdf" title="Read the PDF edition" aria-label="Read the PDF edition"><svg class="dl-ico" viewBox="0 0 16 16" width="1.05em" height="1.05em" style="vertical-align:-0.18em;margin-right:0.45em" aria-hidden="true" focusable="false"><path d="M9.4 1.3H4.3a1 1 0 0 0-1 1v11.4a1 1 0 0 0 1 1h7.4a1 1 0 0 0 1-1V4.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.3v3.3h3.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><text x="8" y="12.1" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="4.8" font-weight="700" letter-spacing="-0.1" fill="currentColor">PDF</text></svg>Read the PDF&nbsp;&#8595;
+    </a>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Orientation and Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.0-acknowledgments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acknowledgments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contents.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.3-authors-note.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Author’s Note
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.5-preface.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.1-how-to-read-this-book.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Read This Book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.2-what-this-book-argues.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What This Book Argues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.4-the-books-language.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-1-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.1-the-printer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.1 · The Printer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.2-the-engineering-object.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.2 · The Engineering Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.3-mage-by-example.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.3 · MAGE by Example: DocAble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.4-the-agentic-substrate.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.5-the-new-engineering-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.5 · Two Engineering Problems, One Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Modeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Modeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-2-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.1-context-is-the-first-modeling-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.1 · From Context to Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.2-constructing-and-using-engineering-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.2 · Constructing and Using Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.3-structural.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.3 · Structural Models: What Is Connected to What?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.4-behavioral.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.4 · Behavioral Models: What May Happen?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.5-decision.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="2.6-system-knowledge.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-models-to-answer-engineering-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.1 Connecting Models to Answer Engineering Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintaining-correspondence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.2 Maintaining Correspondence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docable-connecting-engineering-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.3 DocAble: Connecting Engineering Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6.3 DocAble: Connecting Engineering Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-dependency-for-execution-and-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Dependency for Execution and Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-one-document-run-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What One Document Run Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joining-a-call-to-its-deployment-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joining a Call to Its Deployment Permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.7-modeling-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.7 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 3 — Alignment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 3 — Alignment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-3-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.1-where-obligations-can-be-enforced.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.1 · Where Obligations Can Be Enforced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.2-models-and-the-semantic-gap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.2 · From Engineering Intent to Enforceable Obligation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.3-constraints-sensors-validators-gates.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.3 · Governance Mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.4-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.4 · Growing the Governed Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.5-when-guardrails-collide.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.5 · When Controls Become a System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.6-alignment-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.6 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-4-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.1-the-dynamics-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.1 · The Dynamics of MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.2-one-problem-many-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.3-brownfield-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.3 · Brownfield Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.4-engineering-the-environment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.4 · Engineering the Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.5-mage-in-motion-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-5-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.1-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.1 · The Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.2-inside-docables-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.2 · Inside DocAble's Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.3-evaluating-docable.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.3 · Evaluating the Product and Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.4-other-agentic-software-factories.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.4 · Other Agentic Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.5-engineering-the-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.5 · Coda: Engineering the Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 6 — The Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 6 — The Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-6-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.1-toward-a-theory-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.1 · From Production to Cumulative Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.2-what-the-theory-predicts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.2 · What the Theory Predicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.3-scope-conditions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.3 · Scope Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.4-research-agenda.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.4 · Research Agenda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.5-what-the-theory-claims.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 7 — The Profession
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 7 — The Profession
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-7-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Profession
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.1-reorganization-of-se.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.1 · The Reorganization of Software Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.2-software-rejoins-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.2 · Back to Models, but Not Back to Waterfall
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.3-agentic-engineering-beyond-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.3 · Agentic Engineering Beyond Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.4-the-engineer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.5-what-cannot-be-delegated.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Must Not Be Delegated?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="9.1-the-part-that-stays-yours.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-handbook.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-engineering-moves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.1 Engineering Moves: A Field Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-model-coherence.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.2 Model Coherence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.3 Governance Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governed-delegation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.4 Governed Delegation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix B — Practicing MAGE
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-practicing-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.1 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-brownfield-migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.2 Brownfield Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-operating-a-gee.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.3 Operating a GEE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-measuring-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.4 Measuring MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Back Matter
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Back Matter
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="colophon.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colophon — Dogfooding MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about-the-author.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About the Author
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Index
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="book-index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index (terms)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures Gallery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="list-of-figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List of Figures and Tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-models-to-answer-engineering-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.1 Connecting Models to Answer Engineering Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintaining-correspondence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.2 Maintaining Correspondence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docable-connecting-engineering-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6.3 DocAble: Connecting Engineering Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6.3 DocAble: Connecting Engineering Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-dependency-for-execution-and-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Dependency for Execution and Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-one-document-run-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What One Document Run Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joining-a-call-to-its-deployment-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joining a Call to Its Deployment Permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+<div class="wrap">
+<header class="chap"><div class="kicker"><a href="part-2-intro.html" aria-label="Beginning of Chapter 2 — Modeling">Chapter 2 — Modeling</a> &nbsp;::&nbsp; <a href="index.html" aria-label="Book contents — jump to the table of contents">§2.6</a></div><h1><span class="chap-num">§2.6</span> System Knowledge: Connecting the Models</h1></header><p>Different questions require different views of the same system. Following Fairbanks, we understand software architecture as the structures needed to reason about a system, including the software elements, the relations among them, and properties of both <sup class="cite-ref"><a href="#wc-2-6-system-knowledge-1" aria-label="citation 1">1</a></sup>.<span class="cite-note"><span class="cn-mark">1.</span> George Fairbanks, <em><span>Just Enough Software Architecture: A Risk-Driven Approach</span></em> (Marshall &amp; Brainerd, 2010).</span> A component view exposes decomposition, a behavioral view shows legal transitions, a deployment view records allocation, and a quantitative view can supply a resource bound. An architectural decision can draw on several of these views. To decide whether two workers can share a host within its memory budget, for example, an engineer needs to know which workers may run together, how much memory each needs, and how much the host provides.</p>
+<p>The views need to agree on the identities and relationships that their questions cross. A deployment record and a memory budget can each serve its own purpose if the engineer can identify the workers and host in both. MBSE methods likewise connect requirements, design models, analyses, and verification results so that engineers can follow a decision across representations <sup class="cite-ref"><a href="#wc-2-6-system-knowledge-2" aria-label="citation 2">2</a></sup><span class="cite-note"><span class="cn-mark">2.</span> Jeff A. Estefan, <em><span>Survey of Model-Based Systems Engineering (MBSE) Methodologies</span></em>, INCOSE-TD-2007-003-02 (International Council on Systems Engineering (INCOSE), 2008).</span> <sup class="cite-ref cn-follow"><a href="#wc-2-6-system-knowledge-3" aria-label="citation 3">3</a></sup>.<span class="cite-note"><span class="cn-mark">3.</span> Azad M. Madni and Michael Sievers, <span>“<span>Model-Based Systems Engineering: Motivation, Current Status, and Research Opportunities</span>,”</span> <em><span>Systems Engineering</span></em> 21, no. 3 (2018): 172–90, <a href="https://doi.org/10.1002/sys.21438">https://doi.org/10.1002/sys.21438</a>.</span> When these views are cheap to derive, maintain, and query, more of that knowledge can remain explicit between tasks.</p>
+
+</div>
+
+<h2 id="connecting-models-to-answer-engineering-questions"><span class="sec-num">2.6.1</span> Connecting Models to Answer Engineering Questions</h2>
+<div class="wrap">
+
+<p>Models can be connected across different concerns or across levels of abstraction. A service catalog, deployment model, and measurement record provide different views of the same service; joining them connects information that no individual view contains. A service-level architecture and a module-level dependency graph instead describe related structure at different levels of detail. The latter introduces classes, interfaces, and dependencies omitted from the former, but must preserve any architectural boundaries established by the higher-level model.</p>
+<p>The relationship between abstraction levels recalls the classical technique of <strong>stepwise refinement</strong> <sup class="cite-ref"><a href="#wc-2-6-system-knowledge-4" aria-label="citation 4">4</a></sup><span class="cite-note"><span class="cn-mark">4.</span> Niklaus Wirth, <span>“<span>Program Development by Stepwise Refinement</span>,”</span> <em><span>Communications of the ACM</span></em> 14, no. 4 (1971): 221–27, <a href="https://doi.org/10.1145/362575.362577">https://doi.org/10.1145/362575.362577</a>.</span>: progressively transforming an abstract description into a more detailed realization while preserving its required properties. In agentic engineering, an agent can perform much of this refinement, choosing algorithms, data structures, and internal organization within the freedom left by the higher-level model. The engineer remains responsible for deciding which properties must survive that translation. Explicit relationships between abstraction levels make those obligations available for analysis and checking rather than relying on the agent to infer them correctly.</p>
+<p>A shared service identifier can connect a catalog entry to a deployment and its measurements without requiring those records to share a file format.</p>
+<p>Suppose an agent is investigating a slow report service. The service catalog identifies its owner, the deployment model records its resource allocation, and a measurement record supplies recent response times. Shared service identities let the agent connect these representations and obtain the relevant facts without reconstructing their relationships from source code or directory names.</p>
+<p>The deployment model describes where the service runs and what resources it has been assigned; an execution history records what happened during particular requests. Joining measurements from that history to the service identity can reveal a performance problem without turning the deployment model into a log. Why not combine all these representations into one comprehensive description? Taken to its extreme, that description would read like the implementation itself, with all the detail that modeling was intended to suppress. Separate models preserve the distinctions needed for different questions; their connections let engineers reason across those distinctions without carrying every detail into every analysis.</p>
+<p>Some answers require a join. Suppose the policy allows a report service to invoke a renderer. The policy names the two services, while the deployment model records the runtime identity under which the report service runs. Joining the permitted call to that identity determines which principal needs permission to invoke the renderer. Neither model contains that complete answer by itself: the policy does not name the environment's principal, and the deployment record does not decide which calls should be permitted.</p>
+<p>A model can also connect an obligation to its evidence. A latency requirement might identify the workload and response-time bound, while a test catalog identifies the measurement that evaluates them. Linking the requirement to that test makes a missing measurement visible. SysML represents this relationship through verification cases that identify the subject and the requirements to be evaluated <sup class="cite-ref"><a href="#wc-2-6-system-knowledge-5" aria-label="citation 5">5</a></sup>.<span class="cite-note"><span class="cn-mark">5.</span> Object Management Group, <em><span>OMG Systems Modeling Language (<span>SysML</span>), Version 2.0, OMG Document <span>formal/26-03-02</span></span></em> (Object Management Group, 2026), <a href="https://www.omg.org/spec/SysML/2.0">https://www.omg.org/spec/SysML/2.0</a>.</span> Whether the test supplies adequate evidence, and whether its result should block release, remain further engineering decisions.</p>
+<p>A join only works if it preserves the distinctions the decision needs. A record may use the correct user identifier and still reduce an unlimited entitlement to a finite-credit balance. Shared identity makes the connection explicit; it does not guarantee that the information passed across it is adequate.</p>
+<p>An engineer or agent can therefore enter through the object named by a task and follow the relations its question requires: from service to owner, from service to deployment, from deployment to measurement. A query interface makes these connections traversable. The agent needs the connected slice that answers the question, rather than every model in the project.</p>
+
+</div>
+
+<h2 id="maintaining-correspondence"><span class="sec-num">2.6.2</span> Maintaining Correspondence</h2>
+<div class="wrap">
+
+<p id="idx-def-derive-and-join">Prefer shared identity and derivation over independently maintained copies of the same fact. A deployment record can refer to the service catalog's identifier rather than copying the service's description and owner. A report can join the two records when it needs their combined information. Where a second representation must contain a copy, make its source and correspondence check explicit. Otherwise every copy becomes another fact engineers must remember to update.</p>
+<p id="idx-def-map-and-territory">Models and implementations can fall out of correspondence as a system changes. Maintaining their relationships requires deciding which representation is authoritative for each property and how correspondence with other representations should be established and checked. <a class="xref" href="2.6-system-knowledge.html#fig-2-6-1">Figure&nbsp;2.6-1</a> distinguishes three arrangements:</p>
+<span id="idx-def-derivation-direction"></span><span id="idx-def-traceability"></span><span id="idx-def-model-to-code"></span><span id="idx-def-model-from-code"></span><ul><li><strong>Derive from implementation.</strong> A dependency graph extracted from call sites describes the connections found in the code. A drift check can repeat the extraction and compare the result with a maintained view. Agreement covers the relationships the extraction observes.</li><li><strong>Generate from models.</strong> An authoritative schema can generate the types used by interface clients. A freshness check compares the checked-in types with the current generator output. The schema determines those types while leaving the client’s algorithms open.</li><li><strong>Trace and check correspondence.</strong> A behavioral model might specify permitted transitions while leaving their implementation to an agent. Traceability links each modeled transition to the functions that implement it. A check can establish that a referenced function still exists; whether it implements the transition correctly requires further evidence.</li></ul>
+<figure id="fig-2-6-1" class="book-figure" data-label="derive-generate-trace" style="--fig-natural:444px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 444 318" role="img" aria-labelledby="f-derive-generate-trace-title f-derive-generate-trace-desc" font-family="'Source Sans 3', sans-serif">
+<title id="f-derive-generate-trace-title">Three correspondence patterns</title>
+<desc id="f-derive-generate-trace-desc">Derive extracts selected models from implementation. Generate determines a portion of implementation from a model. Trace and check connect separately maintained model and implementation elements using distinct directional relations; other implementation decisions remain open.</desc>
+<defs><marker id="f-derive-generate-trace-arrow" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1c1917"/></marker></defs>
+<g fill="#1c1917" font-family="'Source Sans 3', sans-serif" font-size="9">
+<text x="71" y="12" font-size="11" text-anchor="middle" font-weight="700">DERIVE</text>
+<text x="71" y="29" font-size="9" text-anchor="middle" font-style="italic">Implementation is</text>
+<text x="71" y="40" font-size="9" text-anchor="middle" font-style="italic">authoritative</text>
+<rect x="2" y="52" width="138" height="85" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="71" y="65" font-size="10" text-anchor="middle" font-weight="700">Model(s)</text>
+<path d="M16,92 L37,92" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M16,92 L16,112" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="16" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="37" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="16" cy="112" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M48,77 L48,128" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<rect x="54" y="76" width="79" height="52" rx="0" fill="white" stroke="#57534e" stroke-width="0.45"/>
+<rect x="54" y="76" width="79" height="13" rx="0" fill="#f6f4ef" stroke="#57534e" stroke-width="0.45"/>
+<path d="M87,76 L87,128" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M54,89 L133,89" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M54,102 L133,102" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M54,115 L133,115" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<text x="70.5" y="85" font-size="9" text-anchor="middle" font-weight="700">State</text>
+<text x="110" y="85" font-size="9" text-anchor="middle" font-weight="700">Response</text>
+<text x="70.5" y="98" font-size="9" text-anchor="middle">Idle</text>
+<text x="110" y="98" font-size="9" text-anchor="middle">Start()</text>
+<text x="70.5" y="111" font-size="9" text-anchor="middle">Done</text>
+<text x="110" y="111" font-size="9" text-anchor="middle">Stop()</text>
+<text x="70.5" y="124" font-size="9" text-anchor="middle">…</text>
+<text x="110" y="124" font-size="9" text-anchor="middle">…</text>
+<rect x="2" y="221" width="138" height="94" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="71" y="234" font-size="10" text-anchor="middle" font-weight="700">Implementation</text>
+<rect x="16" y="250" width="25" height="32" rx="2" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<rect x="13.5" y="252.5" width="25" height="32" rx="2" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<rect x="11" y="255" width="25" height="32" rx="2" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M18.5,266 L13.5,271" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M13.5,271 L18.5,276" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M28.5,266 L33.5,271" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M33.5,271 L28.5,276" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M25.5,264 L21.5,278" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M47,248 L47,307" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<text x="93" y="256" font-size="9" text-anchor="middle">Agent creates</text>
+<text x="93" y="267" font-size="9" text-anchor="middle">implementation</text>
+<text x="93" y="278" font-size="9" text-anchor="middle">from prompts</text>
+<text x="93" y="289" font-size="9" text-anchor="middle">(and iteration)</text>
+<text x="221" y="12" font-size="11" text-anchor="middle" font-weight="700">GENERATE</text>
+<text x="221" y="29" font-size="9" text-anchor="middle" font-style="italic">Model is authoritative</text>
+<rect x="152" y="52" width="138" height="85" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="221" y="65" font-size="10" text-anchor="middle" font-weight="700">Model(s)</text>
+<path d="M166,92 L187,92" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M166,92 L166,112" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="166" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="187" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="166" cy="112" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M198,77 L198,128" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<rect x="204" y="76" width="79" height="52" rx="0" fill="white" stroke="#57534e" stroke-width="0.45"/>
+<rect x="204" y="76" width="79" height="13" rx="0" fill="#f6f4ef" stroke="#57534e" stroke-width="0.45"/>
+<path d="M237,76 L237,128" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M204,89 L283,89" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M204,102 L283,102" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M204,115 L283,115" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<text x="220.5" y="85" font-size="9" text-anchor="middle" font-weight="700">State</text>
+<text x="260" y="85" font-size="9" text-anchor="middle" font-weight="700">Response</text>
+<text x="220.5" y="98" font-size="9" text-anchor="middle">Idle</text>
+<text x="260" y="98" font-size="9" text-anchor="middle">Start()</text>
+<text x="220.5" y="111" font-size="9" text-anchor="middle">Done</text>
+<text x="260" y="111" font-size="9" text-anchor="middle">Stop()</text>
+<text x="220.5" y="124" font-size="9" text-anchor="middle">…</text>
+<text x="260" y="124" font-size="9" text-anchor="middle">…</text>
+<rect x="152" y="221" width="138" height="94" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="221" y="234" font-size="10" text-anchor="middle" font-weight="700">Implementation</text>
+<rect x="152.5" y="242" width="137" height="38" rx="0" fill="#f6f4ef" stroke="#57534e" stroke-width="0.45"/>
+<path d="M163,256 L158,261" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M158,261 L163,266" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M173,256 L178,261" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M178,261 L173,266" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M170,254 L166,268" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M185,247 L185,275" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<text x="237" y="257" font-size="9" text-anchor="middle">Generated portion</text>
+<text x="237" y="268" font-size="9" text-anchor="middle">(determined by model)</text>
+<polygon points="176.0,297.0 177.81,298.95 177.24,300.83 174.65,301.44 173.66,302.66 173.56,305.31 171.83,306.24 169.56,304.85 168.0,305.0 166.05,306.81 164.17,306.24 163.56,303.65 162.34,302.66 159.69,302.56 158.76,300.83 160.15,298.56 160.0,297.0 158.19,295.05 158.76,293.17 161.35,292.56 162.34,291.34 162.44,288.69 164.17,287.76 166.44,289.15 168.0,289.0 169.95,287.19 171.83,287.76 172.44,290.35 173.66,291.34 176.31,291.44 177.24,293.17 175.85,295.44" fill="white" stroke="#1c1917" stroke-width=".7"/>
+<circle cx="168" cy="297" r="3" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M185,285 L185,308" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<text x="237" y="291" font-size="9" text-anchor="middle">Other implementation</text>
+<text x="237" y="302" font-size="9" text-anchor="middle">decisions remain open</text>
+<text x="371" y="12" font-size="11" text-anchor="middle" font-weight="700">TRACE + CHECK</text>
+<text x="371" y="29" font-size="9" text-anchor="middle" font-style="italic">Neither fully determines</text>
+<text x="371" y="40" font-size="9" text-anchor="middle" font-style="italic">the other</text>
+<rect x="302" y="52" width="138" height="85" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="371" y="65" font-size="10" text-anchor="middle" font-weight="700">Model(s)</text>
+<path d="M316,92 L337,92" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M316,92 L316,112" fill="none" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="316" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="337" cy="92" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<circle cx="316" cy="112" r="4.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M348,77 L348,128" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<rect x="354" y="76" width="79" height="52" rx="0" fill="white" stroke="#57534e" stroke-width="0.45"/>
+<rect x="354" y="76" width="79" height="13" rx="0" fill="#f6f4ef" stroke="#57534e" stroke-width="0.45"/>
+<path d="M387,76 L387,128" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M354,89 L433,89" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M354,102 L433,102" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<path d="M354,115 L433,115" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<text x="370.5" y="85" font-size="9" text-anchor="middle" font-weight="700">State</text>
+<text x="410" y="85" font-size="9" text-anchor="middle" font-weight="700">Response</text>
+<text x="370.5" y="98" font-size="9" text-anchor="middle">Idle</text>
+<text x="410" y="98" font-size="9" text-anchor="middle">Start()</text>
+<text x="370.5" y="111" font-size="9" text-anchor="middle">Done</text>
+<text x="410" y="111" font-size="9" text-anchor="middle">Stop()</text>
+<text x="370.5" y="124" font-size="9" text-anchor="middle">…</text>
+<text x="410" y="124" font-size="9" text-anchor="middle">…</text>
+<rect x="302" y="221" width="138" height="94" rx="4" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="371" y="234" font-size="10" text-anchor="middle" font-weight="700">Implementation</text>
+<rect x="302.5" y="242" width="137" height="38" rx="0" fill="#f6f4ef" stroke="#57534e" stroke-width="0.45"/>
+<path d="M313,256 L308,261" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M308,261 L313,266" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M323,256 L328,261" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M328,261 L323,266" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M320,254 L316,268" fill="none" stroke="#1c1917" stroke-width="1.1"/>
+<path d="M335,247 L335,275" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<text x="387" y="251" font-size="9" text-anchor="middle">Corresponding portion</text>
+<text x="387" y="262" font-size="9" text-anchor="middle">(maintained</text>
+<text x="387" y="273" font-size="9" text-anchor="middle">and checked)</text>
+<polygon points="326.0,297.0 327.81,298.95 327.24,300.83 324.65,301.44 323.66,302.66 323.56,305.31 321.83,306.24 319.56,304.85 318.0,305.0 316.05,306.81 314.17,306.24 313.56,303.65 312.34,302.66 309.69,302.56 308.76,300.83 310.15,298.56 310.0,297.0 308.19,295.05 308.76,293.17 311.35,292.56 312.34,291.34 312.44,288.69 314.17,287.76 316.44,289.15 318.0,289.0 319.95,287.19 321.83,287.76 322.44,290.35 323.66,291.34 326.31,291.44 327.24,293.17 325.85,295.44" fill="white" stroke="#1c1917" stroke-width=".7"/>
+<circle cx="318" cy="297" r="3" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<path d="M335,285 L335,308" fill="none" stroke="#57534e" stroke-width="0.7"/>
+<text x="387" y="291" font-size="9" text-anchor="middle">Other implementation</text>
+<text x="387" y="302" font-size="9" text-anchor="middle">decisions</text>
+<path d="M147,18 L147,315" fill="none" stroke="#57534e" stroke-width="0.6"/>
+<path d="M297,18 L297,315" fill="none" stroke="#57534e" stroke-width="0.6"/>
+<path d="M34,214 L34,144" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-derive-generate-trace-arrow)"/>
+<text x="84" y="168" font-size="10" text-anchor="middle" font-style="italic">derive</text>
+<text x="89" y="185" font-size="9" text-anchor="middle" font-style="italic">(extract model</text>
+<text x="89" y="196" font-size="9" text-anchor="middle" font-style="italic">from implementation)</text>
+<path d="M182,144 L182,214" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-derive-generate-trace-arrow)"/>
+<text x="237" y="168" font-size="10" text-anchor="middle" font-style="italic">generate</text>
+<text x="237" y="185" font-size="9" text-anchor="middle" font-style="italic">(produce implementation</text>
+<text x="237" y="196" font-size="9" text-anchor="middle" font-style="italic">artifacts from model)</text>
+<path d="M355,144 C342,166 342,192 355,214" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-derive-generate-trace-arrow)"/>
+<path d="M388,214 C401,192 401,166 388,144" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-derive-generate-trace-arrow)"/>
+<text x="321" y="166" font-size="10" text-anchor="middle" font-weight="700" font-style="italic">trace</text>
+<text x="321" y="182" font-size="9" text-anchor="middle" font-style="italic">(bind</text>
+<text x="321" y="193" font-size="9" text-anchor="middle" font-style="italic">related</text>
+<text x="321" y="204" font-size="9" text-anchor="middle" font-style="italic">elements)</text>
+<text x="419" y="166" font-size="10" text-anchor="middle" font-weight="700" font-style="italic">check</text>
+<text x="419" y="182" font-size="9" text-anchor="middle" font-style="italic">(evaluate</text>
+<text x="419" y="193" font-size="9" text-anchor="middle" font-style="italic">where</text>
+<text x="419" y="204" font-size="9" text-anchor="middle" font-style="italic">decidable)</text>
+</g>
+</svg><figcaption data-short="Three correspondence patterns"><span class="fig-label">Figure 2.6-1.</span> <em>Three correspondence patterns.</em> Derivation extracts models from implementation; generation produces implementation artifacts from models; traceability connects representations maintained independently. Each relationship covers selected properties or artifacts rather than necessarily determining the entire implementation.</figcaption></figure>
+<p>An authoritative model can also be interpreted directly during execution. Consider the build with two independent compilations and one link task. The runner reads the declared dependencies to start each compilation when it is ready and to delay linking until both object files exist. Nothing has to generate a schedule in advance. An engineer can query those same dependencies to find which task a changed object file could affect.</p>
+<p>The third arrangement is particularly useful when agents implement systems whose models specify only selected properties. The models preserve engineering decisions while leaving other implementation choices open. The three arrangements can coexist within one system, and their coverage can change as engineers learn which properties need explicit representation. These correspondence patterns apply between models at different abstraction levels as well as between models and implementation; a refinement relationship identifies which higher-level properties a more detailed representation must preserve.</p>
+
+</div>
+
+<h2 id="docable-connecting-engineering-models"><span class="sec-num">2.6.3</span> DocAble: Connecting Engineering Models</h2>
+<div class="wrap">
+
+<p>DocAble improves document accessibility through passes that analyze or change a document. Workers and services execute those passes, and the product retains evidence about the resulting artifact. Its modeling problem therefore crosses several views: the intended computation, the execution arrangement, and what one run actually changed. The worked question is how those views can share facts without becoming independent accounts that drift apart.</p>
+<p>DocAble uses different representations for different engineering questions. Roughly 130 structured model records and several data dialects describe components, deployment, data flow, behavior, and governance. Shared identities let an engineer move among these records as a question requires. <a class="xref" href="2.6-system-knowledge.html#fig-2-6-2">Figure&nbsp;2.6-2</a> follows the slow service from its registry entry to its deployment and then to performance measurements.</p>
+<p>The models are represented as data rather than importing the implementation they describe. Keeping the representations separate lets engineers check their correspondence. Where a model is intended to provide independent evidence about an artifact, the model must remain distinguishable from that artifact. Chapter 5 shows how these models are maintained and used in the governed engineering environment.</p>
+<figure id="fig-2-6-2" class="book-figure" data-label="modeling-substrate" style="--fig-natural:335px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 335 201" role="img" aria-labelledby="f-modeling-substrate-title f-modeling-substrate-desc">
+<title id="f-modeling-substrate-title">Heterogeneous models over shared identities</title>
+<desc id="f-modeling-substrate-desc">A service performance question follows the service registry into the shared-identity hub, out to deployment topology, back through the hub, then out to measurements. Four other representations have thin connections to the same hub.</desc>
+<defs><marker id="f-modeling-substrate-arrow" markerWidth="7" markerHeight="6" refX="6.8" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z" fill="black"/></marker></defs>
+<rect width="335" height="201" fill="white"/>
+<path d="M75,68 L101,85" fill="none" stroke="black" stroke-width=".55"/>
+<path d="M75,140 L101,123" fill="none" stroke="black" stroke-width=".55"/>
+<path d="M155,168 L155,138" fill="none" stroke="black" stroke-width=".55"/>
+<path d="M243,48 L201,80" fill="none" stroke="black" stroke-width=".55"/>
+<path d="M151,32 C151,47 144,56 145,70" fill="none" stroke="black" stroke-width="1.9" marker-end="url(#f-modeling-substrate-arrow)"/>
+<path d="M217,94 C227,89 233,89 244,92" fill="none" stroke="black" stroke-width="1.9" marker-end="url(#f-modeling-substrate-arrow)"/>
+<path d="M244,119 C234,126 224,125 215,117" fill="none" stroke="black" stroke-width="1.9" marker-end="url(#f-modeling-substrate-arrow)"/>
+<path d="M199,129 C213,147 227,169 243,177" fill="none" stroke="black" stroke-width="1.9" marker-end="url(#f-modeling-substrate-arrow)"/>
+<ellipse cx="155" cy="104" rx="65" ry="34" fill="#eeeeee" stroke="black" stroke-width=".7"/>
+<text x="155" y="88.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">Traverse via</text>
+<text x="155" y="100.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">shared identities</text>
+<text x="155" y="114.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="italic">e.g., investigate a</text>
+<text x="155" y="126.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="italic">service’s performance</text>
+<rect x="105.5" y="4.0" width="91" height="28" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="151" y="15.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">Service registry</text>
+<text x="151" y="27.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(identify service)</text>
+<rect x="5.0" y="53.5" width="70" height="29" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="40" y="65.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Provenance</text>
+<text x="40" y="77.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">records</text>
+<rect x="5.0" y="125.5" width="70" height="29" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="40" y="137.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Computation</text>
+<text x="40" y="149.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">graph</text>
+<rect x="118.0" y="168.0" width="74" height="28" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="155" y="179.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Entitlement</text>
+<text x="155" y="191.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">policy</text>
+<rect x="243.0" y="38.0" width="86" height="20" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="286" y="51.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">State machines</text>
+<rect x="244.0" y="84.0" width="86" height="42" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="287" y="96.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">Deployment</text>
+<text x="287" y="108.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">topology</text>
+<text x="287" y="120.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(where it runs)</text>
+<rect x="243.0" y="162.0" width="88" height="30" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="287" y="174.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">Measurements</text>
+<text x="287" y="186.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(how it performs)</text>
+<circle cx="132" cy="49" r="8" fill="white" stroke="black" stroke-width=".7"/>
+<text x="132" y="52.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">1</text>
+<circle cx="232" cy="76" r="8" fill="white" stroke="black" stroke-width=".7"/>
+<text x="232" y="79.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">2</text>
+<circle cx="234" cy="148" r="8" fill="white" stroke="black" stroke-width=".7"/>
+<text x="234" y="151.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">3</text>
+</svg><figcaption data-short="Heterogeneous models over shared identities"><span class="fig-label">Figure 2.6-2.</span> <em>Heterogeneous models over shared identities.</em> An engineering question selects a path through the available representations. The highlighted traversal follows a service from its registry entry through deployment topology to performance measurements, using shared identities to connect the models. Other models remain available for different questions.</figcaption></figure>
+
+</div>
+
+<h3 id="one-dependency-for-execution-and-analysis">One Dependency for Execution and Analysis</h3>
+<div class="wrap">
+
+<p>Suppose we change a remediation pass. Which later computations depend on its output, and will they still execute in the required order? In [ref:chapter:2.3-structural], we introduced DocAble's remediation-computation graph for investigating dependencies. Connecting those dependencies to the execution declarations lets us examine their scheduling consequences without reconstructing the pipeline from code. For a DOCX job with table-header repair enabled, one pass marks table headers and another checks the table's structure. The registry declares that the repair pass writes table-header information and that the structure check reads it.</p>
+<p>Matching that write to that read gives a dependency: repair must precede the check. The scheduler uses the dependency to order the work, so the check examines the table after the header pass has run.</p>
+<p>The Office registry also emits its resource dependencies for a separate Python graph view. The edge from table-header repair to the structure check therefore comes from the same read/write metadata used by scheduling. An engineer can inspect which computations depend on table-header information, or join their identities to measurements, without executing the remediation pipeline. The Python graph provides the analytical view; the execution machinery does not schedule from it.</p>
+<p>PDF uses a different connection. Its analytical edges are projected from parallel typed declarations of what each pass produces and consumes, including information consulted only to decide whether a pass runs. Blocking checks hold those declared relationships in correspondence with the executable pipeline.</p>
+<p>The Office example makes the same dependency available for execution and analysis; it does not derive a new relationship by joining independent models. The execution machinery uses the declared relationships to schedule work; the analytical view exposes the structure needed for queries and checks. The important question is which representation owns each fact and how each consumer remains connected to that source. Where separate declarations are necessary, as in the PDF view, checked correspondence carries that connection.</p>
+
+</div>
+
+<h3 id="what-one-document-run-changed">What One Document Run Changed</h3>
+<div class="wrap">
+
+<p>A static computation graph does not record the mutations performed during a particular run. DocAble records consequential document changes as typed operations: each operation names its target, the mutation made, the responsible remediation pass, and the retained evidence. That history supports audit, debugging, and a changelog. Recording only “document modified” would lose the very distinctions those uses need.</p>
+<p>During a PDF remediation session, typed edit values form a per-session log. A replay engine can apply the same sequence deterministically. This record preserves the mutations while omitting the reasoning, analyses, control decisions, and retries that produced them. The computation graph asks what may compose; the edit record asks what happened to this artifact. <a class="xref" href="2.6-system-knowledge.html#fig-2-6-3">Figure&nbsp;2.6-3</a> contrasts these two reductions.</p>
+<p>DocAble’s PDF changeset interface also represents edits before they happen. A changeset is an ordered collection of typed operations, each naming a target and a supported mutation, such as assigning alternative text or changing a structural tag. The proposing computation does not manipulate PDF objects directly. An applier resolves the targets against the current document and returns a result for each operation. The proposal expresses intended mutations; the results and attribution record show what was actually applied.</p>
+<p>A specialized remediation pass, a general-purpose agent, or a human editor can propose operations using the same vocabulary. The interface preserves the information needed to apply and inspect the change while leaving its producer’s reasoning unspecified. Chapter 3 examines the constraints on applying such proposals; Chapter 5 returns to the reasoning strategies that can produce them.</p>
+<figure id="fig-2-6-3" class="book-figure" data-label="two-reductions-static-realized" style="--fig-natural:337.5px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 337.5 242" role="img" aria-labelledby="f-two-reductions-static-realized-trTitle f-two-reductions-static-realized-trDesc" font-family="&quot;Source Sans 3&quot;, sans-serif"><title xmlns="http://www.w3.org/2000/svg" id="f-two-reductions-static-realized-trTitle">Computation structure versus recorded history</title>
+  <desc xmlns="http://www.w3.org/2000/svg" id="f-two-reductions-static-realized-trDesc">Two reductions of the same remediation system, side by side. Left: the static computation graph — named passes joined by a typed data edge and a typed control gate, modeling what computations may compose. Right: one session's edit record — a run that emits a sequence of typed PdfEdit operations, recording what mutations did occur. A dashed link between them marks that they are not joined today; a shared computation identity would join them, and the join is added when a question needs it.</desc>
+  <defs><marker id="f-two-reductions-static-realized-a2f5169" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#2f5169"/></marker><marker id="f-two-reductions-static-realized-a57534e" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#57534e"/></marker><marker id="f-two-reductions-static-realized-a086438" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#086438"/></marker><marker id="f-two-reductions-static-realized-a1c1917" viewBox="0 0 6 6" refX="5.6" refY="3" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z" fill="#1c1917"/></marker></defs>
+<rect x="3" y="3" width="154" height="207" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<rect x="181" y="3" width="153.5" height="207" rx="4" fill="#f6f4ef" stroke="#57534e" stroke-width="0.8"/>
+<text x="80" y="18.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Computation graph</text>
+<text x="80" y="31.0" text-anchor="middle" font-size="9" fill="#1c1917" font-style="italic">what computations may compose</text>
+<text x="257.75" y="18.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Edit record</text>
+<text x="257.75" y="31.0" text-anchor="middle" font-size="9" fill="#1c1917" font-style="italic">what mutations one run did emit</text>
+<rect x="21" y="44" width="118" height="25" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="80" y="60.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Analyze pass</text>
+<rect x="21" y="111" width="118" height="25" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="80" y="127.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Remediate pass</text>
+<rect x="21" y="168" width="118" height="25" rx="4" fill="#e4efe8" stroke="#086438" stroke-width="0.8"/>
+<text x="80" y="184.0" text-anchor="middle" font-size="10" fill="#1c1917" font-weight="700">Route gate</text>
+<path d="M80,69 L80,110" fill="none" stroke="#086438" stroke-width=".8" marker-end="url(#f-two-reductions-static-realized-a086438)"/>
+<text x="86" y="91.0" text-anchor="start" font-size="9" fill="#086438" font-weight="700">DATA_FLOW</text>
+<path d="M80,168 L80,137" fill="none" stroke="#57534e" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#f-two-reductions-static-realized-a57534e)"/>
+<text x="86" y="154.0" text-anchor="start" font-size="9" fill="#ad420d" font-weight="700">CONTROL_GATE</text>
+<rect x="188" y="44" width="140" height="25" rx="4" fill="#e7edf3" stroke="#2f5169" stroke-width="0.8"/>
+<text x="258" y="60.0" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">Session run</text>
+<path d="M258,69 L258,83" fill="none" stroke="#2f5169" stroke-width=".8" marker-end="url(#f-two-reductions-static-realized-a2f5169)"/>
+<rect x="188" y="84" width="140" height="25" rx="4" fill="#e7edf3" stroke="#2f5169" stroke-width="0.8"/>
+<text x="258" y="100.0" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">PdfEdit · SetAltText</text>
+<path d="M258,109 L258,123" fill="none" stroke="#2f5169" stroke-width=".8" marker-end="url(#f-two-reductions-static-realized-a2f5169)"/>
+<rect x="188" y="124" width="140" height="25" rx="4" fill="#e7edf3" stroke="#2f5169" stroke-width="0.8"/>
+<text x="258" y="140.0" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">PdfEdit · TagFigure</text>
+<path d="M258,149 L258,163" fill="none" stroke="#2f5169" stroke-width=".8" marker-end="url(#f-two-reductions-static-realized-a2f5169)"/>
+<rect x="188" y="164" width="140" height="25" rx="4" fill="#e7edf3" stroke="#2f5169" stroke-width="0.8"/>
+<text x="258" y="180.0" text-anchor="middle" font-size="9" fill="#1c1917" font-weight="700">PdfEdit · SetReadingOrder</text>
+<text x="80" y="204.0" text-anchor="middle" font-size="9" fill="#086438" font-weight="700">static structure</text>
+<text x="258" y="204.0" text-anchor="middle" font-size="9" fill="#2f5169" font-weight="700">recorded history</text>
+<path d="M134,215 L203,215" fill="none" stroke="#57534e" stroke-width=".8" stroke-dasharray="3 2"/>
+<text x="168.75" y="230.0" text-anchor="middle" font-size="9" fill="#57534e" font-weight="700">not joined today</text>
+</svg><figcaption data-short="Computation structure versus recorded history"><span class="fig-label">Figure 2.6-3.</span> <em>Computation structure versus recorded history.</em> Declared computations and a run’s actual mutations answer different questions. A shared computation identity can join the recorded edits to the static model when needed, while preserving the distinction between what was declared and what happened.</figcaption></figure>
+<p>DocAble joins staged-run latency and cost to stable computation identities, so measurements can be queried alongside the static graph. The per-session edit log remains a separate provenance record; it is not a per-run execution graph over computation nodes. Recording attribution is also distinct from ensuring that every mutation records it. A structural check requires typed mutation operations to emit attribution, but it cannot establish that the semantic explanation inside the record is correct.</p>
+
+</div>
+
+<h3 id="joining-a-call-to-its-deployment-permission">Joining a Call to Its Deployment Permission</h3>
+<div class="wrap">
+
+<p>A permitted interservice call requires several models to agree. A typed edge records that one service may call another. Deployment configuration identifies the environment variable carrying the callee's URL. The caller's runtime identity determines which invocation grant the cloud's access-control configuration must contain. Joining the edge to these records determines both how to reach the callee and who is permitted to invoke it; a further comparison checks agreement with the service catalog's documented topology. Twenty-eight modeled call edges produce ten distinct invocation grants once shared runtime identities are accounted for. No single source artifact contains that deployment plan.</p>
+<p>DocAble introduced the join after service URLs were wired correctly but the matching invocation grant was absent, taking staging down with authorization errors. The repair made URL wiring and authorization two consequences of the same modeled edge, so a later change could derive them together rather than requiring another bespoke grant.</p>
+<p>Connections can create information that no individual model contains. The call model does not contain the environment-specific runtime identity; the deployment environment does not independently state the intended call topology. Joining them determines the permission that should exist.</p>
+<p>Each connection has a specific purpose. Resource declarations supply a dependency, computation identities connect measured cost to a pass, an edit record explains a document change, and a call joined to a deployment identity determines a permission. Keeping those relations explicit lets engineers inspect the connection that an analysis depends on, instead of treating membership in a model family as evidence that the models agree.</p><section class="works-cited" aria-labelledby="wc-2-6-system-knowledge-h"><h2 id="wc-2-6-system-knowledge-h" class="wc-h">Works Cited</h2><ol class="wc-list"><li id="wc-2-6-system-knowledge-1">Fairbanks, George. <em><span>Just Enough Software Architecture: A Risk-Driven Approach</span></em>. Marshall &amp; Brainerd, 2010.</li><li id="wc-2-6-system-knowledge-2">Estefan, Jeff A. <em><span>Survey of Model-Based Systems Engineering (MBSE) Methodologies</span></em>. INCOSE-TD-2007-003-02. International Council on Systems Engineering (INCOSE), 2008.</li><li id="wc-2-6-system-knowledge-3">Madni, Azad M., and Michael Sievers. <span>“<span>Model-Based Systems Engineering: Motivation, Current Status, and Research Opportunities</span>.”</span> <em><span>Systems Engineering</span></em> 21, no. 3 (2018): 172–90. <a href="https://doi.org/10.1002/sys.21438">https://doi.org/10.1002/sys.21438</a>.</li><li id="wc-2-6-system-knowledge-4">Wirth, Niklaus. <span>“<span>Program Development by Stepwise Refinement</span>.”</span> <em><span>Communications of the ACM</span></em> 14, no. 4 (1971): 221–27. <a href="https://doi.org/10.1145/362575.362577">https://doi.org/10.1145/362575.362577</a>.</li><li id="wc-2-6-system-knowledge-5">Object Management Group. <em><span>OMG Systems Modeling Language (<span>SysML</span>), Version 2.0, OMG Document <span>formal/26-03-02</span></span></em>. Object Management Group, 2026. <a href="https://www.omg.org/spec/SysML/2.0">https://www.omg.org/spec/SysML/2.0</a>.</li></ol></section><nav class="chapnav" aria-label="Book navigation"><div class="chapnav-back"><a href="index.html" aria-label="Table of contents">« Table of contents</a><a href="part-2-intro.html" aria-label="Beginning of Chapter 2 — Modeling">« Beginning of chapter</a><a href="2.5-decision.html" aria-label="Previous section — §2.5 · Decision Models: What Should Happen Next?">« Previous section</a></div><span class="chapnav-here" title="§2.6 · System Knowledge: Connecting the Models">§2.6 · System Knowledge: Connecting the Models</span><div class="chapnav-fwd"><a href="2.7-modeling-summary.html" aria-label="Next section — §2.7 · Summary">Next section »</a><a href="part-3-intro.html" aria-label="Next chapter — Chapter 3 — Alignment">Next chapter »</a><a href="book-index.html" aria-label="Index of terms">Index »</a></div></nav><div class="book-foot">© James C. Davis, 2026–present</div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

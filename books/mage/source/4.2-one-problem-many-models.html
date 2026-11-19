@@ -1,0 +1,4132 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Case Study in Software Engineering — web edition.">
+      
+      
+      
+      
+        <link rel="prev" href="4.1-the-dynamics-of-mage.html">
+      
+      
+        <link rel="next" href="4.3-brownfield-engineering.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>§4.2 · One Problem, Many Models - Model-Based Agentic Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/mage-family.css">
+    
+      <link rel="stylesheet" href="assets/mage-book.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="citation_title" content="One Problem, Many Models"><meta name="citation_author" content="James C. Davis"><meta name="citation_book_title" content="Model-Based Agentic Engineering"><meta name="citation_publication_date" content="2026"><meta name="citation_fulltext_html_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/4.2-one-problem-many-models.html"><meta name="citation_pdf_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/mage-book.pdf"><meta name="citation_reference" content="citation_title=Always Measure One Level Deeper;citation_author=John Ousterhout;citation_publication_date=2018">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#421-one-document-one-worker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-header__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a class="md-header__brandlink" href="index.html" title="Model-Based Agentic Engineering">Model-Based Agentic Engineering</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              §4.2 · One Problem, Many Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <nav class="md-header__family" aria-label="MAGE publishing family">
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/">MAGE homepage</a>
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/teach/">Teach with MAGE</a>
+        
+      </nav>
+    
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-nav__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Model-Based Agentic Engineering
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  
+    <a class="md-nav__pdf" href="mage-book.pdf" title="Read the PDF edition" aria-label="Read the PDF edition"><svg class="dl-ico" viewBox="0 0 16 16" width="1.05em" height="1.05em" style="vertical-align:-0.18em;margin-right:0.45em" aria-hidden="true" focusable="false"><path d="M9.4 1.3H4.3a1 1 0 0 0-1 1v11.4a1 1 0 0 0 1 1h7.4a1 1 0 0 0 1-1V4.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.3v3.3h3.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><text x="8" y="12.1" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="4.8" font-weight="700" letter-spacing="-0.1" fill="currentColor">PDF</text></svg>Read the PDF&nbsp;&#8595;
+    </a>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Orientation and Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.0-acknowledgments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acknowledgments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contents.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.3-authors-note.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Author’s Note
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.5-preface.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.1-how-to-read-this-book.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Read This Book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.2-what-this-book-argues.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What This Book Argues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.4-the-books-language.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-1-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.1-the-printer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.1 · The Printer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.2-the-engineering-object.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.2 · The Engineering Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.3-mage-by-example.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.3 · MAGE by Example: DocAble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.4-the-agentic-substrate.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.5-the-new-engineering-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.5 · Two Engineering Problems, One Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Modeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Modeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-2-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.1-context-is-the-first-modeling-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.1 · From Context to Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.2-constructing-and-using-engineering-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.2 · Constructing and Using Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.3-structural.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.3 · Structural Models: What Is Connected to What?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.4-behavioral.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.4 · Behavioral Models: What May Happen?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.5-decision.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.6-system-knowledge.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.7-modeling-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.7 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 3 — Alignment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 3 — Alignment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-3-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.1-where-obligations-can-be-enforced.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.1 · Where Obligations Can Be Enforced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.2-models-and-the-semantic-gap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.2 · From Engineering Intent to Enforceable Obligation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.3-constraints-sensors-validators-gates.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.3 · Governance Mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.4-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.4 · Growing the Governed Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.5-when-guardrails-collide.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.5 · When Controls Become a System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.6-alignment-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.6 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-4-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.1-the-dynamics-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.1 · The Dynamics of MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="4.2-one-problem-many-models.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#421-one-document-one-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 One Document, One Worker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#422-pages-as-the-unit-of-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 Pages as the Unit of Scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#423-a-new-class-of-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 A New Class of Input
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#424-remove-media-from-the-working-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.4 Remove Media from the Working Set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#425-why-one-level-deeper-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.5 Why One Level Deeper Matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#426-memory-did-not-stop-mattering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.6 Memory Did Not Stop Mattering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#427-why-are-we-still-chunking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.7 Why Are We Still Chunking?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#428-analyze-before-you-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.8 Analyze Before You Build
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.8 Analyze Before You Build">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-second-resource-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The second resource model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#predicting-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicting latency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#predicting-the-cost-of-a-design-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicting the cost of a design change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-prediction-error-as-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use prediction error as evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#429-what-carries-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.9 What Carries Forward
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.9 What Carries Forward">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models-get-falsified-the-obligation-survives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models get falsified; the obligation survives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4210-the-resulting-model-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.10 The Resulting Model Family
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.10 The Resulting Model Family">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-days" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modeling Inside the Implementation Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.3-brownfield-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.3 · Brownfield Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.4-engineering-the-environment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.4 · Engineering the Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.5-mage-in-motion-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-5-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.1-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.1 · The Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.2-inside-docables-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.2 · Inside DocAble's Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.3-evaluating-docable.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.3 · Evaluating the Product and Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.4-other-agentic-software-factories.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.4 · Other Agentic Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.5-engineering-the-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.5 · Coda: Engineering the Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 6 — The Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 6 — The Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-6-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.1-toward-a-theory-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.1 · From Production to Cumulative Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.2-what-the-theory-predicts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.2 · What the Theory Predicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.3-scope-conditions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.3 · Scope Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.4-research-agenda.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.4 · Research Agenda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.5-what-the-theory-claims.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 7 — The Profession
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 7 — The Profession
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-7-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Profession
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.1-reorganization-of-se.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.1 · The Reorganization of Software Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.2-software-rejoins-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.2 · Back to Models, but Not Back to Waterfall
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.3-agentic-engineering-beyond-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.3 · Agentic Engineering Beyond Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.4-the-engineer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.5-what-cannot-be-delegated.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Must Not Be Delegated?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="9.1-the-part-that-stays-yours.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-handbook.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-engineering-moves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.1 Engineering Moves: A Field Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-model-coherence.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.2 Model Coherence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.3 Governance Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governed-delegation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.4 Governed Delegation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix B — Practicing MAGE
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-practicing-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.1 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-brownfield-migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.2 Brownfield Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-operating-a-gee.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.3 Operating a GEE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-measuring-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.4 Measuring MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Back Matter
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Back Matter
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="colophon.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colophon — Dogfooding MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about-the-author.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About the Author
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Index
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="book-index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index (terms)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures Gallery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="list-of-figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List of Figures and Tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#421-one-document-one-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 One Document, One Worker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#422-pages-as-the-unit-of-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 Pages as the Unit of Scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#423-a-new-class-of-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 A New Class of Input
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#424-remove-media-from-the-working-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.4 Remove Media from the Working Set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#425-why-one-level-deeper-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.5 Why One Level Deeper Matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#426-memory-did-not-stop-mattering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.6 Memory Did Not Stop Mattering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#427-why-are-we-still-chunking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.7 Why Are We Still Chunking?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#428-analyze-before-you-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.8 Analyze Before You Build
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.8 Analyze Before You Build">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-second-resource-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The second resource model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#predicting-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicting latency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#predicting-the-cost-of-a-design-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicting the cost of a design change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-prediction-error-as-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use prediction error as evidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#429-what-carries-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.9 What Carries Forward
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.9 What Carries Forward">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models-get-falsified-the-obligation-survives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models get falsified; the obligation survives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4210-the-resulting-model-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.10 The Resulting Model Family
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2.10 The Resulting Model Family">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-days" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modeling Inside the Implementation Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+<div class="wrap">
+<header class="chap"><div class="kicker"><a href="part-4-intro.html" aria-label="Beginning of Chapter 4 — MAGE in Motion: Engineering Through Models">Chapter 4 — MAGE in Motion: Engineering Through Models</a> &nbsp;::&nbsp; <a href="index.html" aria-label="Book contents — jump to the table of contents">§4.2</a></div><h1><span class="chap-num">§4.2</span> One Problem, Many Models</h1></header><p>A large PowerPoint presentation exposed a memory problem in DocAble. The system handled ordinary documents, but this input exceeded the worker's memory budget. I needed to understand why memory consumption grew with document size before deciding how to change the implementation.</p>
+<p>Several familiar techniques were available: reduce the working set, separate structure from media, partition execution, or change where data resides. Each could reduce memory consumption, but each would also affect other properties of the system. The engineering question was which relationship needed to change.</p>
+<p>The initial problem was memory exhaustion. Later changes raised questions about latency, throughput, and execution cost. I did not begin with a plan to construct a family of models. Each model emerged because an observed failure or a proposed improvement exposed a relationship worth understanding.</p>
+
+</div>
+
+<h2 id="421-one-document-one-worker"><span class="sec-num">4.2.1</span> One Document, One Worker</h2>
+<div class="wrap">
+
+<p>DocAble originally treated an entire document as one unit of execution. A long-running Kubernetes worker opened the document, held the state needed for remediation in memory, modified it, and produced the result. <a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-1">Figure&nbsp;4.2-1</a> traces the architectural progression from whole-document execution through page chunking to skeletonized residency.</p>
+<figure id="fig-4-2-1" class="book-figure" data-label="interlude-execution-unit" style="--fig-natural:444px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 444 536" role="img" aria-labelledby="f-interlude-execution-unit-title f-interlude-execution-unit-desc"><title id="f-interlude-execution-unit-title">Evolution of DocAble’s document working set</title><desc id="f-interlude-execution-unit-desc">Three equal panels: whole-document execution, page-chunked execution, and skeletonized execution. Chunking partitions execution; skeletonization separates resident structure from externally stored media. Media access and the GenAI connection are distinct.</desc><defs><marker id="f-interlude-execution-unit-arrow" markerWidth="5" markerHeight="5" refX="4.6" refY="2.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 Z" fill="#222"/></marker></defs><rect width="444" height="536" fill="white"/><style>text{font-family:'Source Sans 3','Arial',sans-serif;fill:#171717;}path,rect{stroke-linejoin:round;}</style>
+<rect x="1" y="1" width="142" height="534" rx="4" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<rect x="2" y="2" width="140" height="42" rx="2" fill="#f5f5f5" stroke="none" stroke-width=".65"/>
+<rect x="2" y="408" width="140" height="126" rx="2" fill="#f7f7f7" stroke="none" stroke-width=".65"/>
+<text x="72" y="18" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">(a) Whole-document</text>
+<text x="72" y="32" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">execution</text>
+<rect x="151" y="1" width="142" height="534" rx="4" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<rect x="152" y="2" width="140" height="42" rx="2" fill="#f5f5f5" stroke="none" stroke-width=".65"/>
+<rect x="152" y="408" width="140" height="126" rx="2" fill="#f7f7f7" stroke="none" stroke-width=".65"/>
+<text x="222" y="18" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">(b) Page-chunked</text>
+<text x="222" y="32" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">execution</text>
+<rect x="301" y="1" width="142" height="534" rx="4" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<rect x="302" y="2" width="140" height="42" rx="2" fill="#f5f5f5" stroke="none" stroke-width=".65"/>
+<rect x="302" y="408" width="140" height="126" rx="2" fill="#f7f7f7" stroke="none" stroke-width=".65"/>
+<text x="372" y="18" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">(c) Skeletonized</text>
+<text x="372" y="32" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">execution</text>
+<rect x="38" y="69" width="68" height="26" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="72.0" y="85.4" text-anchor="middle" style="font-size:10.4px;">Document</text>
+<path d="M72,95 L72,139" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<rect x="18" y="140" width="108" height="127" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="72" y="159" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">Worker</text>
+<rect x="26" y="171" width="92" height="29" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="72.0" y="188.9" text-anchor="middle" style="font-size:10.4px;">Structure</text>
+<rect x="26" y="211" width="92" height="42" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="72.0" y="229.4" text-anchor="middle" style="font-size:10.4px;">Media</text>
+<text x="72.0" y="241.4" text-anchor="middle" style="font-size:10.4px;">(all resident)</text>
+<path d="M72,267 L72,337" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<rect x="38" y="338" width="68" height="26" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="72.0" y="354.4" text-anchor="middle" style="font-size:10.4px;">Output</text>
+<rect x="190" y="53" width="66" height="26" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="223.0" y="69.4" text-anchor="middle" style="font-size:10.4px;">Document</text>
+<path d="M223,79 L223,92 L163,92 L163,285" fill="none" stroke="#222" stroke-width=".8"/>
+<rect x="174" y="106" width="108" height="62" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="228" y="120" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">Worker</text>
+<text x="228" y="133" text-anchor="middle" style="font-size:10.4px;">Pages 1–10</text>
+<rect x="179" y="140" width="53" height="22" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="205.5" y="154.4" text-anchor="middle" style="font-size:10.4px;">Structure</text>
+<rect x="237" y="140" width="40" height="22" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="257.0" y="154.4" text-anchor="middle" style="font-size:10.4px;">Media</text>
+<path d="M163,137 L174,137" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<path d="M282,137 L291,137" fill="none" stroke="#222" stroke-width=".8"/>
+<rect x="174" y="180" width="108" height="62" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="228" y="194" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">Worker</text>
+<text x="228" y="207" text-anchor="middle" style="font-size:10.4px;">Pages 11–20</text>
+<rect x="179" y="214" width="53" height="22" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="205.5" y="228.4" text-anchor="middle" style="font-size:10.4px;">Structure</text>
+<rect x="237" y="214" width="40" height="22" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="257.0" y="228.4" text-anchor="middle" style="font-size:10.4px;">Media</text>
+<path d="M163,211 L174,211" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<path d="M282,211 L291,211" fill="none" stroke="#222" stroke-width=".8"/>
+<rect x="174" y="254" width="108" height="62" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="228" y="268" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">Worker</text>
+<text x="228" y="281" text-anchor="middle" style="font-size:10.4px;">Pages 21–30</text>
+<rect x="179" y="288" width="53" height="22" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="205.5" y="302.4" text-anchor="middle" style="font-size:10.4px;">Structure</text>
+<rect x="237" y="288" width="40" height="22" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="257.0" y="302.4" text-anchor="middle" style="font-size:10.4px;">Media</text>
+<path d="M163,285 L174,285" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<path d="M282,285 L291,285" fill="none" stroke="#222" stroke-width=".8"/>
+<path d="M291,137 L291,326 L223,326 L223,336" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<rect x="192" y="337" width="62" height="24" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="223.0" y="352.4" text-anchor="middle" style="font-size:10.4px;">Merge</text>
+<path d="M223,361 L223,378" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<rect x="192" y="379" width="62" height="24" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="223.0" y="394.4" text-anchor="middle" style="font-size:10.4px;">Output</text>
+<rect x="338" y="69" width="68" height="26" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="372.0" y="85.4" text-anchor="middle" style="font-size:10.4px;">Document</text>
+<path d="M372,95 L372,139" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<rect x="319" y="140" width="106" height="113" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="372" y="158" text-anchor="middle" style="font-size:11.2px;font-weight:bold;">Worker</text>
+<text x="372" y="172" text-anchor="middle" style="font-size:10.4px;">(skeletonized)</text>
+<rect x="326" y="182" width="92" height="25" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="372.0" y="197.9" text-anchor="middle" style="font-size:10.4px;">Structure</text>
+<rect x="326" y="219" width="92" height="25" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="372.0" y="234.9" text-anchor="middle" style="font-size:10.4px;">Media references</text>
+<rect x="307" y="321" width="66" height="43" rx="3" fill="#ffffff" stroke="#444" stroke-width=".65"/>
+<text x="340.0" y="339.9" text-anchor="middle" style="font-size:10.4px;">GenAI</text>
+<text x="340.0" y="351.9" text-anchor="middle" style="font-size:10.4px;">service</text>
+<rect x="383" y="321" width="53" height="43" rx="3" fill="#d1d1d1" stroke="#444" stroke-width=".65"/>
+<text x="409.5" y="339.9" text-anchor="middle" style="font-size:10.4px;">External</text>
+<text x="409.5" y="351.9" text-anchor="middle" style="font-size:10.4px;">media</text>
+<path d="M340,253 L340,321" fill="none" stroke="#222" stroke-width=".8" marker-end="url(#f-interlude-execution-unit-arrow)" marker-start="url(#f-interlude-execution-unit-arrow)"/>
+<path d="M416,253 L416,321" fill="none" stroke="#222" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<path d="M397,321 L397,253" fill="none" stroke="#222" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#f-interlude-execution-unit-arrow)"/>
+<text x="8" y="424" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="18" y="424" text-anchor="start" style="font-size:10.2px;">One worker retains the</text>
+<text x="18" y="436" text-anchor="start" style="font-size:10.2px;">complete document.</text>
+<text x="8" y="453" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="18" y="453" text-anchor="start" style="font-size:10.2px;">Structure and all media</text>
+<text x="18" y="465" text-anchor="start" style="font-size:10.2px;">are resident.</text>
+<text x="8" y="482" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="18" y="482" text-anchor="start" style="font-size:10.2px;">Memory scales with the</text>
+<text x="18" y="494" text-anchor="start" style="font-size:10.2px;">document payload.</text>
+<text x="158" y="420" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="168" y="420" text-anchor="start" style="font-size:10.2px;">The document is</text>
+<text x="168" y="432" text-anchor="start" style="font-size:10.2px;">partitioned into page</text>
+<text x="168" y="444" text-anchor="start" style="font-size:10.2px;">chunks.</text>
+<text x="158" y="461" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="168" y="461" text-anchor="start" style="font-size:10.2px;">Each worker retains</text>
+<text x="168" y="473" text-anchor="start" style="font-size:10.2px;">the chunk’s structure</text>
+<text x="168" y="485" text-anchor="start" style="font-size:10.2px;">and media.</text>
+<text x="158" y="502" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="168" y="502" text-anchor="start" style="font-size:10.2px;">A smaller working set</text>
+<text x="168" y="514" text-anchor="start" style="font-size:10.2px;">per worker reduces</text>
+<text x="168" y="526" text-anchor="start" style="font-size:10.2px;">memory.</text>
+<text x="308" y="424" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="318" y="424" text-anchor="start" style="font-size:10.2px;">The worker retains</text>
+<text x="318" y="436" text-anchor="start" style="font-size:10.2px;">structure and media</text>
+<text x="318" y="448" text-anchor="start" style="font-size:10.2px;">references.</text>
+<text x="308" y="465" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="318" y="465" text-anchor="start" style="font-size:10.2px;">Media is not resident,</text>
+<text x="318" y="477" text-anchor="start" style="font-size:10.2px;">but streamed on demand.</text>
+<text x="308" y="494" text-anchor="start" style="font-size:10.4px;">•</text>
+<text x="318" y="494" text-anchor="start" style="font-size:10.2px;">Media is processed by a</text>
+<text x="318" y="506" text-anchor="start" style="font-size:10.2px;">GenAI service.</text></svg><figcaption data-short="Three stages of DocAble&#x27;s document processing architecture"><span class="fig-label">Figure 4.2-1.</span> <em>Three stages of DocAble's document processing architecture.</em> (a) Initially, one worker retained the complete document, including its media. (b) Page chunking reduced the working set per worker, but each chunk still retained its media. (c) Skeletonization separated document structure from media, retaining only structure and references in worker memory while streaming media on demand. Chunking changed the execution unit; skeletonization changed the residency requirement.</figcaption></figure>
+<p>The document therefore served as both the user's artifact and the worker's in-memory unit of computation. Media needed by GenAI operations was read from that resident representation and sent to the foundation model as needed.</p>
+<p>I had specified how DocAble should process documents, but I had forgotten to tell Claude what memory consumption was acceptable. The resulting architecture worked on ordinary inputs. Larger documents exposed the omission. Teaching presentations carried more slides, images, and other media, and handling the whole document in one process began to put enough pressure on worker memory that the execution unit needed to shrink.</p>
+
+</div>
+
+<h2 id="422-pages-as-the-unit-of-scale"><span class="sec-num">4.2.2</span> Pages as the Unit of Scale</h2>
+<div class="wrap">
+
+<p>DocAble's response was ChunkWorker, which divided a document into page ranges (<a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-1">Figure&nbsp;4.2-1</a>, panel b).</p>
+<p>The new representation treated contiguous pages as independent work partitions. For a presentation, a chunk contained a range of slides together with the document state needed to remediate them; the system later recombined the resulting patches into the complete artifact.</p>
+<p>Each worker now handled only part of the document, and multiple chunks could run concurrently. More importantly, chunking reduced the memory required by an individual worker. Memory affects both infrastructure cost and cold-start behavior, so a smaller worker was useful even for documents that did not strictly require chunking to fit.</p>
+<p>Chunking worked across a much broader workload: ordinary teaching presentations and hundreds of documents from multiple universities. Page ranges gave each ChunkWorker a practical bound on its working state, and experience provided no reason to replace that design merely because another architecture was possible.</p>
+<p>This architecture accommodated the inputs encountered so far. The page boundary gradually became part of how DocAble was understood: a document was divided into chunks because chunks were how large documents were processed. A roughly 250 MB media-heavy presentation eventually exceeded that operating regime.</p>
+<p>Smaller chunks could reduce memory consumption further, but they would also reduce the context available for semantic judgments and increase coordination costs. Chunking therefore presented a tradeoff between memory use and the information available to each operation.</p>
+<p>The 250 MB presentation made me question the tradeoff itself. Most of the file consisted of media, but many remediation operations needed only the document's structure. Why was the worker retaining all that media?</p>
+<p>That question led to a different representation rather than another reduction in chunk size.</p>
+
+</div>
+
+<h2 id="423-a-new-class-of-input"><span class="sec-num">4.2.3</span> A New Class of Input</h2>
+<div class="wrap">
+
+<p>A 250 MB PowerPoint file does not imply that remediation needs 250 MB of document content resident in memory.</p>
+<p>Modern Office documents use Office Open XML (OOXML). A <code>.pptx</code>, <code>.docx</code>, or <code>.xlsx</code> file is a package containing many parts. Much of its semantic structure is XML: text, slides, relationships, identifiers, and references among objects. Large binary assets such as images and other media live alongside those XML parts inside the package.</p>
+<p>The structural portion is comparatively small. It is largely text, and even an unusually large Office document may require only low megabytes to represent its semantic skeleton. The media payload can be hundreds of megabytes. Most remediation operations need only the structural portion; they may reach into the media, but not every media byte need be resident at once.</p>
+<p>Until this point, DocAble had largely accepted the storage representation supplied by the document format as its working representation. For Office documents, that meant opening the OOXML package through the document library and letting its structure and media participate in the in-memory object graph; other formats followed analogous format-native representations. That was reasonable while the input sizes fit the worker. Handling a roughly 250 MB media-heavy file without allocating correspondingly large workers required reconsidering the arrangement itself.</p>
+<p>The existing representation coupled the two. <a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-1">Figure&nbsp;4.2-1</a>, panel c, shows how skeletonization separated them.</p>
+<p>The architecture therefore carried an implicit scaling relation: total media size drove resident worker state. Finer chunking could reduce that state, at the cost of more coordination and less semantic context, but could not eliminate the relationship. The new file made that limitation consequential.</p>
+<p>A residency model made the alternative visible (<a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-1">Figure&nbsp;4.2-1</a>, panel c): the structural pipeline could operate on a lightweight representation while media lived in object storage, and operations that needed media could reach it by reference.</p>
+
+</div>
+
+<h2 id="424-remove-media-from-the-working-set"><span class="sec-num">4.2.4</span> Remove Media from the Working Set</h2>
+<div class="wrap">
+
+<p>The memory problem came from coupling document structure to media residency: total media size increased the worker's persistent working set even though most remediation operations needed only the document's structural skeleton. Skeletonization removes that coupling. For OOXML documents, the pipeline streams through the package, moves media into external storage, and leaves stable references in a much smaller structural skeleton.</p>
+<p>Remediation then operates on the skeleton (<a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-1">Figure&nbsp;4.2-1</a>, panel c). If a GenAI operation needs an image, the worker follows the reference and streams that media through the network to the GenAI service without first materializing the document's complete media payload in worker memory. Recombination follows the same discipline in reverse. The worker no longer needs memory proportional to total media size.</p>
+<p>The corresponding memory invariant states the property directly:</p>
+<pre><code>peak worker RSS &lt;= C</code></pre>
+<p>where, within the declared operating envelope,</p>
+<pre><code>C =
+    rolling stream buffer
+  + structural skeleton
+  + handles
+  + remediation working set</code></pre>
+<p>and C is independent of aggregate media payload size within that envelope.</p>
+<p>Chunking had shown that the observed documents worked. Skeletonization supports a structural claim over a declared class of inputs: peak worker memory is bounded independently of total media size, provided the modeled path never retains the complete payload.</p>
+<p>That claim depends on bounded streaming buffers, a structural skeleton whose size remains inside the declared envelope, and bounded active state at each media consumer. The write path must stream too; buffering the complete payload before writing would merely move the memory spike. Pathological structure, oversized individual objects, excessive concurrency, or an unmodeled resource can still exhaust memory.</p>
+<p>The implementation enforces the assumptions behind the bound as invariants; measurement checks that the realized system behaves as the model predicts. The PDF path already shows approximately flat peak-RSS scaling across a count-scaled media sweep when each object is flushed; the corresponding OOXML media-size sweep remains a designed validation step.</p>
+<p>While this architecture was being developed, agents sometimes proposed removing operations or state that looked expensive but were essential to correct remediation. The fixtures available at the time would not necessarily have exposed every resulting semantic failure. The engineering model supplied a distinction the surface objective did not: which relationships the system depends on, and which resource costs follow from the current realization. Agents could use that structure to correct their account of the system before changing it.</p>
+<p>The model also let me judge which relationships an optimization had to preserve while the realization changed faster than I could reconstruct its behavior from code and tests.</p>
+<p>Changing the architecture to satisfy the residency model is active alignment. Once correspondence is established, the model and invariant checks provide passive alignment: later changes must preserve the memory property or justify revising the model and its checks. The memory obligation became part of the alignment kernel for the execution changes that followed.</p>
+
+</div>
+
+<h2 id="425-why-one-level-deeper-matters"><span class="sec-num">4.2.5</span> Why One Level Deeper Matters</h2>
+<div class="wrap">
+
+<p>An end-to-end measurement says whether the outcome moved. It does not say why it moved. Peak worker memory is the outcome; media residency is the mechanism that produces it. A model of the mechanism answers the further question: which relationship generated the improvement, and whether that explanation is compatible with the work the system must still perform.</p>
+<p>Measurement tests the residency model's explanation. A peak-memory figure reports what happened on the inputs in one sweep; the model predicts which changes to those inputs should change the result. Comparing the two can expose a missing relationship, as a later sweep did in this case. The engineer needs both: measurements to test the account, and an account of memory growth to assess the next unfamiliar document.</p>
+<p>Ousterhout puts the same instruction compactly: measure one level deeper <sup class="cite-ref"><a href="#wc-4-2-one-problem-many-models-1" aria-label="citation 1">1</a></sup>.<span class="cite-note"><span class="cn-mark">1.</span> John Ousterhout, <span>“<span>Always Measure One Level Deeper</span>,”</span> <em><span>Communications of the ACM</span></em> 61, no. 7 (2018): 74–83.</span> One level, not arbitrarily deep. The deeper cut earns its cost when it exposes an optimization target, a failure class, or a decision that the surface number hides. Media residency did all three, and the surface number — peak resident memory — would have named none of them.</p>
+
+</div>
+
+<h2 id="426-memory-did-not-stop-mattering"><span class="sec-num">4.2.6</span> Memory Did Not Stop Mattering</h2>
+<div class="wrap">
+
+<p>Bringing memory under governance did not make memory disappear. It changed the conditions under which later performance work could proceed. The next questions increasingly concerned latency, throughput, and compute cost, but proposed answers remained subject to the memory relationships already made explicit. A faster design that exceeded the deployment's memory budget was not an improvement.</p>
+<p>Memory came first because the two failures differ in kind: out-of-memory failure prevented processing altogether, whereas inefficient execution increased latency and cost while still producing a result. The later service-sizing model recorded that priority in a one-sided safety margin: exhausting memory kills the process, while over-provisioning costs money. Another domain might prioritize safety, latency, or numerical accuracy; the ordering must follow the consequences.</p>
+<p>That coupling became explicit in the engineering machinery. Concurrency models delegated memory feasibility to the memory model of record rather than doing memory arithmetic of their own. Fan-out width was represented as a peak-memory multiplier, so a throughput author had to size the width against a memory budget. Some throughput changes carried fail-loud guards that refused to run a fan-out whose estimated memory exceeded its budget. A batched-rendering design was chosen over a concurrent one partly because the concurrent alternative measured past the service's memory ceiling. And in one latency campaign a memory sweep blocked the production deploy altogether. The earlier resource model had become part of the environment within which the later one operated.</p>
+
+</div>
+
+<h2 id="427-why-are-we-still-chunking"><span class="sec-num">4.2.7</span> Why Are We Still Chunking?</h2>
+<div class="wrap">
+
+<p>Page chunking had originally served two purposes: it partitioned remediation work and reduced the memory required by each worker. Skeletonization largely removed the second reason. I could now reconsider the execution boundary without immediately exceeding the worker's memory budget.</p>
+<p>The question was no longer how many pages a worker could hold. It was which operations could execute independently, and which had to wait for information produced by other operations.</p>
+<p>A page tells us where content occurs, not which computations depend on which others. DocAble already represented remediation as a dependency graph. Consider alt-text generation as a concrete example. Each page can first be analyzed independently. Those analyses feed an operation that builds shared document context. Once that context exists, the GenAI queries that generate alt text for individual images become ready to execute independently. The actions and their information dependencies form a remediation graph; the currently executable actions form its frontier.</p>
+<p>The same graph admits different execution policies. <a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-2">Figure&nbsp;4.2-2</a> shows the distinction.</p>
+<figure id="fig-4-2-2" class="book-figure" data-label="interlude-graph-two-partitions" style="--fig-natural:940px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 552" role="group" aria-labelledby="f-interlude-graph-two-partitions-tpTitle f-interlude-graph-two-partitions-tpDesc" font-family="'Source Sans 3', -apple-system, 'Segoe UI', sans-serif">
+<title id="f-interlude-graph-two-partitions-tpTitle">Two execution policies over one remediation graph of actions</title>
+  <desc id="f-interlude-graph-two-partitions-tpDesc">One graph of actions — analyze page 1, 2, and 3; build document context; and GenAI query
+    for image 1, 2, and 3 — with information dependencies among them: each page analysis feeds the document
+    context, which feeds each GenAI query. (a) Page-oriented execution groups the actions into three page
+    columns by where their artifacts occur, so a page owns both an upstream analysis and a downstream query,
+    and the shared document-context action spans all pages. (b) Frontier execution groups the same actions by
+    when they are ready: the three page analyses run together, their results build the document context, and
+    that context makes the three GenAI queries ready at once. Same work and dependencies; different boundary.</desc>
+<!-- Print refinement: retain the source geometry semantics and text; reflow labels at 450 bp publication width. -->
+<defs>
+<marker id="f-interlude-graph-two-partitions-arrow-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c1917"/></marker>
+<marker id="f-interlude-graph-two-partitions-arrow-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#57534e"/></marker>
+<marker id="f-interlude-graph-two-partitions-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f7a4d"/></marker>
+<marker id="f-interlude-graph-two-partitions-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f5169"/></marker>
+<marker id="f-interlude-graph-two-partitions-arrow-rust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a3f12"/></marker>
+</defs>
+<rect x="0" y="0" width="940" height="552" rx="0" fill="#fdfcf9" stroke="#fdfcf9" stroke-width="0"/>
+<line x1="470" y1="44" x2="470" y2="530" stroke="#e7e2d6" stroke-width="1.5"/>
+<text x="24" y="30" font-size="23" text-anchor="start" fill="#57534e" font-weight="700">(a) Page-oriented execution</text>
+<text x="492" y="30" font-size="23" text-anchor="start" fill="#57534e" font-weight="700">(b) Frontier execution</text>
+<rect x="28" y="51" width="124" height="390" rx="10" fill="#faf1e6" stroke="#faf1e6" stroke-width="0"/>
+<text x="90" y="76" font-size="19" text-anchor="middle" fill="#9a3f12" font-weight="700">PAGE 1</text>
+<rect x="31" y="91" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="90.0" y="114.27" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="90.0" y="138.26999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 1</text>
+<rect x="31" y="353" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="90.0" y="376.27" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="90.0" y="400.27" font-size="19" text-anchor="middle" fill="#1c1917">image 1</text>
+<rect x="173" y="51" width="124" height="390" rx="10" fill="#faf1e6" stroke="#faf1e6" stroke-width="0"/>
+<text x="235" y="76" font-size="19" text-anchor="middle" fill="#9a3f12" font-weight="700">PAGE 2</text>
+<rect x="176" y="91" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="235.0" y="114.27" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="235.0" y="138.26999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 2</text>
+<rect x="176" y="353" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="235.0" y="376.27" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="235.0" y="400.27" font-size="19" text-anchor="middle" fill="#1c1917">image 2</text>
+<rect x="318" y="51" width="124" height="390" rx="10" fill="#faf1e6" stroke="#faf1e6" stroke-width="0"/>
+<text x="380" y="76" font-size="19" text-anchor="middle" fill="#9a3f12" font-weight="700">PAGE 3</text>
+<rect x="321" y="91" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="380.0" y="114.27" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="380.0" y="138.26999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 3</text>
+<rect x="321" y="353" width="118" height="58" rx="7" fill="#f6f4ef" stroke="#1c1917" stroke-width="2"/>
+<text x="380.0" y="376.27" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="380.0" y="400.27" font-size="19" text-anchor="middle" fill="#1c1917">image 3</text>
+<line x1="90" y1="149" x2="155" y2="217" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<line x1="155" y1="269" x2="90" y2="353" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<line x1="235" y1="149" x2="235" y2="217" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<line x1="235" y1="269" x2="235" y2="353" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<line x1="380" y1="149" x2="315" y2="217" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<line x1="315" y1="269" x2="380" y2="353" stroke="#57534e" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-muted)"/>
+<rect x="31" y="217" width="408" height="52" rx="7" fill="#e7edf3" stroke="#2f5169" stroke-width="2"/>
+<text x="235.0" y="249.93" font-size="21" text-anchor="middle" fill="#1c1917" font-weight="700">build document context</text>
+<text x="235" y="476" font-size="20" text-anchor="middle" fill="#9a3f12" font-style="italic">group work by where it occurs</text>
+<rect x="492" y="51" width="430" height="94" rx="10" fill="#e3f0e7" stroke="#1f7a4d" stroke-width="1.6"/>
+<text x="504" y="74" font-size="19" text-anchor="start" fill="#1f7a4d" font-weight="700">READY FRONTIER 1</text>
+<rect x="503" y="86" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="568.0" y="105.77" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="568.0" y="129.76999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 1</text>
+<rect x="641" y="86" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="706.0" y="105.77" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="706.0" y="129.76999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 2</text>
+<rect x="779" y="86" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="844.0" y="105.77" font-size="19" text-anchor="middle" fill="#1c1917">analyze</text>
+<text x="844.0" y="129.76999999999998" font-size="19" text-anchor="middle" fill="#1c1917">page 3</text>
+<rect x="492" y="190" width="430" height="94" rx="10" fill="#e3f0e7" stroke="#1f7a4d" stroke-width="1.6"/>
+<text x="504" y="213" font-size="19" text-anchor="start" fill="#1f7a4d" font-weight="700">READY FRONTIER 2</text>
+<rect x="572" y="225" width="270" height="51" rx="7" fill="#e7edf3" stroke="#2f5169" stroke-width="2"/>
+<text x="707.0" y="257.1" font-size="20" text-anchor="middle" fill="#1c1917" font-weight="700">build document context</text>
+<rect x="492" y="329" width="430" height="94" rx="10" fill="#e3f0e7" stroke="#1f7a4d" stroke-width="1.6"/>
+<text x="504" y="352" font-size="19" text-anchor="start" fill="#1f7a4d" font-weight="700">READY FRONTIER 3</text>
+<rect x="503" y="364" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="568.0" y="383.77" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="568.0" y="407.77" font-size="19" text-anchor="middle" fill="#1c1917">image 1</text>
+<rect x="641" y="364" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="706.0" y="383.77" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="706.0" y="407.77" font-size="19" text-anchor="middle" fill="#1c1917">image 2</text>
+<rect x="779" y="364" width="130" height="51" rx="7" fill="#fff" stroke="#1c1917" stroke-width="2"/>
+<text x="844.0" y="383.77" font-size="19" text-anchor="middle" fill="#1c1917">GenAI query</text>
+<text x="844.0" y="407.77" font-size="19" text-anchor="middle" fill="#1c1917">image 3</text>
+<line x1="707" y1="145" x2="707" y2="190" stroke="#9a3f12" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-rust)"/>
+<text x="724" y="174" font-size="19" text-anchor="start" fill="#57534e" font-style="italic">page-analysis results</text>
+<line x1="707" y1="284" x2="707" y2="329" stroke="#9a3f12" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-rust)"/>
+<text x="724" y="314" font-size="19" text-anchor="start" fill="#57534e" font-style="italic">document context</text>
+<line x1="707" y1="423" x2="707" y2="452" stroke="#9a3f12" stroke-width="2" marker-end="url(#f-interlude-graph-two-partitions-arrow-rust)"/>
+<text x="724" y="447" font-size="19" text-anchor="start" fill="#57534e" font-style="italic">alt-text results</text>
+<text x="707" y="477" font-size="20" text-anchor="middle" fill="#1f7a4d" font-style="italic">group work by when it is ready</text>
+<text x="707" y="509" font-size="19" text-anchor="middle" fill="#57534e" font-weight="700">SAME WORK · SAME DEPENDENCIES ·</text>
+<text x="707" y="533" font-size="19" text-anchor="middle" fill="#57534e" font-weight="700">DIFFERENT EXECUTION BOUNDARY</text>
+</svg><figcaption data-short="Two execution policies over the same remediation graph"><span class="fig-label">Figure 4.2-2.</span> <em>Two execution policies over the same remediation graph.</em> The graph contains actions—page analysis, construction of document context, and GenAI queries—and information dependencies among them. (a) A page partition groups actions by the page their artifacts occur on, so it can span several dependency levels. (b) A frontier groups actions by readiness: page analyses execute first, their results enable construction of document context, and that context enables independent GenAI queries for alt text. The work and its dependencies are unchanged; only the execution boundary changes — so the choice between (a) and (b) is a scheduling decision, not a remediation redesign.</figcaption></figure>
+<p>The graph explains the ordering. Independent work can run together; a consumer waits only for information it actually needs from upstream. Pages do not create those dependencies. Information does. Expressed as a directed acyclic graph, the work currently ready to execute forms a frontier: the nodes with no unmet dependencies. A worker executes that frontier, materializes its outputs, and thereby exposes the next frontier.<sup class="note-ref"><a href="#note-4-2-one-problem-many-models-fn-topo-dag" role="doc-noteref" aria-label="note 1">*</a></sup><span class="editorial-note" id="note-4-2-one-problem-many-models-fn-topo-dag"><span class="cn-mark">*</span> This is ordinary topological traversal of a directed acyclic graph, familiar from compilers, build systems, and dependency schedulers.</span></p>
+<p>This reframes ChunkWorker. Page-oriented and frontier-oriented execution are not different remediation graphs. They are different ways of partitioning the same graph. Page execution groups work by where it occurs; frontier execution groups work by when it is ready.</p>
+<p>Skeletonization removed the memory pressure that had made page ranges the natural execution boundary, so page identity no longer needs to determine execution. It can survive as metadata on graph nodes—useful for locality, debugging, rate limiting, or failure isolation—without remaining the fundamental unit of executable remediation.</p>
+<p>For the present problem, the architecture therefore needs only a clean seam between the remediation graph and its executor: the graph supplies ready work and its dependencies; the executor consumes them. The executor can schedule by frontier now and exploit page locality later if measurements justify it. There is no need to build a strategy hierarchy merely because two policies are conceivable. The graph/executor seam preserves the degree of freedom without spending it. In the realized architecture, that execution-driving representation remains distinct from richer analytical projections built over the same computation identities. The distinction matters later: a model may govern realization while another view of the same structure serves analysis.</p>
+
+</div>
+
+<h2 id="428-analyze-before-you-build"><span class="sec-num">4.2.8</span> Analyze Before You Build</h2>
+<div class="wrap">
+
+<p>Representing remediation as a dependency graph does more than provide an execution plan. The graph can be analyzed before an executor—or a proposed architectural change—is implemented. <a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-3">Figure&nbsp;4.2-3</a> illustrates how critical-path analysis can identify a bottleneck and suggest two kinds of redesign: decomposing expensive work or changing the dependencies among operations.</p>
+<figure id="fig-4-2-3" class="book-figure" data-label="interlude-analysis-before-build" style="--fig-natural:444px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 444 344" role="img" aria-labelledby="f-interlude-analysis-before-build-title f-interlude-analysis-before-build-desc" font-family="Source Sans 3, sans-serif">
+<title id="f-interlude-analysis-before-build-title">Analyzing dependency graphs to redesign execution</title>
+<desc id="f-interlude-analysis-before-build-desc">A weighted graph branches after A. The path through B and D takes 12 seconds, while the path through C and E takes 6 seconds. Three concurrent 3-second parts of B shorten the critical path to 7 seconds before overhead. In DocAble, two image-description operations become independent when each receives its image and shared rendered page context.</desc>
+<defs><marker id="f-interlude-analysis-before-build-arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0 0 L5 2.5 L0 5 Z" fill="#1c1917"/></marker></defs>
+<g fill="#1c1917" font-family="Source Sans 3, sans-serif">
+<text x="91" y="11" font-size="10" text-anchor="middle" font-weight="700">(a) Identify the critical path</text>
+<text x="91" y="23" font-size="9" text-anchor="middle" font-style="italic">Diagnosis</text>
+<rect x="75.0" y="29.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="91" y="41.0" font-size="9" text-anchor="middle">A (1 s)</text>
+<rect x="44.0" y="57.5" width="32" height="17" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="60" y="69.0" font-size="9" text-anchor="middle" font-weight="700">B (8 s)</text>
+<rect x="106.0" y="57.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="122" y="69.0" font-size="9" text-anchor="middle">C (2 s)</text>
+<rect x="44.0" y="86.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="60" y="98.0" font-size="9" text-anchor="middle">D (2 s)</text>
+<rect x="106.0" y="86.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="122" y="98.0" font-size="9" text-anchor="middle">E (2 s)</text>
+<rect x="75.0" y="115.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="91" y="127.0" font-size="9" text-anchor="middle">F (1 s)</text>
+<path d="M80,47 L65,57" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M102,47 L117,57" fill="none" stroke="#1c1917" stroke-width="0.65" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M60,75 L60,86" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M122,75 L122,86" fill="none" stroke="#1c1917" stroke-width="0.65" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M65,104 L80,115" fill="none" stroke="#1c1917" stroke-width="1" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M117,104 L102,115" fill="none" stroke="#1c1917" stroke-width="0.65" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M42,52 Q22,84 43,114" stroke="#1c1917" fill="none" marker-end="url(#f-interlude-analysis-before-build-arrow)" stroke-width=".65"/>
+<path d="M139,52 Q159,84 139,114" stroke="#1c1917" fill="none" marker-end="url(#f-interlude-analysis-before-build-arrow)" stroke-width=".65"/>
+<text x="16" y="86" font-size="9" text-anchor="middle" font-weight="700">12 s</text>
+<text x="164" y="86" font-size="9" text-anchor="middle" font-weight="700">6 s</text>
+<text x="91" y="148" font-size="9" text-anchor="middle" font-weight="700">Critical path: A → B → D → F (12 s)</text>
+<path d="M185,18 L185,147" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<text x="198" y="32" font-size="11" text-anchor="start" font-weight="700">Two modeling responses</text>
+<text x="198" y="48" font-size="9" text-anchor="start">Given this analysis, the engineer can explore</text>
+<text x="198" y="59" font-size="9" text-anchor="start">two redesigns.</text>
+<text x="198" y="80" font-size="9" text-anchor="start" font-weight="700">•  Decompose the dominant operation (b)</text>
+<text x="208" y="93" font-size="9" text-anchor="start">Reduce its cost while keeping the same</text>
+<text x="208" y="104" font-size="9" text-anchor="start">dependencies.</text>
+<text x="198" y="123" font-size="9" text-anchor="start" font-weight="700">•  Redesign the dependencies (c)</text>
+<text x="208" y="136" font-size="9" text-anchor="start">Remove an unnecessary serial constraint.</text>
+<path d="M1,156 L443,156" fill="none" stroke="#57534e" stroke-width="0.5"/>
+<path d="M180,163 L180,313" fill="none" stroke="#57534e" stroke-width="0.45"/>
+<text x="87" y="169" font-size="10" text-anchor="middle" font-weight="700">(b) Decompose an operation</text>
+<text x="87" y="181" font-size="9" text-anchor="middle" font-style="italic">Same dependencies</text>
+<g transform="translate(0 4)">
+<rect x="31.5" y="183.5" width="33" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="48" y="195.0" font-size="9" text-anchor="middle">A (1 s)</text>
+<rect x="1.5" y="213.0" width="29" height="22" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="16" y="221.5" font-size="9" text-anchor="middle" font-weight="700">B₁</text>
+<text x="16" y="232.5" font-size="9" text-anchor="middle" font-weight="700">(3 s)</text>
+<rect x="34.5" y="213.0" width="29" height="22" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="49" y="221.5" font-size="9" text-anchor="middle" font-weight="700">B₂</text>
+<text x="49" y="232.5" font-size="9" text-anchor="middle" font-weight="700">(3 s)</text>
+<rect x="67.5" y="213.0" width="29" height="22" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="82" y="221.5" font-size="9" text-anchor="middle" font-weight="700">B₃</text>
+<text x="82" y="232.5" font-size="9" text-anchor="middle" font-weight="700">(3 s)</text>
+<rect x="33.0" y="246.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="49" y="258.0" font-size="9" text-anchor="middle">D (2 s)</text>
+<rect x="33.0" y="275.5" width="32" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="49" y="287.0" font-size="9" text-anchor="middle">F (1 s)</text>
+<path d="M49,201 L16,213" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M16,235 L49,246" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M49,201 L49,213" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M49,235 L49,246" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M49,201 L82,213" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M82,235 L49,246" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M49,264 L49,275" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<text x="101" y="213" font-size="9" text-anchor="start" font-weight="700">New critical</text>
+<text x="101" y="224" font-size="9" text-anchor="start" font-weight="700">path</text>
+<text x="101" y="242" font-size="9" text-anchor="start">A → Bᵢ → D → F</text>
+<text x="101" y="253" font-size="9" text-anchor="start">(7 s)</text>
+<text x="101" y="276" font-size="9" text-anchor="start" font-style="italic">Illustrative,</text>
+<text x="101" y="287" font-size="9" text-anchor="start" font-style="italic">ignoring</text>
+<text x="101" y="298" font-size="9" text-anchor="start" font-style="italic">overhead</text>
+</g>
+<text x="311" y="169" font-size="10" text-anchor="middle" font-weight="700">(c) Remove an unnecessary dependency</text>
+<text x="311" y="181" font-size="9" text-anchor="middle" font-style="italic">Change the information structure</text>
+<g transform="translate(0 -21)">
+<rect x="181.0" y="216.0" width="38" height="18" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="200" y="228.0" font-size="9" text-anchor="middle">Image 1</text>
+<rect x="231.5" y="213.0" width="35" height="24" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="249" y="222.5" font-size="9" text-anchor="middle" font-weight="700">Gen</text>
+<text x="249" y="233.5" font-size="9" text-anchor="middle" font-weight="700">alt 1</text>
+<path d="M219,225 L231.5,225" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<rect x="181.0" y="251.0" width="38" height="18" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="200" y="263.0" font-size="9" text-anchor="middle">Image 2</text>
+<rect x="231.5" y="248.0" width="35" height="24" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="249" y="257.5" font-size="9" text-anchor="middle" font-weight="700">Gen</text>
+<text x="249" y="268.5" font-size="9" text-anchor="middle" font-weight="700">alt 2</text>
+<path d="M219,260 L231.5,260" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<path d="M249,237 L249,248" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<text x="271" y="232" font-size="12" text-anchor="middle" font-weight="700">⇒</text>
+<rect x="327.5" y="208.5" width="111" height="19" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="383" y="221.0" font-size="9" text-anchor="middle" font-weight="700">Shared rendered context</text>
+<rect x="325.0" y="238.5" width="32" height="25" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="341" y="248.5" font-size="9" text-anchor="middle" font-weight="700">Gen</text>
+<text x="341" y="259.5" font-size="9" text-anchor="middle" font-weight="700">alt 1</text>
+<path d="M341,228 L341,238.5" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<rect x="275.0" y="242.5" width="38" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="294" y="254.0" font-size="9" text-anchor="middle">Image 1</text>
+<path d="M313,251 L325,251" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<rect x="410.0" y="238.5" width="32" height="25" rx="2.5" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="426" y="248.5" font-size="9" text-anchor="middle" font-weight="700">Gen</text>
+<text x="426" y="259.5" font-size="9" text-anchor="middle" font-weight="700">alt 2</text>
+<path d="M426,228 L426,238.5" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<rect x="360.0" y="242.5" width="38" height="17" rx="2.5" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="379" y="254.0" font-size="9" text-anchor="middle">Image 2</text>
+<path d="M398,251 L410,251" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<text x="225" y="297" font-size="9" text-anchor="middle" font-style="italic">Before: serial</text>
+<text x="225" y="308" font-size="9" text-anchor="middle" font-style="italic">dependency</text>
+<text x="362" y="297" font-size="9" text-anchor="middle" font-style="italic">After: independent operations</text>
+<text x="362" y="308" font-size="9" text-anchor="middle" font-style="italic">consume shared context</text>
+</g>
+<path d="M3,317 L441,317" fill="none" stroke="#57534e" stroke-width="0.5"/>
+<text x="2" y="336" font-size="9" text-anchor="start" font-weight="700">Legend</text>
+<rect x="40" y="325" width="15" height="13" rx="2" fill="#f6f4ef" stroke="#1c1917" stroke-width="0.7"/>
+<text x="59" y="331" font-size="9" text-anchor="start">Dominant or modified</text>
+<text x="59" y="342" font-size="9" text-anchor="start">operation</text>
+<rect x="179" y="325" width="15" height="13" rx="2" fill="white" stroke="#1c1917" stroke-width="0.7"/>
+<text x="199" y="335" font-size="9" text-anchor="start">Other operation</text>
+<path d="M281,332 L301,332" fill="none" stroke="#1c1917" stroke-width="0.7" marker-end="url(#f-interlude-analysis-before-build-arrow)"/>
+<text x="307" y="331" font-size="9" text-anchor="start">Dependency</text>
+<text x="307" y="342" font-size="9" text-anchor="start">(must complete before)</text>
+</g>
+</svg><figcaption data-short="Analyzing dependency graphs to redesign execution"><span class="fig-label">Figure 4.2-3.</span> <em>Analyzing dependency graphs to redesign execution.</em> (a) Critical-path analysis identifies the longest weighted dependency chain, which sets a latency floor of 12 seconds in this illustrative graph. Two possible responses are shown. (b) Decomposing the dominant operation into independent suboperations reduces the modeled critical path to 7 seconds, excluding coordination overhead. (c) Changing the information dependencies can remove a serial constraint altogether. In DocAble’s image-description pipeline, replacing propagation of previously generated descriptions with shared rendered context allowed the image-description operations to proceed independently.</figcaption></figure>
+<p>Panel (a) shows a weighted dependency graph. Its critical path, <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mrow><mi>A</mi><mo>→</mo><mi>B</mi><mo>→</mo><mi>D</mi><mo>→</mo><mi>F</mi></mrow></math>, takes 12 seconds, compared with 6 seconds for the alternative path. Adding workers cannot shorten the critical path without changing the work or its dependencies. One possibility is to decompose the dominant operation. In panel (b), splitting B into three independent operations reduces the modeled critical path from 12 to 7 seconds.</p>
+<p>Another possibility is to reconsider the dependencies themselves. In DocAble’s contextual image-description pipeline, each generated description was passed to the next image-description operation. The resulting chain had depth proportional to the number of images. For <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mi>N</mi></math> images, with each GenAI call taking roughly <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mi>t</mi></math>, the serial latency floor approached <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mrow><mi>N</mi><mo>⋅</mo><mi>t</mi></mrow></math>. Adding workers could not remove that dependency.</p>
+<p>The model exposed a distinction between the existing implementation and the information the operations actually needed. Each image required adequate surrounding context, but not necessarily the preceding image’s generated description. Rendering the surrounding pages once supplied a shared visual representation that each image-description operation could consume independently. Panel (c) shows how changing the information dependencies removed the serial chain.</p>
+
+</div>
+
+<h3 id="the-second-resource-model">The second resource model</h3>
+<div class="wrap">
+
+<p>The critical-path model explained which dependencies could determine latency. A second model captured a different source of cost: repeated whole-document work. Let <em>R</em> be the number of remediation rounds, <em>F</em> the cost of producing the whole document once, and <em>G</em> the remaining GenAI work. The model represented execution without page chunks as</p>
+<div class="book-eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" class="book-math-display"><mrow><mi>T</mi><mo>=</mo><mo>(</mo><mi>R</mi><mo>+</mo><mn>1</mn><mo>)</mo><mspace width="0.17em"></mspace><mi>F</mi><mo>+</mo><mi>G</mi></mrow></math></div>
+<p>For example, suppose a document requires four remediation rounds, whole-document production takes 10 seconds, and the remaining GenAI work takes 20 seconds. The model predicts <em>T</em> = (4+1)(10) + 20 = 70 seconds. Fifty of those seconds come from producing the document five times: once for each remediation round and once more to apply the accumulated changes. Cutting the GenAI work in half would save 10 seconds; eliminating two production rounds would save 20. The model therefore identifies repeated whole-document production as a quantity worth attacking.</p>
+<p>The model was also falsifiable. Its calibration procedure inverted observed execution times to recover its components, and it rejected any fit whose inferred costs came out negative. Measurement could therefore disagree with the engineering account rather than merely supplying another number to optimize against.</p>
+
+</div>
+
+<h3 id="predicting-latency">Predicting latency</h3>
+<div class="wrap">
+
+<p>Critical-path analysis also supports quantitative latency predictions when operation costs are available. For the representative workload used during this analysis, the relevant GenAI chain had three dependent levels whose per-call times add to an irreducible floor (<a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-4">Figure&nbsp;4.2-4</a>).</p>
+<figure id="fig-4-2-4" class="book-figure" data-label="interlude-latency-floor" style="--fig-natural:446px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 446 262" role="img" aria-labelledby="f-interlude-latency-floor-title f-interlude-latency-floor-desc">
+<title id="f-interlude-latency-floor-title">The GenAI dependency chain in a schematic remediation graph</title>
+<desc id="f-interlude-latency-floor-desc">Section summary feeds document summary and then alt text, alongside illustrative independent work. The three call durations sum to about 7.7 seconds.</desc>
+<defs><marker id="f-interlude-latency-floor-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3.5 L0,7 Z" fill="black"/></marker></defs>
+<rect width="444" height="260" fill="white"/>
+<rect x="72" y="0" width="288" height="100" rx="6" fill="#f2f2f2" stroke="#666" stroke-width=".6" stroke-dasharray="3,2"/>
+<text x="220" y="16.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="italic">GenAI critical path (dependent chain)</text>
+<rect x="85.0" y="28.0" width="80" height="62" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="125" y="62.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal"></text>
+<rect x="85" y="28" width="80" height="62" rx="3" fill="none" stroke="black" stroke-width="1.3"/>
+<text x="125" y="40.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Section</text>
+<text x="125" y="52.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">summary</text>
+<text x="125" y="69.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">1.777 s</text>
+<text x="125" y="83.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(estimated)</text>
+<rect x="180.0" y="28.0" width="80" height="62" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="220" y="62.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal"></text>
+<rect x="180" y="28" width="80" height="62" rx="3" fill="none" stroke="black" stroke-width="1.3"/>
+<text x="220" y="40.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Document</text>
+<text x="220" y="52.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">summary</text>
+<text x="220" y="69.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">1.777 s</text>
+<text x="220" y="83.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(estimated)</text>
+<rect x="275.0" y="28.0" width="80" height="62" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="315" y="62.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal"></text>
+<rect x="275" y="28" width="80" height="62" rx="3" fill="none" stroke="black" stroke-width="1.3"/>
+<text x="315" y="40.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Generate</text>
+<text x="315" y="52.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">alt text</text>
+<text x="315" y="69.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">4.1049 s</text>
+<text x="315" y="83.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(measured)</text>
+<path d="M165,59 L180,59" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<path d="M260,59 L275,59" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<rect x="0.5" y="128.0" width="59" height="36" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="30" y="143.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Extract</text>
+<text x="30" y="155.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">document</text>
+<text x="225" y="117.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="italic">Other independent work (illustrative)</text>
+<rect x="120.0" y="123.0" width="180" height="30" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="210" y="135.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Repair structure</text>
+<text x="210" y="147.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(validators, rules, …)</text>
+<rect x="120.0" y="165.0" width="180" height="30" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="210" y="177.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Repair metadata</text>
+<text x="210" y="189.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(types, properties, …)</text>
+<rect x="380.5" y="141.0" width="59" height="36" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="410" y="156.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Apply</text>
+<text x="410" y="168.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">changes</text>
+<path d="M59.5,146 L65,146" fill="none" stroke="black" stroke-width=".65"/>
+<path d="M65,59 L65,180" fill="none" stroke="black" stroke-width=".65"/>
+<path d="M65,59 L85,59" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<path d="M65,138 L120,138" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<path d="M65,180 L120,180" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<path d="M355,59 L410,59 L410,141" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<path d="M300,138 L370,138 L370,180 L300,180" fill="none" stroke="black" stroke-width=".65"/>
+<path d="M370,159 L380.5,159" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<rect x="80.5" y="206.0" width="359" height="28" rx="3" fill="rgb(242,242,242)" stroke="black" stroke-width=".6"/>
+<text x="260" y="223.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">GenAI latency floor: 1.777 + 1.777 + 4.1049 ≈ 7.7 s</text>
+<rect x="93" y="244" width="18" height="12" rx="3" fill="white" stroke="black" stroke-width="1.3"/>
+<text x="153" y="253.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">GenAI call</text>
+<path d="M223,250 L241,250" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-latency-floor-arrow)"/>
+<text x="300" y="253.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Must precede</text>
+</svg><figcaption data-short="The GenAI critical path in a schematic fragment of DocAble’s remediation graph"><span class="fig-label">Figure 4.2-4.</span> <em>The GenAI critical path in a schematic fragment of DocAble’s remediation graph.</em> Independent remediation computations can execute concurrently, but section summarization, document summarization, and alt-text generation form a dependent chain. For the modeled workload, their estimated and measured durations contribute approximately 7.7 seconds of serial latency, which additional workers alone cannot eliminate.</figcaption></figure>
+<p>For the representative 37-image workload, local concurrency of six required seven waves, yielding a predicted latency of about 33 seconds. Modeled cloud concurrency of 64 could execute that frontier in one wave; including estimated cold-start and round-trip costs gave about 11.5 seconds, a roughly 2.9× improvement. The prediction depended on those overhead estimates and required staging measurements before cutover. The local cap also reflected memory: concurrent ChunkWorkers each held format-native document state. Skeletonization reduced that per-worker residency, making wider execution feasible without multiplying the same large media working set.</p>
+
+</div>
+
+<h3 id="predicting-the-cost-of-a-design-change">Predicting the cost of a design change</h3>
+<div class="wrap">
+
+<p>A proposed intermediate representation can be inserted into the dependency graph before it is implemented. Recomputing the critical path, execution rounds, peak width, and overhead shows where it could add cost. An IR off the critical path may add no serial latency; one that deepens the chain adds its call time to the floor and may require another distributed round. These are predictions to test, but they help decide which candidate is worth building.</p>
+
+</div>
+
+<h3 id="use-prediction-error-as-evidence">Use prediction error as evidence</h3>
+<div class="wrap">
+
+<p>Implementation eventually supplies measurements to compare with the model’s predictions. A residual — the gap between prediction and observation — turns into an engineering question. <a class="xref" href="4.2-one-problem-many-models.html#fig-4-2-5">Figure&nbsp;4.2-5</a> connects the general engineering loop in panel a to an illustrative prediction error in panel b and the refinement of the model in panel c.</p>
+<figure id="fig-4-2-5" class="book-figure" data-label="interlude-prediction-residual" style="--fig-natural:444px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 444 290" role="img" aria-labelledby="f-interlude-prediction-residual-title f-interlude-prediction-residual-desc">
+<title id="f-interlude-prediction-residual-title">Modeling through prediction and measurement</title>
+<desc id="f-interlude-prediction-residual-desc">Three panels: an engineering loop, an illustrative latency residual, and revision until the residual is acceptable.</desc>
+<defs><marker id="f-interlude-prediction-residual-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3.5 L0,7 Z" fill="black"/></marker></defs>
+<rect width="444" height="290" fill="white"/>
+<rect x="0" y="0" width="132" height="23" rx="3" fill="#e8e8e8"/>
+<text x="66.0" y="14.8" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">(a) The engineering loop</text>
+<rect x="139" y="0" width="163" height="23" rx="3" fill="#e8e8e8"/>
+<text x="220.5" y="14.8" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">(b) One prediction error</text>
+<rect x="309" y="0" width="135" height="23" rx="3" fill="#e8e8e8"/>
+<text x="376.5" y="14.8" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">(c) Revise and repeat</text>
+<path d="M135.5,0 L135.5,288" fill="none" stroke="black" stroke-width=".65"/>
+<path d="M305.5,0 L305.5,288" fill="none" stroke="black" stroke-width=".65"/>
+<rect x="3.0" y="31.0" width="94" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="46.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Problem</text>
+<rect x="3.0" y="68.0" width="94" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="83.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Model</text>
+<rect x="3.0" y="105.0" width="94" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="120.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Analyze</text>
+<rect x="1.0" y="142.0" width="98" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="157.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Prediction / design</text>
+<rect x="3.0" y="179.0" width="94" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="194.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Implementation</text>
+<rect x="3.0" y="216.0" width="94" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="231.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Measurement</text>
+<rect x="1.0" y="253.0" width="98" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="50" y="268.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Explain residual</text>
+<path d="M50,55 L50,68" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M50,92 L50,105" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M50,129 L50,142" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M50,166 L50,179" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M50,203 L50,216" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M50,240 L50,253" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M99,265 L130,265 L130,80 L97,80" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<text x="115" y="173.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="italic">refine</text>
+<text x="115" y="185.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="italic">model</text>
+<rect x="145.0" y="64.0" width="146" height="28" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="218" y="81.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Model predicts 11.5 s</text>
+<rect x="145.0" y="110.0" width="146" height="28" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="218" y="127.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Observed 17.8 s</text>
+<rect x="145.0" y="156.0" width="146" height="28" rx="3" fill="rgb(235,235,235)" stroke="black" stroke-width=".6"/>
+<text x="218" y="173.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="700" font-style="normal">Residual: +6.3 s</text>
+<path d="M218,92 L218,110" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M218,138 L218,156" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M218,184 L218,210" fill="none" stroke="black" stroke-width=".65"/>
+<path d="M165,210 L272,210" fill="none" stroke="black" stroke-width=".65"/>
+<rect x="139.0" y="231.0" width="52" height="38" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="165" y="247.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Wrong</text>
+<text x="165" y="259.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">parameter</text>
+<path d="M165,210 L165,231" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<rect x="195.0" y="231.0" width="46" height="38" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="218" y="247.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Wrong</text>
+<text x="218" y="259.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">relation</text>
+<path d="M218,210 L218,231" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<rect x="243.5" y="231.0" width="57" height="38" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="272" y="247.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Missing</text>
+<text x="272" y="259.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">mechanism</text>
+<path d="M272,210 L272,231" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<rect x="312.0" y="30.0" width="112" height="26" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="368" y="46.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Update the model</text>
+<rect x="312.0" y="69.0" width="112" height="34" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="368" y="83.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Reanalyze</text>
+<text x="368" y="95.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">(e.g., new prediction)</text>
+<rect x="312.0" y="118.0" width="112" height="26" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="368" y="134.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Implement change</text>
+<rect x="312.0" y="159.0" width="112" height="26" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="368" y="175.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Measure again</text>
+<path d="M368,56 L368,69" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M368,103 L368,118" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M368,144 L368,159" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<path d="M368,185 L368,201" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<polygon points="368,201 421,225 368,249 315,225" fill="#f3f3f3" stroke="black" stroke-width=".6"/>
+<text x="368" y="222.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Residual</text>
+<text x="368" y="234.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">acceptable?</text>
+<path d="M421,225 L440,225 L440,43 L424,43" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<text x="429" y="217.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">No</text>
+<rect x="312.0" y="265.0" width="112" height="24" rx="3" fill="rgb(255,255,255)" stroke="black" stroke-width=".6"/>
+<text x="368" y="280.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Keep the change</text>
+<path d="M368,249 L368,265" fill="none" stroke="black" stroke-width=".65" marker-end="url(#f-interlude-prediction-residual-arrow)"/>
+<text x="382" y="260.3" text-anchor="middle" font-family="&quot;Source Sans 3&quot;, sans-serif" font-size="10" font-weight="400" font-style="normal">Yes</text>
+</svg><figcaption data-short="Modeling through prediction and measurement"><span class="fig-label">Figure 4.2-5.</span> <em>Modeling through prediction and measurement.</em> (a) An engineering problem motivates a model whose analysis informs implementation. Measurements test its predictions and may require the model to be revised. (b) A discrepancy between predicted and observed latency directs investigation toward an incorrect parameter, an incorrect relationship, or a missing mechanism. The numerical values are illustrative. (c) The revised model is tested again until its residual is acceptable for the question being investigated.</figcaption></figure>
+<p>The queue overhead may have been underestimated. Two apparently independent nodes may share a serialized resource, or media loading may introduce a cost the latency model omitted. A close prediction supplies evidence that the model captures dominant mechanisms; a miss directs investigation toward a wrong parameter, a missing relation, or an implementation problem.</p>
+
+</div>
+
+<h2 id="429-what-carries-forward"><span class="sec-num">4.2.9</span> What Carries Forward</h2>
+<div class="wrap">
+
+<p>DocAble did not turn observed wall-clock time into the durable control. Wall time varies with hosts, services, cold starts, and other environmental effects, so a benchmark score from one machine makes a poor obligation. The performance ratchet holds structural quantities instead — the quantities the model says contribute to execution cost: production rounds, GenAI calls, capture invocations, and render invocations. Each is counted deterministically on a fixed fixture. A change may lower these quantities freely; raising one requires a named justification recorded beside the baseline. The environment therefore preserves part of the <em>explanation</em> for performance rather than a number that only reproduces on the machine that produced it.</p>
+<p>A fifth quantity, the number of GenAI hops, was observed without blocking while its behavior was still being characterized. The distinction is worth keeping: a counter that gates and a counter that only reports are different mechanisms, and a new one usually begins as the second.</p>
+
+</div>
+
+<h3 id="models-get-falsified-the-obligation-survives">Models get falsified; the obligation survives</h3>
+<div class="wrap">
+
+<p>A ratchet does not make the current model true forever. Several memory hypotheses in this episode were later falsified. One held that a PDF library's whole-file object model kept roughly 2.4 GiB resident; measurement found about 1 MiB live, because the file was memory-mapped and the image bytes never entered the managed heap. Another projected that moving rendering off the worker would recover 90 to 120 MiB; the landed measurement recovered about 6, because rendering was already running off the worker. A later adversarial sweep found a scaling dimension the bound had not covered at all: peak memory rose with decoded image area rather than with stored media size. The response was to extend the model and add an admission gate that refuses inputs outside the declared envelope. A capacity model elsewhere in the same environment was eventually caught about twofold too low against dozens of measured sweeps, and its parameter was recalibrated rather than the measurement discounted.</p>
+<p>The measurements carried their own provenance. A figure taken on a development host was marked as such and did not become the value of record until the deployment environment reproduced it. A process-level measurement may omit memory included in the container's total. Recording the measurement's origin makes that difference visible and helps engineers decide which parameters need to be measured again.</p>
+<p>Nor was the memory work finished before the execution-time work began. A memory front was still open while the time models were being built. What became durable was not a particular bound but the requirement to reason explicitly about the resource. Later work could challenge the model, recalibrate it, or replace it with a better one. It could not silently return memory behavior to an unexamined implementation detail. The ratchet preserves the engineering question and the obligation to answer it, even when the answer changes.</p>
+<blockquote id="idx-def-ratcheteering" class="box-canonical"><p class="inset-title" id="technique-ratcheteering">Engineering technique — Ratcheteering</p>
+<p>Governance conversion is an individual engineering move: it turns a recurring failure, judgment, or newly discovered relationship into durable structure. Ratcheteering is the continuing practice of accumulating and correcting that structure across engineering episodes.</p>
+<p>The ratchet preserves the obligation, not necessarily the current answer. A later measurement may refute a model, change a parameter, expose another scaling dimension, or require a different control. The engineering environment should permit those corrections. What later work cannot do silently is return the consequential property to an unexamined implementation detail.</p>
+<p>Each episode may add, revise, or retire the structure that later engineering work inherits. The engineer retains models, procedures, evidence, and controls selectively, when their engineering value justifies the maintenance they require.</p></blockquote>
+
+</div>
+
+<h2 id="4210-the-resulting-model-family"><span class="sec-num">4.2.10</span> The Resulting Model Family</h2>
+<div class="wrap">
+
+<p>The large-file requirement produced a connected family of models, each answering a different engineering question. <a class="xref" href="4.2-one-problem-many-models.html#tbl-4-2-1">Table&nbsp;4.2-1</a> collects them.</p>
+<table id="tbl-4-2-1" class="book-table" data-label="interlude-model-family"><caption data-short="Models for large-file remediation"><span class="tbl-label">Table 4.2-1.</span> Models for large-file remediation.</caption><thead><tr><th>Model</th><th>Question</th></tr></thead><tbody><tr><td>Media residency</td><td>What must reside in worker memory? How should memory scale with media size?</td></tr><tr><td>Batch execution</td><td>How do batch size and concurrency affect latency, cost, and truncation risk?</td></tr><tr><td>Critical path</td><td>What sets the latency floor? Which nodes are optimization targets?</td></tr><tr><td>Distribution</td><td>Where should ready work execute? What coordination costs does that introduce?</td></tr><tr><td>Remediation graph</td><td>What work exists, and what depends on what?</td></tr><tr><td>Fact / IR catalogue</td><td>Which derived facts feed later computations? How deep is the information-dependency chain?</td></tr><tr><td>Image fidelity</td><td>What representation of media is required, and what does rendering it cost?</td></tr></tbody></table>
+<p>These models take different forms because they answer different questions. Some are typed graphs, some quantitative functions, some declarations of entities and invariants. They stay separate and compose through shared identities and explicit relationships. The remediation graph and fact catalogue supply the static dependency structure, and the batch model supplies per-call cost; the critical-path model combines the two into latency. The distribution model supplies the execution topology the coordination taxes are charged against. The media-residency model supplies the independent memory bound that makes the execution design affordable.</p>
+<p>Some answers follow from structure; others depend on calibrated measurements. The critical path identifies ordering that more workers cannot remove, while a latency prediction depends on operation times and coordination costs. Keeping those sources of knowledge distinct makes disagreement informative: a measurement can require a new parameter, a revised relation, or another model.</p>
+
+</div>
+
+<h3 id="three-days">Modeling Inside the Implementation Loop</h3>
+<div class="wrap">
+
+<p>This sequence took about three days inside the existing governed engineering environment. It included skeletonization and streaming, typed-patch work, reconsidering ChunkWorker, remediation and fact graphs, quantitative analysis, the chunkless execution design, and corrections when assumptions proved wrong. The timescale matters because modeling could participate in the implementation loop rather than follow it as a separate documentation phase.</p>
+<p>The seven models arrived one at a time. Larger inputs exposed a memory problem; changing how media was stored made the execution boundary worth reconsidering; the dependency graph exposed latency limits and possible redesigns. Each model answered a question raised by the work. Together, they let me predict the consequences of proposed changes and test those predictions against measurements. When the measurements disagreed, I revised the models.</p><section class="works-cited" aria-labelledby="wc-4-2-one-problem-many-models-h"><h2 id="wc-4-2-one-problem-many-models-h" class="wc-h">Works Cited</h2><ol class="wc-list"><li id="wc-4-2-one-problem-many-models-1">Ousterhout, John. <span>“<span>Always Measure One Level Deeper</span>.”</span> <em><span>Communications of the ACM</span></em> 61, no. 7 (2018): 74–83.</li></ol></section><nav class="chapnav" aria-label="Book navigation"><div class="chapnav-back"><a href="index.html" aria-label="Table of contents">« Table of contents</a><a href="part-4-intro.html" aria-label="Beginning of Chapter 4 — MAGE in Motion: Engineering Through Models">« Beginning of chapter</a><a href="4.1-the-dynamics-of-mage.html" aria-label="Previous section — §4.1 · The Dynamics of MAGE">« Previous section</a></div><span class="chapnav-here" title="§4.2 · One Problem, Many Models">§4.2 · One Problem, Many Models</span><div class="chapnav-fwd"><a href="4.3-brownfield-engineering.html" aria-label="Next section — §4.3 · Brownfield Engineering">Next section »</a><a href="part-5-intro.html" aria-label="Next chapter — Chapter 5 — DocAble Among Other Software Factories">Next chapter »</a><a href="book-index.html" aria-label="Index of terms">Index »</a></div></nav><div class="book-foot">© James C. Davis, 2026–present</div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

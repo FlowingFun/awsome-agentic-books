@@ -1,0 +1,3349 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Case Study in Software Engineering — web edition.">
+      
+      
+      
+      
+        <link rel="prev" href="1.3-mage-by-example.html">
+      
+      
+        <link rel="next" href="1.5-the-new-engineering-problem.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>§1.4 · Agentic Machinery and Its Properties - Model-Based Agentic Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/mage-family.css">
+    
+      <link rel="stylesheet" href="assets/mage-book.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="citation_title" content="Agentic Machinery and Its Properties"><meta name="citation_author" content="James C. Davis"><meta name="citation_book_title" content="Model-Based Agentic Engineering"><meta name="citation_publication_date" content="2026"><meta name="citation_fulltext_html_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/1.4-the-agentic-substrate.html"><meta name="citation_pdf_url" content="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/mage-book.pdf"><meta name="citation_reference" content="citation_title=Evaluating Large Language Models Trained on Code;citation_author=Mark Chen;citation_author=Jerry Tworek;citation_author=Heewoo Jun;citation_author=Qiming Yuan;citation_author=Henrique Ponde de Oliveira Pinto;citation_author=Jared Kaplan;citation_author=Harri Edwards;citation_author=Yuri Burda;citation_author=Nicholas Joseph;citation_author=Greg Brockman;citation_author=Alex Ray;citation_author=Raul Puri;citation_author=Gretchen Krueger;citation_author=Michael Petrov;citation_author=Heidy Khlaaf;citation_author=Girish Sastry;citation_author=Pamela Mishkin;citation_author=Brooke Chan;citation_author=Scott Gray;citation_author=Nick Ryder;citation_author=Mikhail Pavlov;citation_author=Alethea Power;citation_author=Lukasz Kaiser;citation_author=Mohammad Bavarian;citation_author=Clemens Winter;citation_author=Philippe Tillet;citation_author=Felipe Petroski Such;citation_author=Dave Cummings;citation_author=Matthias Plappert;citation_author=Fotios Chantzis;citation_author=Elizabeth Barnes;citation_author=Ariel Herbert-Voss;citation_author=William Hebgen Guss;citation_author=Alex Nichol;citation_author=Alex Paino;citation_author=Nikolas Tezak;citation_author=Jie Tang;citation_author=Igor Babuschkin;citation_author=Suchir Balaji;citation_author=Shantanu Jain;citation_author=William Saunders;citation_author=Christopher Hesse;citation_author=Andrew N. Carr;citation_author=Jan Leike;citation_author=Josh Achiam;citation_author=Vedant Misra;citation_author=Evan Morikawa;citation_author=Alec Radford;citation_author=Matthew Knight;citation_author=Miles Brundage;citation_author=Mira Murati;citation_author=Katie Mayer;citation_author=Peter Welinder;citation_author=Bob McGrew;citation_author=Dario Amodei;citation_author=Sam McCandlish;citation_author=Ilya Sutskever;citation_author=Wojciech Zaremba;citation_publication_date=2021"><meta name="citation_reference" content="citation_title=GPT-4 Technical Report;citation_author=OpenAI;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Training Language Models to Follow Instructions with Human Feedback;citation_author=Long Ouyang;citation_author=Jeffrey Wu;citation_author=Xu Jiang;citation_author=Diogo Almeida;citation_author=Carroll Wainwright;citation_author=Pamela Mishkin;citation_author=Chong Zhang;citation_author=Sandhini Agarwal;citation_author=Katarina Slama;citation_author=Alex Ray;citation_author=John Schulman;citation_author=Jacob Hilton;citation_author=Fraser Kelton;citation_author=Luke Miller;citation_author=Maddie Simens;citation_author=Amanda Askell;citation_author=Peter Welinder;citation_author=Paul F. Christiano;citation_author=Jan Leike;citation_author=Ryan Lowe;citation_publication_date=2022"><meta name="citation_reference" content="citation_title=ReAct: Synergizing Reasoning and Acting in Language Models;citation_author=Shunyu Yao;citation_author=Jeffrey Zhao;citation_author=Dian Yu;citation_author=Nan Du;citation_author=Izhak Shafran;citation_author=Karthik Narasimhan;citation_author=Yuan Cao;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=LoRA: Low-Rank Adaptation of Large Language Models;citation_author=Edward J. Hu;citation_author=Yelong Shen;citation_author=Phillip Wallis;citation_author=Zeyuan Allen-Zhu;citation_author=Yuanzhi Li;citation_author=Shean Wang;citation_author=Lu Wang;citation_author=Weizhu Chen;citation_publication_date=2022"><meta name="citation_reference" content="citation_title=On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?;citation_author=Emily M. Bender;citation_author=Timnit Gebru;citation_author=Angelina McMillan-Major;citation_author=Shmargaret Shmitchell;citation_publication_date=2021"><meta name="citation_reference" content="citation_title=Sparks of Artificial General Intelligence: Early Experiments with GPT-4;citation_author=S\&#x27;ebastien Bubeck;citation_author=Varun Chandrasekaran;citation_author=Ronen Eldan;citation_author=Johannes Gehrke;citation_author=Eric Horvitz;citation_author=Ece Kamar;citation_author=Peter Lee;citation_author=Yin Tat Lee;citation_author=Yuanzhi Li;citation_author=Scott Lundberg;citation_author=Harsha Nori;citation_author=Hamid Palangi;citation_author=Marco Tulio Ribeiro;citation_author=Yi Zhang;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task;citation_author=Kenneth Li;citation_author=Aspen K. Hopkins;citation_author=David Bau;citation_author=Fernanda Vi\&#x27;egas;citation_author=Hanspeter Pfister;citation_author=Martin Wattenberg;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Emergent Linear Representations in World Models of Self-Supervised Sequence Models;citation_author=Neel Nanda;citation_author=Andrew Lee;citation_author=Martin Wattenberg;citation_publication_date=2023"><meta name="citation_reference" content="citation_title=Emergent Representations of Program Semantics in Language Models Trained on Programs;citation_author=Charles Jin;citation_author=Martin Rinard;citation_publication_date=2024"><meta name="citation_reference" content="citation_title=Vibe Coding: Programming Through Conversation with Artificial Intelligence;citation_author=Advait Sarkar;citation_author=Ian Drosos;citation_publication_date=2025"><meta name="citation_reference" content="citation_title=Building Software by Rolling the Dice: A Qualitative Study of Vibe Coding;citation_author=Yi-Hung Chou;citation_author=Boyuan Jiang;citation_author=Yiwen Chen;citation_author=Mingyue Weng;citation_author=Victoria Jackson;citation_author=Thomas Zimmermann;citation_author=James A. Jones;citation_publication_date=2026"><meta name="citation_reference" content="citation_title=9 Critical Failure Patterns of Coding Agents;citation_author=Reya Vir;citation_publication_date=2026"><meta name="citation_reference" content="citation_title=FlowCheck: Helping End-Users Specify and Verify Intent in Vibe-Coded Web Apps;citation_author=Reya Vir;citation_author=Lydia Chilton;citation_author=Zhuo Zhang;citation_author=Eugene Wu;citation_publication_date=2026"><meta name="citation_reference" content="citation_title=seqBench: A Tunable Benchmark to Quantify Sequential Reasoning Limits of LLMs;citation_author=Mohammad Ramezanali;citation_author=Mo Vazifeh;citation_author=Paolo Santi;citation_publication_date=2025"><meta name="citation_reference" content="citation_title=Effective Context Engineering for AI Agents;citation_author=Prithvi Rajasekaran;citation_author=Ethan Dixon;citation_author=Carly Ryan;citation_author=Jeremy Hadfield;citation_publication_date=2025"><meta name="citation_reference" content="citation_title=Why a Diagram Is (Sometimes) Worth Ten Thousand Words;citation_author=Jill H. Larkin;citation_author=Herbert A. Simon;citation_publication_date=1987"><meta name="citation_reference" content="citation_title=Representations in Distributed Cognitive Tasks;citation_author=Jiajie Zhang;citation_author=Donald A. Norman;citation_publication_date=1994">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#141-foundation-models-the-source-of-commodity-intelligence" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-header__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a class="md-header__brandlink" href="index.html" title="Model-Based Agentic Engineering">Model-Based Agentic Engineering</a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              §1.4 · Agentic Machinery and Its Properties
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <nav class="md-header__family" aria-label="MAGE publishing family">
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/">MAGE homepage</a>
+        
+          <a class="md-header__family-link" href="https://davisjam.github.io/model-based-agentic-software-engineering/teach/">Teach with MAGE</a>
+        
+      </nav>
+    
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Model-Based Agentic Engineering" class="md-nav__button md-logo" aria-label="Model-Based Agentic Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 2-5 4.5v11l5-4.5zM6.5 5C4.55 5 2.45 5.4 1 6.5v14.66c0 .25.25.5.5.5.1 0 .15-.07.25-.07 1.35-.65 3.3-1.09 4.75-1.09 1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.31 4.75 1.06.1.05.15.03.25.03.25 0 .5-.25.5-.5V6.5c-.6-.45-1.25-.75-2-1V19c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V6.5C10.55 5.4 8.45 5 6.5 5"/></svg>
+
+    </a>
+    Model-Based Agentic Engineering
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davisjam/model-based-agentic-software-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  
+    <a class="md-nav__pdf" href="mage-book.pdf" title="Read the PDF edition" aria-label="Read the PDF edition"><svg class="dl-ico" viewBox="0 0 16 16" width="1.05em" height="1.05em" style="vertical-align:-0.18em;margin-right:0.45em" aria-hidden="true" focusable="false"><path d="M9.4 1.3H4.3a1 1 0 0 0-1 1v11.4a1 1 0 0 0 1 1h7.4a1 1 0 0 0 1-1V4.6Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.3v3.3h3.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><text x="8" y="12.1" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="4.8" font-weight="700" letter-spacing="-0.1" fill="currentColor">PDF</text></svg>Read the PDF&nbsp;&#8595;
+    </a>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Orientation and Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.0-acknowledgments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acknowledgments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contents.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.3-authors-note.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Author’s Note
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.5-preface.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.1-how-to-read-this-book.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Read This Book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.2-what-this-book-argues.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What This Book Argues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0.4-the-books-language.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — The New Engineering Problem
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-1-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The New Engineering Problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.1-the-printer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.1 · The Printer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.2-the-engineering-object.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.2 · The Engineering Object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.3-mage-by-example.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.3 · MAGE by Example: DocAble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="1.4-the-agentic-substrate.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.4 · Agentic Machinery and Its Properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#141-foundation-models-the-source-of-commodity-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 Foundation Models: The Source of Commodity Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142-four-properties-of-commodity-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 Four Properties of Commodity Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engineering-the-agent-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 Steering Agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-simple-probabilistic-model-of-success-with-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.4 A Simple Probabilistic Model of Success with Agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="1.5-the-new-engineering-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §1.5 · Two Engineering Problems, One Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Modeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Modeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-2-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.1-context-is-the-first-modeling-problem.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.1 · From Context to Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.2-constructing-and-using-engineering-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.2 · Constructing and Using Engineering Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.3-structural.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.3 · Structural Models: What Is Connected to What?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.4-behavioral.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.4 · Behavioral Models: What May Happen?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.5-decision.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.5 · Decision Models: What Should Happen Next?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.6-system-knowledge.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.6 · System Knowledge: Connecting the Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2.7-modeling-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §2.7 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 3 — Alignment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 3 — Alignment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-3-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alignment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.1-where-obligations-can-be-enforced.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.1 · Where Obligations Can Be Enforced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.2-models-and-the-semantic-gap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.2 · From Engineering Intent to Enforceable Obligation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.3-constraints-sensors-validators-gates.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.3 · Governance Mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.4-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.4 · Growing the Governed Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.5-when-guardrails-collide.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.5 · When Controls Become a System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="3.6-alignment-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §3.6 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 4 — MAGE in Motion: Engineering Through Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-4-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAGE in Motion: Engineering Through Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.1-the-dynamics-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.1 · The Dynamics of MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.2-one-problem-many-models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.2 · One Problem, Many Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.3-brownfield-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.3 · Brownfield Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.4-engineering-the-environment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.4 · Engineering the Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="4.5-mage-in-motion-summary.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §4.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 5 — DocAble Among Other Software Factories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-5-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocAble Among Other Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.1-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.1 · The Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.2-inside-docables-software-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.2 · Inside DocAble's Software Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.3-evaluating-docable.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.3 · Evaluating the Product and Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.4-other-agentic-software-factories.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.4 · Other Agentic Software Factories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="5.5-engineering-the-factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §5.5 · Coda: Engineering the Factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 6 — The Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 6 — The Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-6-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.1-toward-a-theory-of-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.1 · From Production to Cumulative Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.2-what-the-theory-predicts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.2 · What the Theory Predicts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.3-scope-conditions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.3 · Scope Conditions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.4-research-agenda.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.4 · Research Agenda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="6.5-what-the-theory-claims.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §6.5 · Summary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 7 — The Profession
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 7 — The Profession
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="part-7-intro.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Profession
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.1-reorganization-of-se.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.1 · The Reorganization of Software Work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.2-software-rejoins-engineering.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.2 · Back to Models, but Not Back to Waterfall
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.3-agentic-engineering-beyond-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.3 · Agentic Engineering Beyond Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.4-the-engineer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    §7.4 · The Engineer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="7.5-what-cannot-be-delegated.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Must Not Be Delegated?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="9.1-the-part-that-stays-yours.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-handbook.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix A — MAGE Engineering Handbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-engineering-moves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.1 Engineering Moves: A Field Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-model-coherence.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.2 Model Coherence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governance-conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.3 Governance Conversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-a-governed-delegation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A.4 Governed Delegation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix B — Practicing MAGE
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-practicing-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix B — Practicing MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.1 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-brownfield-migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.2 Brownfield Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-operating-a-gee.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.3 Operating a GEE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="appendix-b-measuring-mage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B.4 Measuring MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Back Matter
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Back Matter
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="colophon.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colophon — Dogfooding MAGE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="about-the-author.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About the Author
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Index
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="book-index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index (terms)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Figures Gallery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bibliography.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bibliography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="list-of-figures.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List of Figures and Tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#141-foundation-models-the-source-of-commodity-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.1 Foundation Models: The Source of Commodity Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#142-four-properties-of-commodity-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.2 Four Properties of Commodity Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engineering-the-agent-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.3 Steering Agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-simple-probabilistic-model-of-success-with-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4.4 A Simple Probabilistic Model of Success with Agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+<div class="wrap">
+<header class="chap"><div class="kicker"><a href="part-1-intro.html" aria-label="Beginning of Chapter 1 — The New Engineering Problem">Chapter 1 — The New Engineering Problem</a> &nbsp;::&nbsp; <a href="index.html" aria-label="Book contents — jump to the table of contents">§1.4</a></div><h1><span class="chap-num">§1.4</span> Agentic Machinery and Its Properties</h1></header><p>Engineering methods must fit the machinery they govern. <a class="xref" href="1.4-the-agentic-substrate.html#fig-1-4-1">Figure&nbsp;1.4-1</a> distinguishes three components of an agentic engineering system: the foundation model that supplies general capabilities, the harness that turns those capabilities into actions, and the engineered environment in which agents work. Understanding their respective roles helps explain where engineers can exercise control.</p>
+<figure id="fig-1-4-1" class="book-figure" data-label="agentic-substrate" style="--fig-natural:440px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 440 136" role="img" aria-labelledby="f-agentic-substrate-title f-agentic-substrate-desc" font-family="Source Sans 3, sans-serif"><title id="f-agentic-substrate-title">Commodity intelligence in a governed engineering environment</title><desc id="f-agentic-substrate-desc">Training supplies the foundation model. The model sends outputs to the harness and receives context. The harness acts on the governed engineering environment and receives evidence. Engineers maintain the environment, which supplies project knowledge and controls which actions are permitted.</desc>
+<defs><marker id="f-agentic-substrate-arrow" viewBox="0 0 6 6" refX="5.7" refY="3" markerWidth="6" markerHeight="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 3L0 6Z"/></marker></defs>
+<rect x="3" y="1" width="105" height="30" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="55.5" y="14" text-anchor="middle" font-size="10.5" font-weight="bold" font-style="normal">Model development</text>
+<text x="55.5" y="25" text-anchor="middle" font-size="9" font-weight="normal" font-style="normal">Training data and training</text>
+<rect x="314" y="1" width="119" height="30" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<text x="373.5" y="14" text-anchor="middle" font-size="10.5" font-weight="bold" font-style="normal">Engineer</text>
+<text x="373.5" y="25" text-anchor="middle" font-size="9" font-weight="normal" font-style="normal">Develops and maintains GEE</text>
+<path d="M55,31 L55,51" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+<path d="M374,31 L374,51" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+<rect x="3" y="51" width="105" height="79" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<rect x="155" y="51" width="102" height="79" rx="3" fill="white" stroke="black" stroke-width=".65"/>
+<rect x="314" y="51" width="119" height="79" rx="3" fill="#eeeeee" stroke="black" stroke-width=".65"/>
+<text x="55.5" y="72" text-anchor="middle" font-size="11" font-weight="bold" font-style="normal">Foundation model</text>
+<text x="55.5" y="94" text-anchor="middle" font-size="10" font-weight="normal" font-style="italic">General-purpose</text>
+<text x="55.5" y="106" text-anchor="middle" font-size="10" font-weight="normal" font-style="italic">reasoning</text>
+<text x="206" y="72" text-anchor="middle" font-size="11" font-weight="bold" font-style="normal">Agentic harness</text>
+<text x="206" y="92" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">Context management</text>
+<text x="206" y="105" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">Tools and hooks</text>
+<text x="206" y="118" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">Action execution</text>
+<text x="373.5" y="65" text-anchor="middle" font-size="11" font-weight="bold" font-style="normal">Governed engineering</text>
+<text x="373.5" y="78" text-anchor="middle" font-size="11" font-weight="bold" font-style="normal">environment (GEE)</text>
+<text x="373.5" y="96" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">Existing system</text>
+<text x="373.5" y="109" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">Project knowledge</text>
+<text x="373.5" y="122" text-anchor="middle" font-size="10" font-weight="normal" font-style="normal">and controls</text>
+<text x="131.5" y="81" text-anchor="middle" font-size="9.5" font-weight="normal" font-style="italic">Outputs</text>
+<path d="M108,86 L155,86" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+<text x="131.5" y="107" text-anchor="middle" font-size="9.5" font-weight="normal" font-style="italic">Context</text>
+<path d="M155,112 L108,112" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+<text x="285.5" y="81" text-anchor="middle" font-size="9.5" font-weight="normal" font-style="italic">Actions</text>
+<path d="M257,86 L314,86" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+<text x="285.5" y="107" text-anchor="middle" font-size="9.5" font-weight="normal" font-style="italic">Evidence</text>
+<path d="M314,112 L257,112" fill="none" stroke="black" stroke-width=".7" marker-end="url(#f-agentic-substrate-arrow)"/>
+</svg><figcaption data-short="Commodity intelligence in a governed engineering environment"><span class="fig-label">Figure 1.4-1.</span> <em>Commodity intelligence in a governed engineering environment.</em> General capabilities from a foundation model become useful engineering machinery when connected to an agentic harness and a governed engineering environment. The environment contains both the existing system and the engineering structure used to guide and govern work. Engineers develop and maintain this environment.</figcaption></figure>
+
+</div>
+
+<h2 id="141-foundation-models-the-source-of-commodity-intelligence"><span class="sec-num">1.4.1</span> Foundation Models: The Source of Commodity Intelligence</h2>
+<div class="wrap">
+
+<p id="idx-def-engineering-substrate">The coding agents available in 2026 are built primarily around large language models (LLMs), which serve as their <strong>foundation models</strong>. These models acquire general capabilities through training on large collections of text, software, and other data.<sup class="note-ref"><a href="#note-1-4-the-agentic-substrate-1" role="doc-noteref" aria-label="note 1">*</a></sup><span class="editorial-note" id="note-1-4-the-agentic-substrate-1"><span class="cn-mark">*</span> Engineering predates machine learning in its use of models as purposeful representations of systems. Machine learning later adopted the same word for a learned approximation of a function—also reasonably a model, but a different kind. This book gives the engineering usage precedence: unqualified model means a purposeful representation of an engineered system or some property of it. I therefore use foundation model for the trained machine-learning system and agent for the acting system built around one through a harness, tools, and working state. Where the distinction matters, I will not ask the reader to infer which “model” I mean.</span> Publicly available source code, including open-source repositories, has been an important source of training material for coding models <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-1" aria-label="citation 1">1</a></sup>.<span class="cite-note"><span class="cn-mark">1.</span> Mark Chen et al., <em><span>Evaluating Large Language Models Trained on Code</span></em>, arXiv preprint arXiv:2107.03374, 2021, <a href="https://arxiv.org/abs/2107.03374">https://arxiv.org/abs/2107.03374</a>.</span> Training mixtures can also include licensed material, and their full composition is not always disclosed <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-2" aria-label="citation 2">2</a></sup>.<span class="cite-note"><span class="cn-mark">2.</span> OpenAI, <em><span><span>GPT-4</span> Technical Report</span></em>, arXiv preprint arXiv:2303.08774, 2023, <a href="https://cdn.openai.com/papers/gpt-4.pdf">https://cdn.openai.com/papers/gpt-4.pdf</a>.</span></p>
+<p>The goal of training is to develop a model that can make useful predictions and generalize beyond its training examples. Training typically begins with a prediction objective: given a sequence of tokens, predict the next one. Tokens are units of representation, often words, parts of words, or punctuation. Training adjusts numerical parameters, or weights, to improve these predictions. Additional training can improve how a foundation model follows instructions and responds to human requests <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-3" aria-label="citation 3">3</a></sup>.<span class="cite-note"><span class="cn-mark">3.</span> Long Ouyang et al., <span>“<span>Training Language Models to Follow Instructions with Human Feedback</span>,”</span> <em><span>Advances in Neural Information Processing Systems</span></em> 35 (2022): 27730–44, <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html</a>.</span> At inference time, the trained model processes the context supplied to it and generates a response. An <em>agentic harness</em> turns some of those responses into actions, such as searching a repository, modifying files, running tests, or invoking development tools. Tool results can then be returned as context for further reasoning <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-4" aria-label="citation 4">4</a></sup>.<span class="cite-note"><span class="cn-mark">4.</span> Shunyu Yao et al., <span>“<span>ReAct: Synergizing Reasoning and Acting in Language Models</span>,”</span> <em><span>International Conference on Learning Representations</span></em>, 2023.</span></p>
+<p>A foundation model trained on public software may know programming languages, libraries, common architectures, and established engineering practices. It ordinarily will not know the current state of the particular system an engineer asks it to modify. That system may be proprietary, may have changed since training, or may contain local design decisions that general programming knowledge cannot supply. Even a seemingly local change may depend on an architectural boundary established years earlier, a configuration convention shared across services, or an operational constraint that appears nowhere near the code being edited. Agents must recover relevant knowledge from the codebase, documentation, configuration, and other available evidence. General programming knowledge must be connected to the particular system and the obligations its changes must preserve.</p>
+<p>Engineers can influence a language-based agent in two broad ways. They can modify the foundation model through training or fine-tuning, changing its weights. Alternatively, they can change what the agent receives and the environment in which it operates: instructions, system knowledge, tools, permissions, and feedback. The agentic harness provides some of the machinery for exercising this control, including context management, tool access, and hooks through which engineers can observe or constrain actions. Training a frontier foundation model requires resources far beyond those of an ordinary software engineering project. Fine-tuning is more accessible, particularly through techniques that update only a fraction of the model’s parameters <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-5" aria-label="citation 5">5</a></sup><span class="cite-note"><span class="cn-mark">5.</span> Edward J. Hu et al., <span>“<span><span>LoRA</span>: Low-Rank Adaptation of Large Language Models</span>,”</span> <em><span>International Conference on Learning Representations</span></em>, 2022, <a href="https://openreview.net/forum?id=nZeVKeeFYf9">https://openreview.net/forum?id=nZeVKeeFYf9</a>.</span>, but still requires suitable training data, evaluation, and maintenance. It may also be unavailable for a particular foundation model. By contrast, engineers can often configure the harness and establish project-specific controls without modifying the model’s weights.</p>
+<p>MAGE concentrates on this second approach. The engineer acquires general-purpose intelligence as a service or software component, then engineers the environment in which that intelligence performs consequential work. The foundation model supplies general capabilities, the harness turns its outputs into actions and exposes points of control, and the governed engineering environment supplies the knowledge, obligations, and mechanisms governing those actions.</p>
+<blockquote class="box-inset"><span class="box-badge">REASONING</span><p class="inset-title" id="do-llms-reason">Inset — Do LLMs Reason?</p>
+<p>Whether LLMs genuinely reason remains a subject of scientific debate. Bender and colleagues challenged the identification of linguistic fluency with understanding <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-6" aria-label="citation 6">6</a></sup><span class="cite-note"><span class="cn-mark">6.</span> Emily M. Bender et al., <span>“<span>On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?</span>”</span> <em><span>Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency</span></em>, 2021, 610–23, <a href="https://doi.org/10.1145/3442188.3445922">https://doi.org/10.1145/3442188.3445922</a>.</span>, while Bubeck and colleagues demonstrated broad problem-solving behavior in an early GPT-4 <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-7" aria-label="citation 7">7</a></sup>.<span class="cite-note"><span class="cn-mark">7.</span> Sébastien Bubeck et al., <em><span>Sparks of Artificial General Intelligence: Early Experiments with <span>GPT-4</span></span></em>, arXiv preprint arXiv:2303.12712, 2023, <a href="https://arxiv.org/abs/2303.12712">https://arxiv.org/abs/2303.12712</a>.</span> More controlled experiments have found evidence of learned internal representations: studies of Othello-playing models recovered representations of board state and demonstrated their influence on predictions <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-8" aria-label="citation 8">8</a></sup><sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-9" aria-label="citation 9">9</a></sup><span class="cite-note"><span class="cn-mark">8.</span> Kenneth Li et al., <span>“<span>Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task</span>,”</span> <em><span>International Conference on Learning Representations</span></em>, 2023, <a href="https://openreview.net/forum?id=DeG07_TcZvT">https://openreview.net/forum?id=DeG07_TcZvT</a>.</span><span class="cite-note"><span class="cn-mark">9.</span> Neel Nanda et al., <span>“<span>Emergent Linear Representations in World Models of Self-Supervised Sequence Models</span>,”</span> <em><span>Proceedings of the 6th BlackboxNLP Workshop: Analyzing and Interpreting Neural Networks for NLP</span></em> (Singapore), 2023, 16–30, <a href="https://doi.org/10.18653/v1/2023.blackboxnlp-1.2">https://doi.org/10.18653/v1/2023.blackboxnlp-1.2</a>.</span>, while Jin and Rinard found evidence that models trained on programs had learned aspects of program semantics <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-10" aria-label="citation 10">10</a></sup>.<span class="cite-note"><span class="cn-mark">10.</span> Charles Jin and Martin Rinard, <span>“<span>Emergent Representations of Program Semantics in Language Models Trained on Programs</span>,”</span> <em><span>Proceedings of the 41st International Conference on Machine Learning</span></em>, <span>Proceedings of Machine Learning Research</span>, vol. 235 (2024): 22160–84, <a href="https://proceedings.mlr.press/v235/jin24e.html">https://proceedings.mlr.press/v235/jin24e.html</a>.</span> These studies establish different things: observable problem-solving behavior, learned structure, and evidence connecting internal representations to computation. None establishes that an agent will reason reliably about arbitrary production software. For this book, reasoning is a functional capability: using available information to draw inferences, evaluate alternatives, and work toward a solution. LLM-based systems can supply enough of that capability to undertake substantial engineering work. The question for engineering is how to put it to work under informed control.</p></blockquote>
+
+</div>
+
+<h2 id="142-four-properties-of-commodity-intelligence"><span class="sec-num">1.4.2</span> Four Properties of Commodity Intelligence</h2>
+<div class="wrap">
+
+<p>Four properties of contemporary foundation models matter to the engineering argument.</p>
+<p><strong>Broad semantic reasoning.</strong> A foundation model can interpret instructions, synthesize information, draw inferences, and search for solutions across open-ended domains. Give it an abstraction—a schema, state table, architectural model, or policy—and it can work with that abstraction rather than merely execute a fixed script. This makes it possible to delegate implementation decisions that engineers have not specified in advance. A plausible decision may nevertheless be inappropriate for the system at hand. An agent may select a familiar architecture or design pattern that works well elsewhere but violates a local constraint, introduces unnecessary complexity, or conflicts with an established design decision.</p>
+<p><strong>Probabilistic output.</strong> Repeated invocations may produce different implementations or judgments. A foundation model’s confidence in its own result supplies no independent evidence of correctness. An agent may also fail consistently when its attempts share an incorrect assumption. Asking another foundation model to review the work can improve reliability, but the errors of the producer and evaluator may be correlated. Engineering assurance therefore cannot rest solely on the judgment that produced the result.</p>
+<span id="idx-def-long-horizon-task"></span><span id="idx-def-reasoning-horizon"></span><p><strong>Bounded working state.</strong> The information available to a foundation model during an invocation is finite. An agentic harness can extend its effective working state through retrieval, external memory, compaction, and repeated tool use, but information needed for a particular decision must be available when that decision is made. A <em>long-horizon task</em> requires carrying earlier decisions or commitments into later steps. Large software systems exceed what can be presented in a single reasoning episode, so agents must select and reconstruct relevant system knowledge. The <strong>reasoning horizon</strong> is the practical limit of the work a reasoner and its supporting machinery can carry through reliably, given the available representations and resources.</p>
+<p><strong>Inexpensive repeated reasoning.</strong> Agents can explore alternatives at a speed and cost that human engineers cannot match. An agent can propose an implementation, run checks, revise its work, and try again, often many times in the time a human engineer would need for one attempt. This is particularly valuable when the engineer can state what constitutes an acceptable result. Human engineers are fallible reasoners too: they misunderstand requirements, overlook interactions, make incorrect assumptions, and introduce defects. Software engineering has long responded with specifications, types, tests, reviews, and other means of checking work independently of its author. Artificial reasoners introduce a new source of implementation capacity, not a new need for engineering assurance.</p>
+<p>These capabilities make natural language a remarkably productive interface for programming. In the practice known as <em>vibe coding</em>, a developer describes what an application should do, tries the generated software, and asks for changes in light of what happens. Some developers work almost entirely through that conversation. Others inspect or edit the code when a result surprises them <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-11" aria-label="citation 11">11</a></sup><sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-12" aria-label="citation 12">12</a></sup>.<span class="cite-note"><span class="cn-mark">11.</span> Advait Sarkar and Ian Drosos, <span>“<span>Vibe Coding: Programming Through Conversation with Artificial Intelligence</span>,”</span> <em><span>Proceedings of the 36th Annual Workshop of the Psychology of Programming Interest Group</span></em>, 2025, <a href="https://arxiv.org/abs/2506.23253">https://arxiv.org/abs/2506.23253</a>.</span><span class="cite-note"><span class="cn-mark">12.</span> Yi-Hung Chou et al., <span>“<span>Building Software by Rolling the Dice: A Qualitative Study of Vibe Coding</span>,”</span> <em><span>Proceedings of the ACM on Software Engineering</span></em> 3, no. FSE (2026), <a href="https://doi.org/10.1145/3797105">https://doi.org/10.1145/3797105</a>.</span> Either way, a developer can go from an idea to a working application with little code written by hand. For prototypes, this may be enough.</p>
+<p>On more complex systems, a change must also preserve requirements that nobody thought to repeat in the latest request. In experiments at Columbia University, applications that appeared to work mishandled business rules or lost track of state as users moved between components <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-13" aria-label="citation 13">13</a></sup>.<span class="cite-note"><span class="cn-mark">13.</span> Reya Vir, <em><span>9 Critical Failure Patterns of Coding Agents</span></em>, DAPLab, Columbia University, 2026, <a href="https://daplab.cs.columbia.edu/general/2026/01/08/9-critical-failure-patterns-of-coding-agents.html">https://daplab.cs.columbia.edu/general/2026/01/08/9-critical-failure-patterns-of-coding-agents.html</a>.</span> The FlowCheck study gives a particularly clear example. Three coding systems were asked to let several speakers share a time slot. All three also allowed a speaker to occupy several slots, violating an earlier rule <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-14" aria-label="citation 14">14</a></sup>.<span class="cite-note"><span class="cn-mark">14.</span> Reya Vir et al., <span>“<span><span>FlowCheck</span>: Helping End-Users Specify and Verify Intent in Vibe-Coded Web Apps</span>,”</span> <em><span>Proceedings of the 2nd ACM SIGPLAN International Workshop on Language Models and Programming Languages</span></em> (Oakland, CA, USA), 2026, <a href="https://doi.org/10.1145/3843750.3843844">https://doi.org/10.1145/3843750.3843844</a>.</span> A developer who tried only the newly requested feature could easily miss what the change had undone.</p>
+<blockquote class="box-inset"><span class="box-badge">AGENT HARNESS</span><p class="inset-title" id="inset-context-windows-and-compaction">Inset — Context Windows, Compaction, and the Reasoning Horizon</p>
+<p>A long-running engineering task can fail even when an agent has enough information for each step in isolation. An earlier decision or test result may be missing when the next step depends on it. In seqBench, reasoning horizon describes the length of a sequence a model can reliably complete <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-15" aria-label="citation 15">15</a></sup><span class="cite-note"><span class="cn-mark">15.</span> Mohammad Ramezanali et al., <span>“<span><span>seqBench</span>: A Tunable Benchmark to Quantify Sequential Reasoning Limits of <span>LLMs</span></span>,”</span> <em><span>Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing</span></em>, 2025, 33771–92, <a href="https://doi.org/10.18653/v1/2025.emnlp-main.1714">https://doi.org/10.18653/v1/2025.emnlp-main.1714</a>.</span>; here it includes what the harness and external resources make possible.</p>
+<p>A <strong>context window</strong> limits how much information a foundation model can process in one invocation. Instructions, conversation history, files, and tool results compete for space measured in tokens. A harness can carry work beyond one window by storing records for retrieval or using <strong>compaction</strong>: replacing accumulated context with a shorter account. Pages of investigation and test output might become a handoff recording the plan, decisions, checks, and remaining work. If the handoff says only “the tests passed,” the next agent cannot tell which tests ran or which version they exercised. Keeping the original results helps only if the agent retrieves them when needed <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-16" aria-label="citation 16">16</a></sup>.<span class="cite-note"><span class="cn-mark">16.</span> Prithvi Rajasekaran et al., <span>“<span>Effective Context Engineering for <span>AI</span> Agents</span>,”</span> Anthropic, September 29, 2025, <a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">https://www.anthropic.com/research/effective-context-engineering-for-ai-agents</a>.</span></p>
+<p>The generation of commodity intelligence that motivated this book is built around language models with bounded context windows. The reasoning horizon is broader than a context-window limit and is intended to remain useful as new kinds of intelligence bring different capabilities and constraints.</p></blockquote>
+
+</div>
+
+<h2 id="engineering-the-agent-environment"><span class="sec-num">1.4.3</span> Steering Agents</h2>
+<div class="wrap">
+
+<span id="idx-def-agentic-harness"></span><span id="idx-def-engineered-environment"></span><p>A foundation model supplies general reasoning capabilities, but the effectiveness of an agent also depends on how its harness organizes the work. A harness manages the context supplied to the foundation model, invokes tools in response to its outputs, and returns their results for further reasoning. It may also provide memory, task management, parallel execution, and hooks at which additional code can run. Engineers can use these facilities to influence both the information available to an agent and the sequence of actions through which it pursues a task.</p>
+<p>One approach, often called <em>context engineering</em>, concerns selecting and organizing the information available to an agent when it makes decisions <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-16" aria-label="citation 16">16</a></sup>. A foundation model’s context window is finite, so supplying irrelevant material consumes limited capacity and processing resources. Instructions, repository files, documentation, earlier decisions, and tool results must be selected and presented so that the agent can recover the knowledge it needs. Research on external representations has long shown that how information is organized affects the effort needed to reason with it <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-17" aria-label="citation 17">17</a></sup><sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-18" aria-label="citation 18">18</a></sup>.<span class="cite-note"><span class="cn-mark">17.</span> Jill H. Larkin and Herbert A. Simon, <span>“<span>Why a Diagram Is (Sometimes) Worth Ten Thousand Words</span>,”</span> <em><span>Cognitive Science</span></em> 11, no. 1 (1987): 65–100, <a href="https://doi.org/10.1111/j.1551-6708.1987.tb00863.x">https://doi.org/10.1111/j.1551-6708.1987.tb00863.x</a>.</span><span class="cite-note"><span class="cn-mark">18.</span> Jiajie Zhang and Donald A. Norman, <span>“<span>Representations in Distributed Cognitive Tasks</span>,”</span> <em><span>Cognitive Science</span></em> 18, no. 1 (1994): 87–122, <a href="https://doi.org/10.1207/s15516709cog1801_3">https://doi.org/10.1207/s15516709cog1801_3</a>.</span> A useful representation preserves relationships that would otherwise have to be reconstructed from implementation. Better representations can reduce that work without changing the underlying foundation model.</p>
+<p>Another approach is to structure agent behavior through <em>feedback loops</em>. Rather than asking an agent to produce a complete implementation in one attempt, the harness can organize repeated cycles of proposing changes, running tools, observing results, and revising the work <sup class="cite-ref"><a href="#wc-1-4-the-agentic-substrate-4" aria-label="citation 4">4</a></sup>. Tests, static analyses, and other checks can provide feedback that helps the agent improve successive attempts. The effectiveness of these loops depends on the evidence they produce: an agent may repeatedly pursue an incorrect assumption, optimize for an inadequate test, or satisfy a new request while losing an earlier requirement. Repeated attempts can improve a result, but they do not establish that the result is correct. <a class="xref" href="1.4-the-agentic-substrate.html#fig-1-4-2">Figure&nbsp;1.4-2</a> illustrates these two approaches.</p>
+<figure id="fig-1-4-2" class="book-figure" data-label="reasoning-horizon-fig" style="--fig-natural:1108px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1108 583" role="img" aria-labelledby="f-reasoning-horizon-title f-reasoning-horizon-desc">
+<title id="f-reasoning-horizon-title">Two ways to steer an agent</title><desc id="f-reasoning-horizon-desc">Two ways to steer an agent. Panel (a) compares reconstructing relevant structure from raw code at higher cost with retrieving it from a purposeful representation at lower cost. Panel (b) shows a loop from proposing a change through running tools, observing results, and revising. It repeats until acceptance criteria are met or work stops.</desc>
+<rect width="1108" height="583" fill="white"/>
+<g stroke-linejoin="round" stroke-linecap="round">
+<rect x="12" y="6" width="1084" height="282" rx="14" fill="white" stroke="black" stroke-width="2"/>
+<rect x="12" y="310" width="1084" height="267" rx="14" fill="white" stroke="black" stroke-width="2"/>
+<text x="40" y="41" font-family="sans-serif" font-size="30"><tspan font-weight="bold">(a) Context engineering:</tspan> make the right information available</text>
+<text x="40" y="345" font-family="sans-serif" font-size="30"><tspan font-weight="bold">(b) Feedback loops:</tspan> improve results through iteration</text>
+<path d="M554 71 L554 269" stroke="black" stroke-width="1.8" fill="none" stroke-dasharray="7 7"/>
+<rect x="93" y="76" width="173" height="130" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="75" y="86" width="173" height="130" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="53" y="97" width="173" height="147" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="634" y="71" width="180" height="141" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="619" y="79" width="180" height="141" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="600" y="86" width="180" height="158" rx="10" fill="white" stroke="black" stroke-width="2"/>
+<rect x="319" y="92" width="189" height="108" rx="12" fill="white" stroke="black" stroke-width="2"/>
+<rect x="868" y="92" width="189" height="108" rx="12" fill="white" stroke="black" stroke-width="2"/>
+<path d="M250 146 L314 146" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M318 146 L305 139 L307 146 L305 153 Z" stroke="black" stroke-width="1" fill="black"/>
+<path d="M800 146 L863 146" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M867 146 L854 139 L856 146 L854 153 Z" stroke="black" stroke-width="1" fill="black"/>
+<path d="M112 193 L111 119 L160 119 L175 134 L175 185 L165 185 L165 193 Z" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M159 119 L159 134 L174 134" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M119 128 L149 128 M119 135 L140 135 M132 150 L121 157 L132 164 M144 148 L138 169 M153 150 L164 157 L153 164" stroke="black" stroke-width="2.3" fill="none"/>
+<text x="139" y="227" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="700" font-style="normal">Raw code</text>
+<path d="M692 126 L692 137 M663 148 L663 138 L720 138 L720 148" stroke="black" stroke-width="2.3" fill="none"/>
+<rect x="676" y="104" width="33" height="21" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<rect x="646" y="147" width="33" height="21" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<rect x="704" y="147" width="33" height="21" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<text x="690" y="201" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" font-style="normal">Purposeful</text>
+<text x="690" y="227" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" font-style="normal">representation</text>
+<text x="414" y="125" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">Reconstruct</text>
+<text x="414" y="153" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">relevant</text>
+<text x="414" y="181" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">structure</text>
+<text x="414" y="231" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="italic">Higher cost</text>
+<text x="414" y="257" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="italic">(more work)</text>
+<text x="962" y="125" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">Retrieve</text>
+<text x="962" y="153" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">relevant</text>
+<text x="962" y="181" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="normal">structure</text>
+<text x="962" y="231" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="italic">Lower cost</text>
+<text x="962" y="257" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="italic">(less work)</text>
+<rect x="41" y="378" width="215" height="89" rx="15" fill="white" stroke="black" stroke-width="2"/>
+<rect x="307" y="378" width="255" height="89" rx="15" fill="white" stroke="black" stroke-width="2"/>
+<rect x="612" y="378" width="195" height="89" rx="15" fill="white" stroke="black" stroke-width="2"/>
+<rect x="856" y="378" width="217" height="89" rx="15" fill="white" stroke="black" stroke-width="2"/>
+<path d="M256 422 L302 422" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M306 422 L293 415 L295 422 L293 429 Z" stroke="black" stroke-width="1" fill="black"/>
+<path d="M562 422 L607 422" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M611 422 L598 415 L600 422 L598 429 Z" stroke="black" stroke-width="1" fill="black"/>
+<path d="M807 422 L851 422" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M855 422 L842 415 L844 422 L842 429 Z" stroke="black" stroke-width="1" fill="black"/>
+<rect x="72" y="411" width="47" height="33" rx="8" fill="white" stroke="black" stroke-width="2"/>
+<circle cx="95" cy="400" r="3.6" stroke="black" stroke-width="2.3" fill="white"/>
+<path d="M95 404 L95 410 M72 421 L68 421 L68 431 L72 431 M119 421 L122 421 L122 431 L119 431" stroke="black" stroke-width="2.3" fill="none"/>
+<circle cx="85" cy="424" r="1.8" stroke="black" stroke-width="2.3" fill="black"/>
+<circle cx="105" cy="424" r="1.8" stroke="black" stroke-width="2.3" fill="black"/>
+<path d="M88 435 L102 435" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M341 403 C338 411 343 419 351 418 L372 440 C375 443 382 438 380 435 L359 413 C362 405 357 399 349 400 L354 406 L350 411 Z" stroke="black" stroke-width="2.3" fill="none"/>
+<path d="M341 432 L350 423 L355 428 L347 439 C344 443 337 438 341 432 Z M362 417 L374 404 L378 401 L381 404 L378 409 L374 409 L365 420" stroke="black" stroke-width="2.3" fill="none"/>
+<rect x="637" y="425" width="10" height="16" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<rect x="653" y="413" width="10" height="28" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<rect x="670" y="400" width="10" height="41" rx="0" fill="white" stroke="black" stroke-width="2"/>
+<path d="M881 416 C886 396 911 396 919 414 M919 405 L919 415 L910 412 M919 425 C912 446 889 444 881 426 M881 434 L881 424 L890 428" stroke="black" stroke-width="2.9" fill="none"/>
+<text x="188" y="416" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">Propose</text>
+<text x="188" y="443" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">change</text>
+<text x="466" y="416" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">Run tools</text>
+<text x="466" y="443" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">(check, test, etc.)</text>
+<text x="742" y="416" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">Observe</text>
+<text x="742" y="443" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">results</text>
+<text x="999" y="416" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">Revise</text>
+<text x="999" y="443" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" font-style="normal">and try again</text>
+<path d="M1006 467 L1006 502 C1006 516 997 522 986 522 L122 522 C109 522 101 514 101 503 L101 476" stroke="black" stroke-width="3" fill="none"/>
+<path d="M101 467 L94 482 L101 480 L109 482 Z" stroke="black" stroke-width="1" fill="black"/>
+<text x="554" y="552" text-anchor="middle" font-family="sans-serif" font-size="25" font-weight="400" font-style="italic">Repeat until acceptance criteria are met or work stops</text>
+</g></svg><figcaption data-short="Two ways to steer an agent"><span class="fig-label">Figure 1.4-2.</span> <strong>Two ways to steer an agent.</strong> (a) Purposeful representations can reduce the effort needed to recover relevant system knowledge. (b) Feedback loops let agents revise their work using observations from tools and checks. Both can improve performance without changing the foundation model, but neither guarantees an acceptable result.</figcaption></figure>
+
+</div>
+
+<h2 id="a-simple-probabilistic-model-of-success-with-agents"><span class="sec-num">1.4.4</span> A Simple Probabilistic Model of Success with Agents</h2>
+<div class="wrap">
+
+<p>Commodity intelligence is probabilistic. This book focuses on the implications for engineering. A foundation model’s answer does not ordinarily come with a guarantee that its engineering judgments are correct. Generation can vary between runs, a request may admit several interpretations, and the model may choose different reasoning steps or tools. A task can depend on many such judgments before it produces a result. The reliability of the complete process also depends on how the harness and engineered environment organize the work.</p>
+<p>A simple model illustrates why reliability on individual features does not guarantee reliability across a product. Suppose an agent implements <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mi>n</mi></math> features, with <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><msub><mi>p</mi><mi>i</mi></msub></math> denoting the probability that feature <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mi>i</mi></math> is implemented correctly. Under the simplifying assumption that these outcomes are independent, the probability that all features are correct is</p>
+<div class="book-eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" class="book-math-display"><mrow><mi>P</mi><mo>(</mo><mtext>all features correct</mtext><mo>)</mo><mo>=</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>p</mi><mi>i</mi></msub></mrow></math></div>
+<p>When probabilities between zero and one are multiplied, their product decreases as more factors are added. If an agent implements each feature correctly with probability 99%, the probability that all three features are correct is <math xmlns="http://www.w3.org/1998/Math/MathML" class="book-math-inline"><mrow><msup><mn>0.99</mn><mn>3</mn></msup><mo>≈</mo><mn>97</mn><mo>%</mo></mrow></math>. For ten features it is approximately 90%, and for one hundred it falls to approximately 37%. At 95% reliability per feature, the probability of implementing all ten correctly is approximately 60%. An agent that usually gets individual features right can therefore have a much lower probability of getting every feature in a product right.</p>
+<p>The independence assumption is deliberately simple; real implementation failures may be correlated, and a product’s features are not necessarily equally difficult. The calculation is not a prediction of agent performance. It illustrates why the reliability of the whole system cannot be inferred from success on individual tasks. Human review, automated checks, iterative repair, and more capable models can improve the final result, but their costs and limitations belong in the evaluation of the complete engineering process.</p>
+<p id="idx-def-probabilistic-surface">The decisions that depend on agentic inference form the system’s <strong>probabilistic surface</strong>. Other parts may be deterministic, such as a tool that applies a fixed transformation or a test suite that evaluates explicit conditions. Better models and iterative loops can improve the reliability of inferred judgments. Engineers can also establish mechanisms that enforce selected requirements even when an agent makes a mistake. The engineering objective is not to eliminate probabilistic reasoning, but to decide where its uncertainty is acceptable and where stronger controls are needed.</p><section class="works-cited" aria-labelledby="wc-1-4-the-agentic-substrate-h"><h2 id="wc-1-4-the-agentic-substrate-h" class="wc-h">Works Cited</h2><ol class="wc-list"><li id="wc-1-4-the-agentic-substrate-1">Chen, Mark, Jerry Tworek, Heewoo Jun, et al. <em><span>Evaluating Large Language Models Trained on Code</span></em>. arXiv preprint arXiv:2107.03374, 2021. <a href="https://arxiv.org/abs/2107.03374">https://arxiv.org/abs/2107.03374</a>.</li><li id="wc-1-4-the-agentic-substrate-2">OpenAI. <em><span><span>GPT-4</span> Technical Report</span></em>. arXiv preprint arXiv:2303.08774, 2023. <a href="https://cdn.openai.com/papers/gpt-4.pdf">https://cdn.openai.com/papers/gpt-4.pdf</a>.</li><li id="wc-1-4-the-agentic-substrate-3">Ouyang, Long, Jeffrey Wu, Xu Jiang, et al. <span>“<span>Training Language Models to Follow Instructions with Human Feedback</span>.”</span> <em><span>Advances in Neural Information Processing Systems</span></em> 35 (2022): 27730–44. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html">https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html</a>.</li><li id="wc-1-4-the-agentic-substrate-4">Yao, Shunyu, Jeffrey Zhao, Dian Yu, et al. <span>“<span>ReAct: Synergizing Reasoning and Acting in Language Models</span>.”</span> <em><span>International Conference on Learning Representations</span></em>, 2023.</li><li id="wc-1-4-the-agentic-substrate-5">Hu, Edward J., Yelong Shen, Phillip Wallis, et al. <span>“<span><span>LoRA</span>: Low-Rank Adaptation of Large Language Models</span>.”</span> <em><span>International Conference on Learning Representations</span></em>, 2022. <a href="https://openreview.net/forum?id=nZeVKeeFYf9">https://openreview.net/forum?id=nZeVKeeFYf9</a>.</li><li id="wc-1-4-the-agentic-substrate-6">Bender, Emily M., Timnit Gebru, Angelina McMillan-Major, and Shmargaret Shmitchell. <span>“<span>On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?</span>”</span> <em><span>Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency</span></em>, 2021, 610–23. <a href="https://doi.org/10.1145/3442188.3445922">https://doi.org/10.1145/3442188.3445922</a>.</li><li id="wc-1-4-the-agentic-substrate-7">Bubeck, Sébastien, Varun Chandrasekaran, Ronen Eldan, et al. <em><span>Sparks of Artificial General Intelligence: Early Experiments with <span>GPT-4</span></span></em>. arXiv preprint arXiv:2303.12712, 2023. <a href="https://arxiv.org/abs/2303.12712">https://arxiv.org/abs/2303.12712</a>.</li><li id="wc-1-4-the-agentic-substrate-8">Li, Kenneth, Aspen K. Hopkins, David Bau, Fernanda Viégas, Hanspeter Pfister, and Martin Wattenberg. <span>“<span>Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task</span>.”</span> <em><span>International Conference on Learning Representations</span></em>, 2023. <a href="https://openreview.net/forum?id=DeG07_TcZvT">https://openreview.net/forum?id=DeG07_TcZvT</a>.</li><li id="wc-1-4-the-agentic-substrate-9">Nanda, Neel, Andrew Lee, and Martin Wattenberg. <span>“<span>Emergent Linear Representations in World Models of Self-Supervised Sequence Models</span>.”</span> <em><span>Proceedings of the 6th BlackboxNLP Workshop: Analyzing and Interpreting Neural Networks for NLP</span></em> (Singapore), 2023, 16–30. <a href="https://doi.org/10.18653/v1/2023.blackboxnlp-1.2">https://doi.org/10.18653/v1/2023.blackboxnlp-1.2</a>.</li><li id="wc-1-4-the-agentic-substrate-10">Jin, Charles, and Martin Rinard. <span>“<span>Emergent Representations of Program Semantics in Language Models Trained on Programs</span>.”</span> <em><span>Proceedings of the 41st International Conference on Machine Learning</span></em>, <span>Proceedings of Machine Learning Research</span>, vol. 235 (2024): 22160–84. <a href="https://proceedings.mlr.press/v235/jin24e.html">https://proceedings.mlr.press/v235/jin24e.html</a>.</li><li id="wc-1-4-the-agentic-substrate-11">Sarkar, Advait, and Ian Drosos. <span>“<span>Vibe Coding: Programming Through Conversation with Artificial Intelligence</span>.”</span> <em><span>Proceedings of the 36th Annual Workshop of the Psychology of Programming Interest Group</span></em>, 2025. <a href="https://arxiv.org/abs/2506.23253">https://arxiv.org/abs/2506.23253</a>.</li><li id="wc-1-4-the-agentic-substrate-12">Chou, Yi-Hung, Boyuan Jiang, Yiwen Chen, et al. <span>“<span>Building Software by Rolling the Dice: A Qualitative Study of Vibe Coding</span>.”</span> <em><span>Proceedings of the ACM on Software Engineering</span></em> 3, no. FSE (2026). <a href="https://doi.org/10.1145/3797105">https://doi.org/10.1145/3797105</a>.</li><li id="wc-1-4-the-agentic-substrate-13">Vir, Reya. <em><span>9 Critical Failure Patterns of Coding Agents</span></em>. DAPLab, Columbia University, 2026. <a href="https://daplab.cs.columbia.edu/general/2026/01/08/9-critical-failure-patterns-of-coding-agents.html">https://daplab.cs.columbia.edu/general/2026/01/08/9-critical-failure-patterns-of-coding-agents.html</a>.</li><li id="wc-1-4-the-agentic-substrate-14">Vir, Reya, Lydia Chilton, Zhuo Zhang, and Eugene Wu. <span>“<span><span>FlowCheck</span>: Helping End-Users Specify and Verify Intent in Vibe-Coded Web Apps</span>.”</span> <em><span>Proceedings of the 2nd ACM SIGPLAN International Workshop on Language Models and Programming Languages</span></em> (Oakland, CA, USA), 2026. <a href="https://doi.org/10.1145/3843750.3843844">https://doi.org/10.1145/3843750.3843844</a>.</li><li id="wc-1-4-the-agentic-substrate-15">Ramezanali, Mohammad, Mo Vazifeh, and Paolo Santi. <span>“<span><span>seqBench</span>: A Tunable Benchmark to Quantify Sequential Reasoning Limits of <span>LLMs</span></span>.”</span> <em><span>Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing</span></em>, 2025, 33771–92. <a href="https://doi.org/10.18653/v1/2025.emnlp-main.1714">https://doi.org/10.18653/v1/2025.emnlp-main.1714</a>.</li><li id="wc-1-4-the-agentic-substrate-16">Rajasekaran, Prithvi, Ethan Dixon, Carly Ryan, and Jeremy Hadfield. <span>“<span>Effective Context Engineering for <span>AI</span> Agents</span>.”</span> Anthropic, September 29, 2025. <a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">https://www.anthropic.com/research/effective-context-engineering-for-ai-agents</a>.</li><li id="wc-1-4-the-agentic-substrate-17">Larkin, Jill H., and Herbert A. Simon. <span>“<span>Why a Diagram Is (Sometimes) Worth Ten Thousand Words</span>.”</span> <em><span>Cognitive Science</span></em> 11, no. 1 (1987): 65–100. <a href="https://doi.org/10.1111/j.1551-6708.1987.tb00863.x">https://doi.org/10.1111/j.1551-6708.1987.tb00863.x</a>.</li><li id="wc-1-4-the-agentic-substrate-18">Zhang, Jiajie, and Donald A. Norman. <span>“<span>Representations in Distributed Cognitive Tasks</span>.”</span> <em><span>Cognitive Science</span></em> 18, no. 1 (1994): 87–122. <a href="https://doi.org/10.1207/s15516709cog1801_3">https://doi.org/10.1207/s15516709cog1801_3</a>.</li></ol></section><nav class="chapnav" aria-label="Book navigation"><div class="chapnav-back"><a href="index.html" aria-label="Table of contents">« Table of contents</a><a href="part-1-intro.html" aria-label="Beginning of Chapter 1 — The New Engineering Problem">« Beginning of chapter</a><a href="1.3-mage-by-example.html" aria-label="Previous section — §1.3 · MAGE by Example: DocAble">« Previous section</a></div><span class="chapnav-here" title="§1.4 · Agentic Machinery and Its Properties">§1.4 · Agentic Machinery and Its Properties</span><div class="chapnav-fwd"><a href="1.5-the-new-engineering-problem.html" aria-label="Next section — §1.5 · Two Engineering Problems, One Method">Next section »</a><a href="part-2-intro.html" aria-label="Next chapter — Chapter 2 — Modeling">Next chapter »</a><a href="book-index.html" aria-label="Index of terms">Index »</a></div></nav><div class="book-foot">© James C. Davis, 2026–present</div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

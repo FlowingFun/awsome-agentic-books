@@ -7,7 +7,7 @@
   <title>Agentic Engineering Library</title>
   <link rel="alternate" hreflang="zh-CN" href="zh.html">
   <link rel="icon" type="image/svg+xml" href="book-icon.svg">
-  <link rel="stylesheet" href="library.css?v=quiet-navigation">
+  <link rel="stylesheet" href="library.css?v=article-catalogue">
 </head>
 <body>
   <div class="library">
@@ -76,44 +76,35 @@
       </section>
 
       <section class="shelf" id="articles" aria-labelledby="articles-title">
-        <h2 id="articles-title">Engineering articles</h2>
-        <div class="article-groups">
-          <section aria-labelledby="essays-title">
-            <h3 id="essays-title" class="publisher">
-              <img class="publisher-logo" src="anthropic-logo.svg" width="24" height="17" alt="">
-              <span>Anthropic Engineering</span>
-            </h3>
-            <ul class="entries">
-              <li><h4><a href="https://www.anthropic.com/research/building-effective-agents">Building effective AI agents</a></h4><p>When a fixed workflow is enough, and when to let the model choose the next step.</p></li>
-              <li><h4><a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></h4><p>What to put in context, what to fetch on demand, and what to save for the next session.</p></li>
-              <li><h4><a href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a></h4><p>How small tasks, progress records, and end-to-end checks help the next session pick up the work.</p></li>
-              <li><h4><a href="https://www.anthropic.com/research/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></h4><p>Grade what changed in the environment, not what the agent says it did.</p></li>
-            </ul>
-          </section>
-          <section aria-labelledby="openai-essays-title">
-            <h3 id="openai-essays-title" class="publisher">
-              <img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="40" height="40" alt="">
-              <span>OpenAI Engineering &amp; Cookbook</span>
-            </h3>
-            <ul class="entries">
-              <li>
-                <h4><a href="https://openai.com/index/unrolling-the-codex-agent-loop/">Unrolling the Codex agent loop</a></h4>
-                <p>Follow one Codex CLI turn from the first model call through tools and their results.</p>
-                <p class="editions"><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">Official Chinese edition</a></p>
-              </li>
-              <li>
-                <h4><a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a></h4>
-                <p>A case study in making a repository, its running application, and its test results readable to an agent.</p>
-                <p class="editions"><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">Official Chinese edition</a></p>
-              </li>
-              <li>
-                <h4><a href="https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems">Macro Evals for Agentic Systems</a></h4>
-                <p>A Cookbook notebook on finding recurring problems by comparing traces across runs.</p>
-                <p class="editions"><a hreflang="zh-CN" href="reading/macro-evals/index.html">Chinese translation</a></p>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <h2 id="articles-title">Selected engineering articles</h2>
+        <ul class="entries article-list">
+          <li>
+            <h3><a href="https://www.anthropic.com/research/building-effective-agents">Building effective AI agents</a></h3>
+            <p>When a fixed workflow is enough, and when to let the model choose the next step.</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt="">Anthropic Engineering</p>
+          </li>
+          <li>
+            <h3><a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></h3>
+            <p>What to put in context, what to fetch on demand, and what to save for the next session.</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt="">Anthropic Engineering</p>
+          </li>
+          <li>
+            <h3><a href="https://openai.com/index/unrolling-the-codex-agent-loop/">Unrolling the Codex agent loop</a></h3>
+            <p>Follow one Codex CLI turn from the first model call through tools and their results.</p>
+            <p class="article-meta"><img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="30" height="30" alt="">OpenAI <a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">Official Chinese edition</a></p>
+          </li>
+          <li>
+            <h3><a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a></h3>
+            <p>A case study in making a repository, its running application, and its test results readable to an agent.</p>
+            <p class="article-meta"><img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="30" height="30" alt="">OpenAI <a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">Official Chinese edition</a></p>
+          </li>
+          <li>
+            <h3><a href="https://www.anthropic.com/research/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></h3>
+            <p>Grade what changed in the environment, not what the agent says it did.</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt="">Anthropic Engineering</p>
+          </li>
+        </ul>
+        <p class="article-index-link"><a href="articles.html">View all articles <span aria-hidden="true">→</span></a></p>
       </section>
     </main>
   </div>

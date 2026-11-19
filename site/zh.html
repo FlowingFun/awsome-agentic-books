@@ -7,7 +7,7 @@
   <title>智能体工程书库</title>
   <link rel="alternate" hreflang="en" href="index.html">
   <link rel="icon" type="image/svg+xml" href="book-icon.svg">
-  <link rel="stylesheet" href="library.css?v=quiet-navigation">
+  <link rel="stylesheet" href="library.css?v=article-catalogue">
 </head>
 <body>
   <div class="library">
@@ -76,44 +76,35 @@
       </section>
 
       <section class="shelf" id="articles" aria-labelledby="articles-title">
-        <h2 id="articles-title">技术文章</h2>
-        <div class="article-groups">
-          <section aria-labelledby="essays-title">
-            <h3 id="essays-title" class="publisher" lang="en">
-              <img class="publisher-logo" src="anthropic-logo.svg" width="24" height="17" alt="">
-              <span>Anthropic Engineering</span>
-            </h3>
-            <ul class="entries">
-              <li><h4><a hreflang="en" href="https://www.anthropic.com/research/building-effective-agents">构建有效的 AI 智能体</a></h4><p>步骤能事先写清，就先用固定工作流；下一步必须看执行结果再决定时，才让模型接管。</p></li>
-              <li><h4><a hreflang="en" href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">如何为 AI 智能体设计上下文</a></h4><p>任务开始时只给必要信息，其余按需查询。下一个会话还用得上的进度，另外保存。</p></li>
-              <li><h4><a hreflang="en" href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">让智能体在多个会话中接着干活</a></h4><p>把工作拆成能验收的小步，留下进度和提交；接手时先确认项目还能运行。</p></li>
-              <li><h4><a hreflang="en" href="https://www.anthropic.com/research/demystifying-evals-for-ai-agents">怎样评估 AI 智能体</a></h4><p>「已修复」不算通过，测试通过才算。已解决的任务留作回归测试，难题另用来衡量进步。</p></li>
-            </ul>
-          </section>
-          <section aria-labelledby="openai-essays-title">
-            <h3 id="openai-essays-title" class="publisher">
-              <img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="40" height="40" alt="">
-              <span>OpenAI 工程博客与 Cookbook</span>
-            </h3>
-            <ul class="entries">
-              <li>
-                <h4><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">拆解 Codex 的智能体循环</a></h4>
-                <p>跟着 Codex CLI 的一轮交互走一遍：准备上下文、调用模型、执行工具，再把结果交给模型。</p>
-                <p class="editions"><a hreflang="en" href="https://openai.com/index/unrolling-the-codex-agent-loop/">英文原文</a></p>
-              </li>
-              <li>
-                <h4><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">Harness Engineering：为 Codex 搭建工程环境</a></h4>
-                <p>适合和 MAGE 对照读：怎样让智能体读懂仓库、运行应用、看日志并验证改动。</p>
-                <p class="editions"><a hreflang="en" href="https://openai.com/index/harness-engineering/">英文原文</a></p>
-              </li>
-              <li>
-                <h4><a hreflang="zh-CN" href="reading/macro-evals/index.html">智能体系统的整体评估</a></h4>
-                <p>对比多次运行的记录，找出哪些工具容易选错，哪些任务总是交接得太晚。</p>
-                <p class="editions"><a hreflang="en" href="https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems">英文原文</a></p>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <h2 id="articles-title">精选技术文章</h2>
+        <ul class="entries article-list">
+          <li>
+            <h3><a hreflang="en" href="https://www.anthropic.com/research/building-effective-agents">构建有效的 AI 智能体</a></h3>
+            <p>步骤能事先写清，就先用固定工作流；下一步必须看执行结果再决定时，才让模型接管。</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt=""><span lang="en">Anthropic Engineering</span></p>
+          </li>
+          <li>
+            <h3><a hreflang="en" href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents">如何为 AI 智能体设计上下文</a></h3>
+            <p>任务开始时只给必要信息，其余按需查询。下一个会话还用得上的进度，另外保存。</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt=""><span lang="en">Anthropic Engineering</span></p>
+          </li>
+          <li>
+            <h3><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">拆解 Codex 的智能体循环</a></h3>
+            <p>跟着 Codex CLI 的一轮交互走一遍：准备上下文、调用模型、执行工具，再把结果交给模型。</p>
+            <p class="article-meta"><img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="30" height="30" alt="">OpenAI <a hreflang="en" href="https://openai.com/index/unrolling-the-codex-agent-loop/">英文原文</a></p>
+          </li>
+          <li>
+            <h3><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">Harness Engineering：为 Codex 搭建工程环境</a></h3>
+            <p>适合和 MAGE 对照读：怎样让智能体读懂仓库、运行应用、看日志并验证改动。</p>
+            <p class="article-meta"><img class="publisher-logo publisher-logo--openai" src="openai-logo.svg" width="30" height="30" alt="">OpenAI <a hreflang="en" href="https://openai.com/index/harness-engineering/">英文原文</a></p>
+          </li>
+          <li>
+            <h3><a hreflang="en" href="https://www.anthropic.com/research/demystifying-evals-for-ai-agents">怎样评估 AI 智能体</a></h3>
+            <p>「已修复」不算通过，测试通过才算。已解决的任务留作回归测试，难题另用来衡量进步。</p>
+            <p class="article-meta"><img class="publisher-logo" src="anthropic-logo.svg" width="18" height="13" alt=""><span lang="en">Anthropic Engineering</span></p>
+          </li>
+        </ul>
+        <p class="article-index-link"><a href="articles-zh.html">查看全部文章 <span aria-hidden="true">→</span></a></p>
       </section>
     </main>
   </div>

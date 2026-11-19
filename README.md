@@ -1,17 +1,29 @@
-# awsome-agentic-books
+# Agentic Engineering Library
 
-一个精选智能体工程在线书籍和一手技术文章的书库。首页默认英文，可切换简体中文。第一本书是 James C. Davis 的《基于模型的智能体工程：一个软件工程案例研究》。
+**English** · [简体中文](README.zh-CN.md)
 
-## 中文译本
+A curated library of online books, guides, and engineering articles about building, operating, and evaluating AI agents. The site opens in English by default and has a Simplified Chinese edition.
 
-- **《基于模型的智能体工程》**：第 1 版网页版共 70 页，已完成正文、附录、目录、图注和索引的逐段翻译。原图和图内文字、代码、公式、参考文献著录信息保留原样。
-- **《构建智能体系统》**：Gerred Dillon 原著，第一卷全部 13 章已翻译。原站章节编号、分组、图表定义和代码保留原样。原书及本站译文按 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 许可，详情见各章页脚。
+## Read online
 
-构建时会核对译文覆盖、原书资源、章内锚点和站内链接。
+| | English | 简体中文 |
+| --- | --- | --- |
+| Library home | [English home](https://flowingfun.github.io/awsome-agentic-books/) | [中文首页](https://flowingfun.github.io/awsome-agentic-books/zh.html) |
+| All articles | [English article directory](https://flowingfun.github.io/awsome-agentic-books/articles.html) | [中文文章目录](https://flowingfun.github.io/awsome-agentic-books/articles-zh.html) |
 
-## 本地构建与预览
+The homepage has books, guides, and a short featured reading list. The full article directory is grouped by topic: agent design and context; agent loops and harnesses; and evaluation. It links to original articles and, where available, Chinese editions. External books and guides are read on their original sites.
 
-在仓库根目录运行（GitHub Actions 使用 Python 3.12）：
+## Chinese editions hosted here
+
+| Edition | What is included |
+| --- | --- |
+| [Model-Based Agentic Engineering](https://flowingfun.github.io/awsome-agentic-books/books/mage/index.html) | James C. Davis’s complete first web edition in Simplified Chinese. The original images (including embedded text), code, equations, and bibliographic records are unchanged. The original search index, PDF, and EPUB remain in English. |
+| [Building an Agentic System, Volume 1](https://flowingfun.github.io/awsome-agentic-books/books/building-an-agentic-system/introduction.html) | Gerred Dillon’s complete first volume in Simplified Chinese, with the original chapter structure, diagrams, and code preserved. |
+| [Macro Evals for Agentic Systems](https://flowingfun.github.io/awsome-agentic-books/reading/macro-evals/index.html) | A Simplified Chinese reading edition of the OpenAI Cookbook notebook. It translates the explanatory text and preserves the original figures and code; the examples do not execute on the site. |
+
+## Build and preview locally
+
+From the repository root (GitHub Actions uses Python 3.12):
 
 ```sh
 python3 -m venv .venv
@@ -21,32 +33,23 @@ python3 tools/build_site.py --output _site
 python3 -m http.server 8000 --bind 127.0.0.1 --directory _site
 ```
 
-打开 <http://127.0.0.1:8000/>，用顶部「简体中文」切换书库语言；MAGE 中文译本位于 <http://127.0.0.1:8000/books/mage/index.html>。`_site/` 是生成目录，不提交到仓库。
+Open [the local homepage](http://127.0.0.1:8000/) and use **English / 中文** to switch languages. The build checks translation coverage, protected content, and local links. `_site/` is generated and should not be committed.
 
-## 文件说明
+## Repository map
 
-| 路径 | 用途 |
+| Path | Purpose |
 | --- | --- |
-| `books/mage/source/` | [原书第 1 版网页版](https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/index.html)快照；网页、资源和原版授权原样保留，哈希记录在 `snapshot.json`。 |
-| `books/mage/zh/` | 按原书页名保存逐段译文，构建时回填到原有版式。 |
-| `books/mage/navigation.json` | 书名、章节目录和阅读界面的中文用语。 |
-| `books/building-an-agentic-system/` | 《构建智能体系统》第一卷的原站正文快照、目录与译文。 |
-| `site/index.html`、`site/zh.html`、`site/styles.css` | 英文首页、中文首页及共用样式。两页的 `mage-progress` 由构建更新。 |
-| `tools/build_site.py` | 生成静态站点。 |
-| `requirements.txt` | 本地及 CI 构建依赖。 |
-| `.gitignore` | 忽略构建产物和本地 Python 环境文件。 |
-| `.github/workflows/pages.yml` | 构建并部署 GitHub Pages 的工作流。 |
+| [`site/index.html`](site/index.html), [`site/zh.html`](site/zh.html) | English and Chinese homepages. The build fills in `#mage-progress`. |
+| [`site/articles.html`](site/articles.html), [`site/articles-zh.html`](site/articles-zh.html) | Complete article directories grouped by topic. |
+| [`site/library.css`](site/library.css), [`site/styles.css`](site/styles.css) | Library pages and shared reading-page styles, respectively. |
+| [`books/mage/`](books/mage/) | Original web snapshot, translations, and navigation labels. |
+| [`books/building-an-agentic-system/`](books/building-an-agentic-system/), [`books/macro-evals/`](books/macro-evals/) | Source material and translations for the first volume and the Cookbook notebook. |
+| [`tools/build_site.py`](tools/build_site.py), [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | Static-site builder and GitHub Pages workflow. |
 
-## 续译
+See [AGENTS.md](AGENTS.md) for editing and translation conventions.
 
-运行 `python3 tools/mage_text.py books/mage/source/<页名>.html` 提取正文段落。把译文写入 `books/mage/zh/<页名>.json`，保留段落编号和成对的 `⟦编号⟧` / `⟦/编号⟧`，可按中文语序移动整组。代码、公式、SVG 原图不重绘，图注和表格文字照译。译文尚未覆盖的页面明确标为英文原文；原版自带搜索仍按英文索引检索，PDF 和 EPUB 仍链接到英文原版。
+## Attribution and deployment
 
-## 原书授权
+The MAGE snapshot and the Cookbook notebook retain their upstream MIT notices: [MAGE license](books/mage/source/LICENSE) · [Cookbook license](books/macro-evals/source/LICENSE). *Building an Agentic System* is attributed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see the reading-page footers. These are work-specific notices, not a blanket license for all linked material.
 
-原书采用 MIT 许可证。原版权声明及许可证全文保存在 [`books/mage/source/LICENSE`](books/mage/source/LICENSE)；分发原书或译本时一并保留。
-
-## GitHub Pages 配置
-
-首次发布时，在 GitHub 仓库的 **Settings → Pages → Build and deployment** 下，将 **Source** 设为 **GitHub Actions**。项目站点地址为 <https://flowingfun.github.io/awsome-agentic-books/>。
-
-启用后，工作流会在推送到 `main` 时运行，也可在 **Actions → Build and deploy GitHub Pages → Run workflow** 中选择 `main` 手动触发。它将用官方 Pages Actions 上传并部署 `_site/`，无需提交构建产物或另建发布分支。
+The Pages workflow builds and deploys `_site/` on pushes to `main` and can also run manually from **Actions → Build and deploy GitHub Pages**. For a new setup, select **GitHub Actions** as the source in **Settings → Pages**. No deployment branch is needed.

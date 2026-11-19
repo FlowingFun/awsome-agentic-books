@@ -16,8 +16,15 @@
       <nav aria-label="站点导航">
         <a href="#books">书籍</a>
         <a href="#articles">文章</a>
-        <a class="language-link" lang="en" hreflang="en" href="index.html">English</a>
-        <a href="https://github.com/FlowingFun/awsome-agentic-books">GitHub</a>
+        <div class="nav-tools">
+          <div class="language-switch" role="group" aria-label="站点语言">
+            <a lang="en" hreflang="en" href="index.html">English</a>
+            <span aria-current="page">中文</span>
+          </div>
+          <a class="github-link" href="https://github.com/FlowingFun/awsome-agentic-books" aria-label="在 GitHub 查看仓库" title="在 GitHub 查看仓库">
+            <img src="github-mark.svg" width="98" height="96" alt="">
+          </a>
+        </div>
       </nav>
     </header>
     <main>
@@ -39,21 +46,30 @@
               <img src="books/mage/assets/cover-thumb.png" width="309" height="400" alt="《基于模型的智能体工程》英文原版封面">
             </div>
           </li>
-          <li>
-            <h3><a href="https://bojieli.github.io/ai-agent-book/astro/">深入理解 AI Agent</a></h3>
-            <p class="byline">李博杰和开源社区 · 中文原著</p>
-            <p>从模型、上下文和工具讲起，带着配套实验动手构建和评估智能体。</p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a href="https://bojieli.github.io/ai-agent-book/astro/">深入理解 AI Agent</a></h3>
+              <p class="byline">李博杰和开源社区 · 中文原著</p>
+              <p>从模型、上下文和工具讲起，带着配套实验动手构建和评估智能体。</p>
+            </div>
           </li>
-          <li>
-            <h3><a href="books/building-an-agentic-system/introduction.html">构建智能体系统</a></h3>
-            <p class="byline"><span lang="en">Gerred Dillon</span> · 第一卷全译</p>
-            <p>拆开编程智能体看内部：流式输出、权限、工具执行和多轮命令循环。</p>
-            <p class="editions"><a hreflang="en" href="https://gerred.github.io/building-an-agentic-system/introduction.html">英文原著</a></p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a href="books/building-an-agentic-system/introduction.html">构建智能体系统</a></h3>
+              <p class="byline"><span lang="en">Gerred Dillon</span> · 第一卷全译</p>
+              <p>拆开编程智能体看内部：流式输出、权限、工具执行和多轮命令循环。</p>
+              <p class="editions"><a hreflang="en" href="https://gerred.github.io/building-an-agentic-system/introduction.html">英文原著</a></p>
+            </div>
           </li>
-          <li>
-            <h3><a hreflang="en" href="https://simonwillison.net/guides/agentic-engineering-patterns/">智能体工程实践模式</a></h3>
-            <p class="byline"><span lang="en">Simon Willison</span> · 英文指南</p>
-            <p>使用编程智能体时，怎么跑测试、审改动，以及什么工作值得交给子智能体。</p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a hreflang="en" href="https://simonwillison.net/guides/agentic-engineering-patterns/">智能体工程实践模式</a></h3>
+              <p class="byline"><span lang="en">Simon Willison</span> · 英文指南</p>
+              <p>使用编程智能体时，怎么跑测试、审改动，以及什么工作值得交给子智能体。</p>
+            </div>
           </li>
         </ul>
       </section>

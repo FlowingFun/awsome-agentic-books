@@ -56,13 +56,55 @@ body {
 .library-header nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0 1.15rem;
   font-size: var(--note);
 }
 
-.library-header nav a { line-height: 2.75rem; }
-.library-header nav a:not(.language-link) { color: var(--quiet); }
-.library-header .language-link { font-weight: 650; }
+.library-header nav > a {
+  color: var(--quiet);
+  line-height: 2.75rem;
+}
+
+.nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.language-switch {
+  display: inline-flex;
+  border: 1px solid #829589;
+  border-radius: 0.5rem;
+  background: var(--paper);
+}
+
+.language-switch > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-inline: 0.55rem;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.language-switch > :first-child { border-radius: calc(0.5rem - 1px) 0 0 calc(0.5rem - 1px); }
+.language-switch > :last-child { border-radius: 0 calc(0.5rem - 1px) calc(0.5rem - 1px) 0; }
+.language-switch [aria-current="page"] { background: var(--action); color: var(--action-text); }
+.language-switch a:hover, .github-link:hover { background: var(--feature); }
+
+.github-link {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.5rem;
+}
+
+.github-link img { display: block; width: 1.25rem; height: auto; }
 
 a {
   color: var(--link);
@@ -91,9 +133,17 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
   gap: clamp(1.25rem, 4vw, 3rem);
 }
 
-#books > .entries > li:not(.with-cover) {
-  padding-inline-start: 2.25rem;
-  background: url("book-icon.svg") left 0.08rem / 1.5rem no-repeat;
+.book-entry {
+  display: grid;
+  grid-template-columns: clamp(3.75rem, 7vw, 5.5rem) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(0.65rem, 1.3vw, 1rem);
+}
+
+.default-cover {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .with-cover {

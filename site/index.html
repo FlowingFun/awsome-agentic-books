@@ -16,8 +16,15 @@
       <nav aria-label="Site navigation">
         <a href="#books">Books</a>
         <a href="#articles">Articles</a>
-        <a class="language-link" lang="zh-CN" hreflang="zh-CN" href="zh.html">简体中文</a>
-        <a href="https://github.com/FlowingFun/awsome-agentic-books">GitHub</a>
+        <div class="nav-tools">
+          <div class="language-switch" role="group" aria-label="Site language">
+            <span aria-current="page">English</span>
+            <a lang="zh-CN" hreflang="zh-CN" href="zh.html" aria-label="简体中文">中文</a>
+          </div>
+          <a class="github-link" href="https://github.com/FlowingFun/awsome-agentic-books" aria-label="View repository on GitHub" title="View repository on GitHub">
+            <img src="github-mark.svg" width="98" height="96" alt="">
+          </a>
+        </div>
       </nav>
     </header>
     <main>
@@ -31,7 +38,7 @@
               <p>What should engineers still decide when agents write the code? The DocAble case study shows how models can guide and check delegated work.</p>
               <div class="feature-links">
                 <a class="feature-primary" href="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/index.html">Read in English <span aria-hidden="true">→</span></a>
-                <a lang="zh-CN" hreflang="zh-CN" href="books/mage/index.html">简体中文译本</a>
+                <a hreflang="zh-CN" href="books/mage/index.html">Chinese translation</a>
               </div>
               <p class="feature-progress" id="mage-progress">In progress</p>
             </div>
@@ -39,21 +46,30 @@
               <img src="books/mage/assets/cover-thumb.png" width="309" height="400" alt="Cover of Model-Based Agentic Engineering">
             </div>
           </li>
-          <li>
-            <h3><a lang="zh-CN" hreflang="zh-CN" href="https://bojieli.github.io/ai-agent-book/astro/">深入理解 AI Agent</a></h3>
-            <p class="byline">Bojie Li and contributors · In Chinese</p>
-            <p>Build and evaluate an agent from the ground up, with labs on context and tool use.</p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a hreflang="zh-CN" href="https://bojieli.github.io/ai-agent-book/astro/">Understanding AI Agents</a></h3>
+              <p class="byline">Bojie Li and contributors · In Chinese</p>
+              <p>Build and evaluate an agent from the ground up, with labs on context and tool use.</p>
+            </div>
           </li>
-          <li>
-            <h3><a href="https://gerred.github.io/building-an-agentic-system/introduction.html">Building an Agentic System</a></h3>
-            <p class="byline">Gerred Dillon</p>
-            <p>Inside a coding agent: streaming, permissions, tool execution, and the command loop.</p>
-            <p class="editions"><a lang="zh-CN" hreflang="zh-CN" href="books/building-an-agentic-system/introduction.html">第一卷简体中文译本</a></p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a href="https://gerred.github.io/building-an-agentic-system/introduction.html">Building an Agentic System</a></h3>
+              <p class="byline">Gerred Dillon</p>
+              <p>Inside a coding agent: streaming, permissions, tool execution, and the command loop.</p>
+              <p class="editions"><a hreflang="zh-CN" href="books/building-an-agentic-system/introduction.html">Volume 1 in Chinese</a></p>
+            </div>
           </li>
-          <li>
-            <h3><a href="https://simonwillison.net/guides/agentic-engineering-patterns/">Agentic Engineering Patterns</a></h3>
-            <p class="byline">Simon Willison</p>
-            <p>Practical advice on working with coding agents: run the tests, review the diffs, and decide what to hand to a subagent.</p>
+          <li class="book-entry">
+            <img class="default-cover" src="default-book-cover.svg" width="309" height="400" alt="">
+            <div>
+              <h3><a href="https://simonwillison.net/guides/agentic-engineering-patterns/">Agentic Engineering Patterns</a></h3>
+              <p class="byline">Simon Willison</p>
+              <p>Practical advice on working with coding agents: run the tests, review the diffs, and decide what to hand to a subagent.</p>
+            </div>
           </li>
         </ul>
       </section>
@@ -76,17 +92,17 @@
               <li>
                 <h4><a href="https://openai.com/index/unrolling-the-codex-agent-loop/">Unrolling the Codex agent loop</a></h4>
                 <p>Follow one Codex CLI turn from the first model call through tools and their results.</p>
-                <p class="editions"><a lang="zh-CN" hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">官方简体中文版</a></p>
+                <p class="editions"><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/">Official Chinese edition</a></p>
               </li>
               <li>
                 <h4><a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a></h4>
                 <p>A case study in making a repository, its running application, and its test results readable to an agent.</p>
-                <p class="editions"><a lang="zh-CN" hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">官方简体中文版</a></p>
+                <p class="editions"><a hreflang="zh-CN" href="https://openai.com/zh-Hans-CN/index/harness-engineering/">Official Chinese edition</a></p>
               </li>
               <li>
                 <h4><a href="https://developers.openai.com/cookbook/examples/partners/macro_evals_for_agentic_systems/macro_evals_for_agentic_systems">Macro Evals for Agentic Systems</a></h4>
                 <p>A Cookbook notebook on finding recurring problems by comparing traces across runs.</p>
-                <p class="editions"><a lang="zh-CN" hreflang="zh-CN" href="reading/macro-evals/index.html">简体中文译本</a></p>
+                <p class="editions"><a hreflang="zh-CN" href="reading/macro-evals/index.html">Chinese translation</a></p>
               </li>
             </ul>
           </section>

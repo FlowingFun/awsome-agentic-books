@@ -6,6 +6,7 @@
   <meta name="description" content="关于智能体工程的在线书籍和技术文章。">
   <title>智能体工程书库</title>
   <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="icon" type="image/svg+xml" href="book-icon.svg">
   <link rel="stylesheet" href="library.css">
 </head>
 <body>
@@ -24,13 +25,19 @@
         <h2 id="books-title">书籍与指南</h2>
         <ul class="entries">
           <li class="with-cover">
-            <div>
-              <h3><a href="books/mage/index.html">基于模型的智能体工程</a></h3>
+            <div class="feature-copy">
+              <h3>基于模型的智能体工程</h3>
               <p class="byline"><span lang="en">James C. Davis</span> · 第 1 版</p>
               <p>当智能体开始写代码，工程师还要决定什么？作者用 DocAble 说明怎样用模型指导和验证委派出去的工作。</p>
-              <p class="editions"><a hreflang="en" href="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/index.html">英文原著</a><span id="mage-progress">翻译进行中</span></p>
+              <div class="feature-links">
+                <a class="feature-primary" href="books/mage/index.html">阅读中文版 <span aria-hidden="true">→</span></a>
+                <a hreflang="en" href="https://davisjam.github.io/model-based-agentic-software-engineering/book/mage-book/index.html">英文原著</a>
+              </div>
+              <p class="feature-progress" id="mage-progress">翻译进行中</p>
             </div>
-            <img src="books/mage/assets/cover-thumb.png" width="309" height="400" alt="《基于模型的智能体工程》英文原版封面">
+            <div class="feature-cover">
+              <img src="books/mage/assets/cover-thumb.png" width="309" height="400" alt="《基于模型的智能体工程》英文原版封面">
+            </div>
           </li>
           <li>
             <h3><a href="https://bojieli.github.io/ai-agent-book/astro/">深入理解 AI Agent</a></h3>

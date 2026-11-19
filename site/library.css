@@ -74,27 +74,22 @@ body {
 
 .language-switch {
   display: inline-flex;
-  border: 1px solid #829589;
-  border-radius: 0.5rem;
-  background: var(--paper);
+  align-items: center;
+  gap: 0.15rem;
+  white-space: nowrap;
 }
 
-.language-switch > * {
+.language-switch a, .language-switch [aria-current="page"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 2.75rem;
   min-height: 2.75rem;
-  padding-inline: 0.55rem;
-  font-weight: 650;
-  text-decoration: none;
-  white-space: nowrap;
 }
 
-.language-switch > :first-child { border-radius: calc(0.5rem - 1px) 0 0 calc(0.5rem - 1px); }
-.language-switch > :last-child { border-radius: 0 calc(0.5rem - 1px) calc(0.5rem - 1px) 0; }
-.language-switch [aria-current="page"] { background: var(--action); color: var(--action-text); }
-.language-switch a:hover, .github-link:hover { background: var(--feature); }
+.language-switch a, .language-divider { color: var(--quiet); }
+.language-switch [aria-current="page"] { color: var(--ink); font-weight: 650; }
+.github-link:hover { background: var(--feature); }
 
 .github-link {
   display: inline-grid;
@@ -104,7 +99,7 @@ body {
   border-radius: 0.5rem;
 }
 
-.github-link img { display: block; width: 1.25rem; height: auto; }
+.github-link img { display: block; width: 1.125rem; height: auto; }
 
 a {
   color: var(--link);

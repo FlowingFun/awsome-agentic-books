@@ -85,7 +85,8 @@ def build_macro_evals(output):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>智能体系统的整体评估 · OpenAI Cookbook 中文译文</title>
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../styles.css?v=paper">
+<script defer src="../../reader.js"></script>
 </head>
 <body class="volume">
 <div class="page">
@@ -94,7 +95,12 @@ def build_macro_evals(output):
   <a class="original" href="{ORIGINAL}" hreflang="en">英文原文 ↗</a>
 </header>
 <div class="volume-grid">
-<nav class="volume-toc" aria-label="教程目录"><h2>教程目录</h2><ol>{''.join(toc)}</ol></nav>
+<nav class="volume-toc" aria-label="教程目录">
+  <details open>
+    <summary>教程目录</summary>
+    <ol>{''.join(toc)}</ol>
+  </details>
+</nav>
 <main class="reading-page">
 <p class="entry-author">OpenAI 与 Slalom 合作编写。此阅读版翻译了原 Notebook 的说明文字，保留原图与示例代码，不在网页上执行代码。需要运行示例时请到 <a href="{NOTEBOOK}" hreflang="en">英文 Notebook</a> 获取代码与配套材料。</p>
 {''.join(sections)}

@@ -1,17 +1,19 @@
 /* Library homepage and article directory. Reading pages have their own styles. */
 :root {
   color-scheme: light;
-  --paper: #f8f9f6;
-  --ink: #19231f;
-  --quiet: #4b5c53;
-  --link: #235a49;
-  --feature: #e5ede6;
-  --workbench: #bfd2c4;
-  --article-field: #edf1e9;
-  --action: #20473a;
+  --paper: #fbfaf7;
+  --ink: #23272f;
+  --quiet: #575b63;
+  --link: #2b527a;
+  --rule: #dcd7ce;
+  --feature: #f2efe9;
+  --cover-field: #eae5dc;
+  --article-field: #f5f2ed;
+  --action: #29496a;
   --action-text: #fff;
   --sans: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
-  --display: clamp(1.85rem, 4vw, 3.55rem);
+  --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", SimSun, Georgia, serif;
+  --display: clamp(1.8rem, 4.2vw, 3.25rem);
   --section: clamp(1.5rem, 2.6vw, 2.25rem);
   --title: 1.125rem;
   --body: 1rem;
@@ -58,7 +60,7 @@ body {
   row-gap: 0.45rem;
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   padding-bottom: 0.65rem;
-  border-bottom: 1px solid var(--workbench);
+  border-bottom: 1px solid var(--rule);
 }
 
 .masthead-intro { min-width: 0; }
@@ -146,15 +148,17 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 
 #books > .entries {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.25rem, 4vw, 3rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(1.25rem, 4vw, 3rem);
 }
 
 .book-entry {
   display: grid;
-  grid-template-columns: clamp(3.75rem, 7vw, 5.5rem) minmax(0, 1fr);
+  grid-template-columns: clamp(2.75rem, 6vw, 3.75rem) minmax(0, 1fr);
   align-items: start;
   gap: clamp(0.65rem, 1.3vw, 1rem);
+  padding-block: clamp(1rem, 2vw, 1.35rem);
+  border-bottom: 1px solid var(--rule);
 }
 
 .default-cover {
@@ -168,6 +172,10 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
   display: grid;
   grid-template-columns: minmax(0, 1.23fr) minmax(0, 0.9fr);
   background: var(--feature);
+  border: 1px solid var(--rule);
+  border-radius: 0.65rem;
+  overflow: hidden;
+  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
 }
 
 .feature-copy {
@@ -177,10 +185,11 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 }
 
 .entries .feature-copy h3 {
+  font-family: var(--serif);
   font-size: var(--display);
-  font-weight: 750;
-  letter-spacing: -0.045em;
-  line-height: 1.03;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.13;
   overflow-wrap: anywhere;
 }
 
@@ -208,7 +217,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
   padding-inline: 0.85rem 1.05rem;
   background: var(--action);
   color: var(--action-text);
-  clip-path: polygon(0 0, calc(100% - 0.55rem) 0, 100% 0.55rem, 100% 100%, 0 100%);
+  border-radius: 0.35rem;
   text-decoration: none;
 }
 .feature-links .feature-primary:hover { background: var(--ink); }
@@ -219,21 +228,24 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
   display: grid;
   place-items: center;
   padding: clamp(1.25rem, 3.8vw, 3rem);
-  background: var(--workbench);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, min(12%, 3rem) 100%);
+  background: var(--cover-field);
+  border-inline-start: 1px solid var(--rule);
 }
 
 .feature-cover img {
   display: block;
-  width: min(100%, 14.5rem);
+  width: min(100%, 13.5rem);
   height: auto;
   aspect-ratio: 309 / 400;
+  box-shadow: 0 0.55rem 1.4rem #2c2a2526;
 }
 
 #articles {
-  margin-top: clamp(2.25rem, 7vw, 5.5rem);
+  margin-top: clamp(2rem, 5vw, 3.75rem);
   padding: clamp(1.15rem, 4vw, 3rem);
   background: var(--article-field);
+  border: 1px solid var(--rule);
+  border-radius: 0.65rem;
 }
 
 #articles h2 { margin-bottom: 0.4rem; font-size: var(--section); }
@@ -245,7 +257,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 
 .article-list > li {
   padding-block: 0.9rem;
-  border-bottom: 1px solid #cdd8cf;
+  border-bottom: 1px solid var(--rule);
 }
 
 .article-meta {
@@ -274,8 +286,8 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 
 @media (max-width: 45rem) {
   .with-cover { grid-template-columns: minmax(0, 1fr); }
-  .feature-cover { clip-path: polygon(0 0.85rem, 100% 0, 100% 100%, 0 100%); }
-  .feature-cover img { width: min(100%, 10rem); }
+  .feature-cover { border-inline-start: 0; border-top: 1px solid var(--rule); }
+  .feature-cover img { width: min(100%, 8.5rem); }
   #books > .entries { grid-template-columns: minmax(0, 1fr); }
   .library-header nav { column-gap: 0.75rem; }
   .masthead-intro { flex-basis: 100%; }

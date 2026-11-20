@@ -162,6 +162,7 @@ def build_volume(target, groups, titles, *, volume, title, status, ordered_toc=T
         site_path = join('books/building-an-agentic-system', start)
         library = relpath('zh.html', site_path)
         styles = relpath('styles.css', site_path)
+        reader = relpath('reader.js', site_path)
         prev = slugs[index - 1] if index else None
         following = slugs[index + 1] if index + 1 < len(slugs) else None
         previous_link = f'<a rel="prev" href="{relpath(prev + ".html", start)}">← {titles[prev]}</a>' if prev else ''
@@ -181,7 +182,8 @@ def build_volume(target, groups, titles, *, volume, title, status, ordered_toc=T
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{titles[slug]} · {title}</title>
-<link rel="stylesheet" href="{styles}">
+<link rel="stylesheet" href="{styles}?v=paper">
+<script defer src="{reader}"></script>
 {diagram_scripts}
 </head>
 <body class="volume">
@@ -192,8 +194,10 @@ def build_volume(target, groups, titles, *, volume, title, status, ordered_toc=T
 </header>
 <div class="volume-grid">
 <nav class="volume-toc" aria-label="{volume}目录">
-  <h2>{volume}目录</h2>
-  {contents(groups, slug, titles, ordered_toc)}
+  <details open>
+    <summary>{volume}目录</summary>
+    {contents(groups, slug, titles, ordered_toc)}
+  </details>
 </nav>
 <main id="chapter" class="reading-page">
 {main.decode_contents()}

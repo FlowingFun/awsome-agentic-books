@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Real-Time Synchronization - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-ii-core-systems/chapter-5-real-time-synchronization.html -->
+<main>
+<h1 id="chapter-5-real-time-synchronization"><a class="header" href="#chapter-5-real-time-synchronization">Chapter 5: Real-Time Synchronization</a></h1>
+<p>Building a collaborative AI coding assistant requires keeping multiple clients synchronized in real-time. When one developer makes changes, their teammates need to see updates immediately. But unlike traditional real-time applications, AI assistants face unique challenges: long-running operations, large payloads, unreliable networks, and the need for eventual consistency.</p>
+<p>This chapter explores synchronization patterns using polling, observables, and smart batching that prove more reliable than traditional WebSocket approaches for AI systems.</p>
+<h2 id="the-synchronization-challenge"><a class="header" href="#the-synchronization-challenge">The Synchronization Challenge</a></h2>
+<p>Real-time sync for AI assistants differs from typical collaborative applications:</p>
+<ol>
+<li><strong>Large Payloads</strong> - AI responses can be megabytes of text and code</li>
+<li><strong>Long Operations</strong> - Tool executions may take minutes to complete</li>
+<li><strong>Unreliable Networks</strong> - Developers work from cafes, trains, and flaky WiFi</li>
+<li><strong>Cost Sensitivity</strong> - Every sync operation costs money in API calls</li>
+<li><strong>Consistency Requirements</strong> - Code changes must apply in the correct order</li>
+</ol>
+<p>Traditional WebSocket approaches struggle with these constraints. Amp takes a different path.</p>
+<h2 id="websocket-challenges-for-ai-systems"><a class="header" href="#websocket-challenges-for-ai-systems">WebSocket Challenges for AI Systems</a></h2>
+<p>WebSockets seem ideal for real-time synchronization, but AI systems present unique challenges that make them problematic.</p>
+<p><strong>Recognition Pattern</strong>: WebSockets become problematic when:</p>
+<ul>
+<li>Clients frequently disconnect (mobile networks, laptop sleep)</li>
+<li>Message sizes vary dramatically (small updates vs. large AI responses)</li>
+<li>Operations have long durations (multi-minute tool executions)</li>
+<li>Debugging requires message replay and inspection</li>
+</ul>
+<p><strong>WebSocket Complications</strong>:</p>
+<ul>
+<li><strong>Stateful connections</strong> require careful lifecycle management</li>
+<li><strong>Message ordering</strong> must be handled explicitly for correctness</li>
+<li><strong>Reconnection storms</strong> can overwhelm servers during outages</li>
+<li><strong>Debugging</strong> is difficult without proper message logging</li>
+<li><strong>Load balancing</strong> requires sticky sessions or complex routing</li>
+<li><strong>Firewall issues</strong> in enterprise environments</li>
+</ul>
+<p><strong>Alternative Approach</strong>: Smart polling with observables provides:</p>
+<ul>
+<li><strong>Stateless interactions</strong> that survive network interruptions</li>
+<li><strong>Natural batching</strong> that reduces server load</li>
+<li><strong>Simple debugging</strong> with standard HTTP request logs</li>
+<li><strong>Easy caching</strong> and CDN compatibility</li>
+</ul>
+<h2 id="observable-based-architecture"><a class="header" href="#observable-based-architecture">Observable-Based Architecture</a></h2>
+<p>At the heart of Amp's sync system is a custom Observable implementation:</p>
+<pre><code class="language-typescript">export abstract class Observable&lt;T&gt; {
+  abstract subscribe(observer: Observer&lt;T&gt;): Subscription&lt;T&gt;;
+  
+  pipe&lt;Out&gt;(...operators: Operator[]): Observable&lt;Out&gt; {
+    return operators.reduce(
+      (source, operator) =&gt; operator(source),
+      this as Observable&lt;any&gt;
+    );
+  }
+  
+  // Convert various sources to Observables
+  static from&lt;T&gt;(source: ObservableLike&lt;T&gt;): Observable&lt;T&gt; {
+    if (source instanceof Observable) return source;
+    
+    if (isPromise(source)) {
+      return new Observable(observer =&gt; {
+        source.then(
+          value =&gt; {
+            observer.next(value);
+            observer.complete();
+          },
+          error =&gt; observer.error(error)
+        );
+      });
+    }
+    
+    if (isIterable(source)) {
+      return new Observable(observer =&gt; {
+        for (const value of source) {
+          observer.next(value);
+        }
+        observer.complete();
+      });
+    }
+    
+    throw new Error('Invalid source');
+  }
+}
+</code></pre>
+<p>This provides a foundation for reactive data flow throughout the system.</p>
+<h2 id="subjects-for-state-broadcasting"><a class="header" href="#subjects-for-state-broadcasting">Subjects for State Broadcasting</a></h2>
+<p>Amp uses specialized Subject types for different synchronization needs:</p>
+<pre><code class="language-typescript">// BehaviorSubject maintains current state
+export class BehaviorSubject&lt;T&gt; extends Observable&lt;T&gt; {
+  constructor(private currentValue: T) {
+    super();
+  }
+  
+  getValue(): T {
+    return this.currentValue;
+  }
+  
+  next(value: T): void {
+    this.currentValue = value;
+    this.observers.forEach(observer =&gt; observer.next(value));
+  }
+  
+  subscribe(observer: Observer&lt;T&gt;): Subscription&lt;T&gt; {
+    // New subscribers immediately receive current value
+    observer.next(this.currentValue);
+    return super.subscribe(observer);
+  }
+}
+
+// SetSubject for managing collections
+export function createSetSubject&lt;T&gt;(): SetSubject&lt;T&gt; {
+  const set = new Set&lt;T&gt;();
+  const subject = new BehaviorSubject&lt;Set&lt;T&gt;&gt;(set);
+  
+  return {
+    add(value: T): void {
+      set.add(value);
+      subject.next(set);
+    },
+    
+    delete(value: T): void {
+      set.delete(value);
+      subject.next(set);
+    },
+    
+    has(value: T): boolean {
+      return set.has(value);
+    },
+    
+    clear(): void {
+      set.clear();
+      subject.next(set);
+    },
+    
+    get size(): number {
+      return set.size;
+    },
+    
+    observable: subject.asObservable()
+  };
+}
+</code></pre>
+<p>These patterns enable efficient state synchronization across components.</p>
+<h2 id="sync-service-architecture"><a class="header" href="#sync-service-architecture">Sync Service Architecture</a></h2>
+<p>Amp's synchronization system provides observable streams and queue management:</p>
+<pre><code class="language-typescript">// Core synchronization interface
+export interface SyncService {
+  // Observable data streams
+  observeSyncStatus(threadId: ThreadID): Observable&lt;SyncStatus&gt;;
+  observePendingItems(): Observable&lt;Set&lt;ThreadID&gt;&gt;;
+  
+  // Sync operations
+  queueForSync(threadId: ThreadID): void;
+  syncImmediately(threadId: ThreadID): Promise&lt;void&gt;;
+  
+  // Service lifecycle
+  start(): void;
+  stop(): void;
+  dispose(): void;
+}
+
+// Factory function creates configured sync service
+export function createSyncService(dependencies: {
+  threadService: ThreadService;
+  cloudAPI: CloudAPIClient;
+  configuration: ConfigService;
+}): SyncService {
+  // Track items waiting for synchronization
+  const pendingItems = createSetSubject&lt;ThreadID&gt;();
+  
+  // Per-thread sync status tracking
+  const statusTracking = new Map&lt;ThreadID, BehaviorSubject&lt;SyncStatus&gt;&gt;();
+  
+  // Failure tracking for exponential backoff
+  const failureHistory = new Map&lt;ThreadID, number&gt;();
+  
+  // Configurable sync parameters
+  const SYNC_INTERVAL = 5000;         // 5 seconds
+  const RETRY_BACKOFF = 60000;        // 1 minute
+  const BATCH_SIZE = 50;              // Items per batch
+  
+  let syncTimer: NodeJS.Timer | null = null;
+  let serviceRunning = false;
+  
+  return {
+    observeSyncStatus(threadId: ThreadID): Observable&lt;SyncStatus&gt; {
+      if (!statusTracking.has(threadId)) {
+        statusTracking.set(threadId, new BehaviorSubject&lt;SyncStatus&gt;({
+          state: 'unknown',
+          lastSync: null
+        }));
+      }
+      return statusTracking.get(threadId)!.asObservable();
+    },
+    
+    observePendingItems(): Observable&lt;Set&lt;ThreadID&gt;&gt; {
+      return pendingItems.observable;
+    },
+    
+    queueForSync(threadId: ThreadID): void {
+      pendingItems.add(threadId);
+      updateSyncStatus(threadId, { state: 'pending' });
+    },
+    
+    async syncImmediately(threadId: ThreadID): Promise&lt;void&gt; {
+      // Bypass queue for high-priority sync
+      await performThreadSync(threadId);
+    },
+    
+    start(): void {
+      if (serviceRunning) return;
+      serviceRunning = true;
+      
+      // Begin periodic sync processing
+      scheduleSyncLoop();
+      
+      // Set up reactive change detection
+      setupChangeListeners();
+    },
+    
+    stop(): void {
+      serviceRunning = false;
+      if (syncTimer) {
+        clearTimeout(syncTimer);
+        syncTimer = null;
+      }
+    },
+    
+    dispose(): void {
+      this.stop();
+      statusTracking.forEach(subject =&gt; subject.complete());
+      statusTracking.clear();
+    }
+  };
+  
+  function scheduleSyncLoop(): void {
+    if (!serviceRunning) return;
+    
+    syncTimer = setTimeout(async () =&gt; {
+      await processQueuedItems();
+      scheduleSyncLoop();
+    }, SYNC_INTERVAL);
+  }
+  
+  async function processQueuedItems(): Promise&lt;void&gt; {
+    const queuedThreads = Array.from(pendingItems.set);
+    if (queuedThreads.length === 0) return;
+    
+    // Filter items ready for sync (respecting backoff)
+    const readyItems = queuedThreads.filter(shouldAttemptSync);
+    if (readyItems.length === 0) return;
+    
+    // Process in manageable batches
+    for (let i = 0; i &lt; readyItems.length; i += BATCH_SIZE) {
+      const batch = readyItems.slice(i, i + BATCH_SIZE);
+      await processBatch(batch);
+    }
+  }
+  
+  function shouldAttemptSync(threadId: ThreadID): boolean {
+    const lastFailure = failureHistory.get(threadId);
+    if (!lastFailure) return true;
+    
+    const timeSinceFailure = Date.now() - lastFailure;
+    return timeSinceFailure &gt;= RETRY_BACKOFF;
+  }
+}
+</code></pre>
+<h2 id="adaptive-polling-strategy"><a class="header" href="#adaptive-polling-strategy">Adaptive Polling Strategy</a></h2>
+<p>Instead of fixed-interval polling, Amp adapts to user activity:</p>
+<pre><code class="language-typescript">// Dynamically adjusts polling frequency based on activity
+export class AdaptivePoller {
+  private baseInterval = 5000;    // 5 seconds baseline
+  private maxInterval = 60000;    // 1 minute maximum
+  private currentInterval = this.baseInterval;
+  private activityLevel = 0;
+  
+  constructor(
+    private syncService: SyncService,
+    private threadService: ThreadService
+  ) {
+    this.setupActivityMonitoring();
+  }
+  
+  private setupActivityMonitoring(): void {
+    // Monitor thread modifications for user activity
+    this.threadService.observeActiveThread().pipe(
+      pairwise(),
+      filter(([previous, current]) =&gt; previous?.v !== current?.v),
+      tap(() =&gt; this.recordUserActivity())
+    ).subscribe();
+    
+    // Monitor sync queue depth to adjust frequency
+    this.syncService.observePendingItems().pipe(
+      map(pending =&gt; pending.size),
+      tap(queueDepth =&gt; {
+        if (queueDepth &gt; 10) this.increaseSyncFrequency();
+        if (queueDepth === 0) this.decreaseSyncFrequency();
+      })
+    ).subscribe();
+  }
+  
+  private recordUserActivity(): void {
+    this.activityLevel = Math.min(100, this.activityLevel + 10);
+    this.adjustPollingInterval();
+  }
+  
+  private adjustPollingInterval(): void {
+    // Higher activity leads to more frequent polling
+    const scaleFactor = 1 - (this.activityLevel / 100) * 0.8;
+    this.currentInterval = Math.floor(
+      this.baseInterval + (this.maxInterval - this.baseInterval) * scaleFactor
+    );
+    
+    // Schedule activity decay for gradual slow-down
+    this.scheduleActivityDecay();
+  }
+  
+  private scheduleActivityDecay(): void {
+    setTimeout(() =&gt; {
+      this.activityLevel = Math.max(0, this.activityLevel - 1);
+      this.adjustPollingInterval();
+    }, 1000);
+  }
+  
+  getCurrentInterval(): number {
+    return this.currentInterval;
+  }
+}
+</code></pre>
+<h2 id="debouncing-and-throttling"><a class="header" href="#debouncing-and-throttling">Debouncing and Throttling</a></h2>
+<p>Amp implements sophisticated flow control to prevent overwhelming the system:</p>
+<pre><code class="language-typescript">// Debounce rapid changes
+export function debounceTime&lt;T&gt;(
+  duration: number
+): OperatorFunction&lt;T, T&gt; {
+  return (source: Observable&lt;T&gt;) =&gt; 
+    new Observable&lt;T&gt;(observer =&gt; {
+      let timeoutId: NodeJS.Timeout | null = null;
+      let lastValue: T;
+      let hasValue = false;
+      
+      const subscription = source.subscribe({
+        next(value: T) {
+          lastValue = value;
+          hasValue = true;
+          
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          
+          timeoutId = setTimeout(() =&gt; {
+            if (hasValue) {
+              observer.next(lastValue);
+              hasValue = false;
+            }
+            timeoutId = null;
+          }, duration);
+        },
+        
+        error(err) {
+          observer.error(err);
+        },
+        
+        complete() {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            if (hasValue) {
+              observer.next(lastValue);
+            }
+          }
+          observer.complete();
+        }
+      });
+      
+      return () =&gt; {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        subscription.unsubscribe();
+      };
+    });
+}
+
+// Throttle with leading and trailing edges
+export function throttleTime&lt;T&gt;(
+  duration: number,
+  { leading = true, trailing = true } = {}
+): OperatorFunction&lt;T, T&gt; {
+  return (source: Observable&lt;T&gt;) =&gt;
+    new Observable&lt;T&gt;(observer =&gt; {
+      let lastEmitTime = 0;
+      let trailingTimeout: NodeJS.Timeout | null = null;
+      let lastValue: T;
+      let hasTrailingValue = false;
+      
+      const emit = (value: T) =&gt; {
+        lastEmitTime = Date.now();
+        hasTrailingValue = false;
+        observer.next(value);
+      };
+      
+      const subscription = source.subscribe({
+        next(value: T) {
+          const now = Date.now();
+          const elapsed = now - lastEmitTime;
+          
+          lastValue = value;
+          
+          if (elapsed &gt;= duration) {
+            // Enough time has passed
+            if (leading) {
+              emit(value);
+            }
+            
+            if (trailing &amp;&amp; !leading) {
+              // Schedule trailing emit
+              hasTrailingValue = true;
+              trailingTimeout = setTimeout(() =&gt; {
+                if (hasTrailingValue) {
+                  emit(lastValue);
+                }
+                trailingTimeout = null;
+              }, duration);
+            }
+          } else {
+            // Still within throttle window
+            if (trailing &amp;&amp; !trailingTimeout) {
+              hasTrailingValue = true;
+              trailingTimeout = setTimeout(() =&gt; {
+                if (hasTrailingValue) {
+                  emit(lastValue);
+                }
+                trailingTimeout = null;
+              }, duration - elapsed);
+            }
+          }
+        }
+      });
+      
+      return () =&gt; {
+        if (trailingTimeout) {
+          clearTimeout(trailingTimeout);
+        }
+        subscription.unsubscribe();
+      };
+    });
+}
+</code></pre>
+<h2 id="batch-synchronization"><a class="header" href="#batch-synchronization">Batch Synchronization</a></h2>
+<p>Amp groups sync operations for network efficiency:</p>
+<pre><code class="language-typescript">// Collects individual sync requests into efficient batches
+export class BatchSyncOrchestrator {
+  private requestQueue = new Map&lt;ThreadID, SyncRequest&gt;();
+  private batchTimer: NodeJS.Timeout | null = null;
+  
+  private readonly BATCH_WINDOW = 100;      // 100ms collection window
+  private readonly MAX_BATCH_SIZE = 50;     // Maximum items per batch
+  
+  constructor(private cloudAPI: CloudAPIClient) {}
+  
+  queueRequest(threadId: ThreadID, request: SyncRequest): void {
+    // Merge with any existing request for same thread
+    const existing = this.requestQueue.get(threadId);
+    if (existing) {
+      request = this.mergeRequests(existing, request);
+    }
+    
+    this.requestQueue.set(threadId, request);
+    
+    // Start batch timer if not already running
+    if (!this.batchTimer) {
+      this.batchTimer = setTimeout(() =&gt; {
+        this.flushBatch();
+      }, this.BATCH_WINDOW);
+    }
+  }
+  
+  private async flushBatch(): Promise&lt;void&gt; {
+    this.batchTimer = null;
+    
+    if (this.requestQueue.size === 0) return;
+    
+    // Extract batch of requests up to size limit
+    const batchEntries = Array.from(this.requestQueue.entries())
+      .slice(0, this.MAX_BATCH_SIZE);
+    
+    // Remove processed items from queue
+    batchEntries.forEach(([id]) =&gt; this.requestQueue.delete(id));
+    
+    // Format batch request for API
+    const batchRequest: BatchSyncRequest = {
+      items: batchEntries.map(([id, request]) =&gt; ({
+        threadId: id,
+        version: request.version,
+        changes: request.operations
+      }))
+    };
+    
+    try {
+      const response = await this.cloudAPI.syncBatch(batchRequest);
+      this.handleBatchResponse(response);
+    } catch (error) {
+      // Retry failed requests with exponential backoff
+      batchEntries.forEach(([id, request]) =&gt; {
+        request.attempts = (request.attempts || 0) + 1;
+        if (request.attempts &lt; 3) {
+          this.queueRequest(id, request);
+        }
+      });
+    }
+    
+    // Continue processing if more items queued
+    if (this.requestQueue.size &gt; 0) {
+      this.batchTimer = setTimeout(() =&gt; {
+        this.flushBatch();
+      }, this.BATCH_WINDOW);
+    }
+  }
+  
+  private mergeRequests(
+    existing: SyncRequest,
+    incoming: SyncRequest
+  ): SyncRequest {
+    return {
+      version: Math.max(existing.version, incoming.version),
+      operations: [...existing.operations, ...incoming.operations],
+      attempts: existing.attempts || 0
+    };
+  }
+}
+</code></pre>
+<h2 id="conflict-resolution"><a class="header" href="#conflict-resolution">Conflict Resolution</a></h2>
+<p>When concurrent edits occur, Amp resolves conflicts intelligently:</p>
+<pre><code class="language-typescript">export class ConflictResolver {
+  async resolveConflict(
+    local: Thread,
+    remote: Thread,
+    base?: Thread
+  ): Promise&lt;Thread&gt; {
+    // Simple case: one side didn't change
+    if (!base) {
+      return this.resolveWithoutBase(local, remote);
+    }
+    
+    // Three-way merge
+    const merged: Thread = {
+      id: local.id,
+      created: base.created,
+      v: Math.max(local.v, remote.v) + 1,
+      messages: await this.mergeMessages(
+        base.messages,
+        local.messages,
+        remote.messages
+      ),
+      title: this.mergeScalar(base.title, local.title, remote.title),
+      env: base.env
+    };
+    
+    return merged;
+  }
+  
+  private async mergeMessages(
+    base: Message[],
+    local: Message[],
+    remote: Message[]
+  ): Promise&lt;Message[]&gt; {
+    // Find divergence point
+    let commonIndex = 0;
+    while (
+      commonIndex &lt; base.length &amp;&amp;
+      commonIndex &lt; local.length &amp;&amp;
+      commonIndex &lt; remote.length &amp;&amp;
+      this.messagesEqual(
+        base[commonIndex],
+        local[commonIndex],
+        remote[commonIndex]
+      )
+    ) {
+      commonIndex++;
+    }
+    
+    // Common prefix
+    const merged = base.slice(0, commonIndex);
+    
+    // Get new messages from each branch
+    const localNew = local.slice(commonIndex);
+    const remoteNew = remote.slice(commonIndex);
+    
+    // Merge by timestamp
+    const allNew = [...localNew, ...remoteNew].sort(
+      (a, b) =&gt; a.timestamp - b.timestamp
+    );
+    
+    // Remove duplicates
+    const seen = new Set&lt;string&gt;();
+    for (const msg of allNew) {
+      const key = this.messageKey(msg);
+      if (!seen.has(key)) {
+        seen.add(key);
+        merged.push(msg);
+      }
+    }
+    
+    return merged;
+  }
+  
+  private messageKey(msg: Message): string {
+    // Create unique key for deduplication
+    return `${msg.role}:${msg.timestamp}:${msg.content.slice(0, 50)}`;
+  }
+  
+  private mergeScalar&lt;T&gt;(base: T, local: T, remote: T): T {
+    // If both changed to same value, use it
+    if (local === remote) return local;
+    
+    // If only one changed, use the change
+    if (local === base) return remote;
+    if (remote === base) return local;
+    
+    // Both changed differently - prefer local
+    return local;
+  }
+}
+</code></pre>
+<h2 id="network-resilience"><a class="header" href="#network-resilience">Network Resilience</a></h2>
+<p>Amp handles network failures gracefully:</p>
+<pre><code class="language-typescript">export class ResilientSyncClient {
+  private online$ = new BehaviorSubject(navigator.onLine);
+  private retryDelays = [1000, 2000, 5000, 10000, 30000]; // Exponential backoff
+  
+  constructor(private api: ServerAPIClient) {
+    // Monitor network status
+    window.addEventListener('online', () =&gt; this.online$.next(true));
+    window.addEventListener('offline', () =&gt; this.online$.next(false));
+    
+    // Test connectivity periodically
+    this.startConnectivityCheck();
+  }
+  
+  async syncWithRetry(
+    request: SyncRequest,
+    attempt = 0
+  ): Promise&lt;SyncResponse&gt; {
+    try {
+      // Wait for network if offline
+      await this.waitForNetwork();
+      
+      // Make request with timeout
+      const response = await this.withTimeout(
+        this.api.sync(request),
+        10000 // 10 second timeout
+      );
+      
+      return response;
+      
+    } catch (error) {
+      if (this.isRetryable(error) &amp;&amp; attempt &lt; this.retryDelays.length) {
+        const delay = this.retryDelays[attempt];
+        
+        logger.debug(
+          `Sync failed, retrying in ${delay}ms (attempt ${attempt + 1})`
+        );
+        
+        await this.delay(delay);
+        return this.syncWithRetry(request, attempt + 1);
+      }
+      
+      throw error;
+    }
+  }
+  
+  private async waitForNetwork(): Promise&lt;void&gt; {
+    if (this.online$.getValue()) return;
+    
+    return new Promise(resolve =&gt; {
+      const sub = this.online$.subscribe(online =&gt; {
+        if (online) {
+          sub.unsubscribe();
+          resolve();
+        }
+      });
+    });
+  }
+  
+  private isRetryable(error: unknown): boolean {
+    if (error instanceof NetworkError) return true;
+    if (error instanceof TimeoutError) return true;
+    if (error instanceof HTTPError) {
+      return error.status &gt;= 500 || error.status === 429;
+    }
+    return false;
+  }
+  
+  private async startConnectivityCheck(): Promise&lt;void&gt; {
+    while (true) {
+      if (!this.online$.getValue()) {
+        // Try to ping server
+        try {
+          await this.api.ping();
+          this.online$.next(true);
+        } catch {
+          // Still offline
+        }
+      }
+      
+      await this.delay(30000); // Check every 30 seconds
+    }
+  }
+}
+</code></pre>
+<h2 id="optimistic-updates"><a class="header" href="#optimistic-updates">Optimistic Updates</a></h2>
+<p>To maintain responsiveness, Amp applies changes optimistically:</p>
+<pre><code class="language-typescript">export class OptimisticSyncManager {
+  private pendingUpdates = new Map&lt;string, PendingUpdate&gt;();
+  
+  async applyOptimisticUpdate&lt;T&gt;(
+    key: string,
+    currentValue: T,
+    update: (value: T) =&gt; T,
+    persist: (value: T) =&gt; Promise&lt;void&gt;
+  ): Promise&lt;T&gt; {
+    // Apply update locally immediately
+    const optimisticValue = update(currentValue);
+    
+    // Track pending update
+    const pendingUpdate: PendingUpdate&lt;T&gt; = {
+      key,
+      originalValue: currentValue,
+      optimisticValue,
+      promise: null
+    };
+    
+    this.pendingUpdates.set(key, pendingUpdate);
+    
+    // Persist asynchronously
+    pendingUpdate.promise = persist(optimisticValue)
+      .then(() =&gt; {
+        // Success - remove from pending
+        this.pendingUpdates.delete(key);
+      })
+      .catch(error =&gt; {
+        // Failure - prepare for rollback
+        pendingUpdate.error = error;
+        throw error;
+      });
+    
+    return optimisticValue;
+  }
+  
+  async rollback(key: string): Promise&lt;void&gt; {
+    const pending = this.pendingUpdates.get(key);
+    if (!pending) return;
+    
+    // Wait for pending operation to complete
+    try {
+      await pending.promise;
+    } catch {
+      // Expected to fail
+    }
+    
+    // Rollback if it failed
+    if (pending.error) {
+      // Notify UI to revert to original value
+      this.onRollback?.(key, pending.originalValue);
+    }
+    
+    this.pendingUpdates.delete(key);
+  }
+  
+  hasPendingUpdates(): boolean {
+    return this.pendingUpdates.size &gt; 0;
+  }
+  
+  async waitForPendingUpdates(): Promise&lt;void&gt; {
+    const promises = Array.from(this.pendingUpdates.values())
+      .map(update =&gt; update.promise);
+    
+    await Promise.allSettled(promises);
+  }
+}
+</code></pre>
+<h2 id="performance-monitoring"><a class="header" href="#performance-monitoring">Performance Monitoring</a></h2>
+<p>Amp tracks sync performance to optimize behavior:</p>
+<pre><code class="language-typescript">export class SyncPerformanceMonitor {
+  private metrics = new Map&lt;string, MetricHistory&gt;();
+  
+  recordSyncTime(
+    threadId: string,
+    duration: number,
+    size: number
+  ): void {
+    const history = this.getHistory('sync-time');
+    history.add({
+      timestamp: Date.now(),
+      value: duration,
+      metadata: { threadId, size }
+    });
+    
+    // Analyze for anomalies
+    if (duration &gt; this.getP95(history)) {
+      logger.warn(`Slow sync detected: ${duration}ms for thread ${threadId}`);
+    }
+  }
+  
+  recordBatchSize(size: number): void {
+    this.getHistory('batch-size').add({
+      timestamp: Date.now(),
+      value: size
+    });
+  }
+  
+  recordConflictRate(hadConflict: boolean): void {
+    this.getHistory('conflicts').add({
+      timestamp: Date.now(),
+      value: hadConflict ? 1 : 0
+    });
+  }
+  
+  getOptimalBatchSize(): number {
+    const history = this.getHistory('batch-size');
+    const recentSizes = history.getRecent(100);
+    
+    // Find size that minimizes sync time
+    const sizeToTime = new Map&lt;number, number[]&gt;();
+    
+    for (const entry of this.getHistory('sync-time').getRecent(100)) {
+      const size = entry.metadata?.size || 1;
+      if (!sizeToTime.has(size)) {
+        sizeToTime.set(size, []);
+      }
+      sizeToTime.get(size)!.push(entry.value);
+    }
+    
+    // Calculate average time per size
+    let optimalSize = 50;
+    let minAvgTime = Infinity;
+    
+    for (const [size, times] of sizeToTime) {
+      const avgTime = times.reduce((a, b) =&gt; a + b) / times.length;
+      if (avgTime &lt; minAvgTime) {
+        minAvgTime = avgTime;
+        optimalSize = size;
+      }
+    }
+    
+    return Math.max(10, Math.min(100, optimalSize));
+  }
+  
+  private getP95(history: MetricHistory): number {
+    const values = history.getRecent(100)
+      .map(entry =&gt; entry.value)
+      .sort((a, b) =&gt; a - b);
+    
+    const index = Math.floor(values.length * 0.95);
+    return values[index] || 0;
+  }
+}
+</code></pre>
+<h2 id="testing-synchronization"><a class="header" href="#testing-synchronization">Testing Synchronization</a></h2>
+<p>Amp includes comprehensive sync testing utilities:</p>
+<pre><code class="language-typescript">export class SyncTestHarness {
+  private mockServer = new MockSyncServer();
+  private clients: TestClient[] = [];
+  
+  async testConcurrentEdits(): Promise&lt;void&gt; {
+    // Create multiple clients
+    const client1 = this.createClient('user1');
+    const client2 = this.createClient('user2');
+    
+    // Both edit same thread
+    const threadId = 'test-thread';
+    
+    await Promise.all([
+      client1.addMessage(threadId, 'Hello from user 1'),
+      client2.addMessage(threadId, 'Hello from user 2')
+    ]);
+    
+    // Let sync complete
+    await this.waitForSync();
+    
+    // Both clients should have both messages
+    const thread1 = await client1.getThread(threadId);
+    const thread2 = await client2.getThread(threadId);
+    
+    assert.equal(thread1.messages.length, 2);
+    assert.equal(thread2.messages.length, 2);
+    assert.deepEqual(thread1, thread2);
+  }
+  
+  async testNetworkPartition(): Promise&lt;void&gt; {
+    const client = this.createClient('user1');
+    
+    // Make changes while online
+    await client.addMessage('thread1', 'Online message');
+    
+    // Go offline
+    this.mockServer.disconnect(client);
+    
+    // Make offline changes
+    await client.addMessage('thread1', 'Offline message 1');
+    await client.addMessage('thread1', 'Offline message 2');
+    
+    // Verify changes are queued
+    assert.equal(client.getPendingSyncCount(), 1);
+    
+    // Reconnect
+    this.mockServer.connect(client);
+    
+    // Wait for sync
+    await this.waitForSync();
+    
+    // Verify all changes synced
+    assert.equal(client.getPendingSyncCount(), 0);
+    
+    const serverThread = this.mockServer.getThread('thread1');
+    assert.equal(serverThread.messages.length, 3);
+  }
+  
+  async testSyncPerformance(): Promise&lt;void&gt; {
+    const client = this.createClient('user1');
+    const messageCount = 1000;
+    
+    // Add many messages
+    const startTime = Date.now();
+    
+    for (let i = 0; i &lt; messageCount; i++) {
+      await client.addMessage('perf-thread', `Message ${i}`);
+    }
+    
+    await this.waitForSync();
+    
+    const duration = Date.now() - startTime;
+    const throughput = messageCount / (duration / 1000);
+    
+    console.log(`Synced ${messageCount} messages in ${duration}ms`);
+    console.log(`Throughput: ${throughput.toFixed(2)} messages/second`);
+    
+    // Should sync within reasonable time
+    assert(throughput &gt; 100, 'Sync throughput too low');
+  }
+}
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>This chapter demonstrated that real-time synchronization doesn't require WebSockets:</p>
+<ul>
+<li><strong>Adaptive polling</strong> adjusts frequency based on activity patterns</li>
+<li><strong>Observable architectures</strong> provide reactive local state management</li>
+<li><strong>Intelligent batching</strong> optimizes network efficiency</li>
+<li><strong>Optimistic updates</strong> maintain responsive user interfaces</li>
+<li><strong>Resilient retry logic</strong> handles network failures gracefully</li>
+<li><strong>Conflict resolution strategies</strong> ensure eventual consistency</li>
+</ul>
+<p>This approach proves more reliable and debuggable than traditional WebSocket solutions while maintaining real-time user experience. The key insight: for AI systems, eventual consistency with intelligent conflict resolution often outperforms complex real-time protocols.</p>
+<p>The next chapter explores tool system architecture for distributed execution with safety and performance at scale.</p>
+</main>
+</body>
+</html>

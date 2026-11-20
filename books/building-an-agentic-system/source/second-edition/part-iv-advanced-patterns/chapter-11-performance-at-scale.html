@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Performance at Scale - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-iv-advanced-patterns/chapter-11-performance-at-scale.html -->
+<main>
+<h1 id="chapter-11-performance-patterns-at-scale"><a class="header" href="#chapter-11-performance-patterns-at-scale">Chapter 11: Performance Patterns at Scale</a></h1>
+<p>Running an AI coding assistant for a handful of developers differs dramatically from serving thousands of concurrent users. When AI processes complex refactoring requests that spawn multiple sub-agents, each analyzing different parts of a codebase, the computational demands multiply quickly. Add real-time synchronization, file system operations, and LLM inference costs, and performance becomes the make-or-break factor for production viability.</p>
+<p>This chapter explores performance patterns that enable AI coding assistants to scale from proof-of-concept to production systems serving entire engineering organizations. We'll examine caching strategies, database optimizations, edge computing patterns, and load balancing approaches that maintain sub-second response times even under heavy load.</p>
+<h2 id="the-performance-challenge"><a class="header" href="#the-performance-challenge">The Performance Challenge</a></h2>
+<p>AI coding assistants face unique performance constraints compared to traditional web applications:</p>
+<pre><code class="language-typescript">// A single user interaction might trigger:
+- Multiple model inference calls (coordinators + specialized agents)
+- Dozens of file system operations
+- Real-time synchronization across platforms
+- Tool executions that spawn processes
+- Code analysis across thousands of files
+- Version control operations on large repositories
+</code></pre>
+<p>Consider what happens when a user asks an AI assistant to "refactor this authentication system to use OAuth":</p>
+<ol>
+<li><strong>Initial Analysis</strong> - The system reads dozens of files to understand the current auth implementation</li>
+<li><strong>Planning</strong> - Model generates a refactoring plan, potentially coordinating multiple agents</li>
+<li><strong>Execution</strong> - Multiple tools modify files, run tests, and verify changes</li>
+<li><strong>Synchronization</strong> - All changes sync across environments and collaborators</li>
+<li><strong>Persistence</strong> - Conversation history, file changes, and metadata save to storage</li>
+</ol>
+<p>Each step has opportunities for optimization—and potential bottlenecks that can degrade the user experience.</p>
+<h2 id="caching-strategies"><a class="header" href="#caching-strategies">Caching Strategies</a></h2>
+<p>The most effective performance optimization is avoiding work entirely. Multi-layered caching minimizes redundant operations:</p>
+<h3 id="model-response-caching"><a class="header" href="#model-response-caching">Model Response Caching</a></h3>
+<p>Model inference represents the largest latency and cost factor. Intelligent caching can dramatically improve performance:</p>
+<pre><code class="language-typescript">class ModelResponseCache {
+  private memoryCache = new Map&lt;string, CachedResponse&gt;();
+  private persistentCache: PersistentStorage;
+  private readonly config: CacheConfiguration;
+  
+  constructor(config: CacheConfiguration) {
+    this.config = {
+      maxMemoryEntries: 1000,
+      ttlMs: 3600000, // 1 hour
+      persistHighValue: true,
+      ...config
+    };
+    
+    this.initializePersistentCache();
+  }
+  
+  async get(
+    request: ModelRequest
+  ): Promise&lt;CachedResponse | null&gt; {
+    // Generate stable cache key from request parameters
+    const key = this.generateCacheKey(request);
+    
+    // Check memory cache first (fastest)
+    const memoryResult = this.memoryCache.get(key);
+    if (memoryResult &amp;&amp; this.isValid(memoryResult)) {
+      this.updateAccessMetrics(memoryResult);
+      return memoryResult;
+    }
+    
+    // Check persistent cache (slower but larger)
+    const persistentResult = await this.persistentCache.get(key);
+    if (persistentResult &amp;&amp; this.isValid(persistentResult)) {
+      // Promote to memory cache
+      this.memoryCache.set(key, persistentResult);
+      return persistentResult;
+    }
+    
+    return null;
+  }
+  
+  async set(
+    messages: Message[],
+    model: string,
+    temperature: number,
+    response: LLMResponse
+  ): Promise&lt;void&gt; {
+    const key = this.generateCacheKey(messages, model, temperature);
+    
+    const cached: CachedResponse = {
+      key,
+      messages,
+      model,
+      temperature,
+      response,
+      timestamp: Date.now(),
+      lastAccessed: Date.now(),
+      hitCount: 0
+    };
+    
+    this.cache.set(key, cached);
+    
+    // Evict old entries if cache is full
+    if (this.cache.size &gt; this.MAX_CACHE_SIZE) {
+      this.evictLRU();
+    }
+    
+    // Persist high-value entries
+    if (this.shouldPersist(cached)) {
+      await this.persistEntry(key, cached);
+    }
+  }
+  
+  private generateCacheKey(
+    messages: Message[],
+    model: string,
+    temperature: number
+  ): string {
+    // Only cache deterministic requests (temperature = 0)
+    if (temperature &gt; 0) {
+      return crypto.randomUUID(); // Unique key = no caching
+    }
+    
+    // Create stable key from messages
+    const messageHash = crypto
+      .createHash('sha256')
+      .update(JSON.stringify(messages))
+      .digest('hex');
+    
+    return `${model}:${temperature}:${messageHash}`;
+  }
+  
+  private evictLRU(): void {
+    // Find least recently used entry
+    let lruKey: string | null = null;
+    let lruTime = Infinity;
+    
+    for (const [key, entry] of this.cache) {
+      if (entry.lastAccessed &lt; lruTime) {
+        lruTime = entry.lastAccessed;
+        lruKey = key;
+      }
+    }
+    
+    if (lruKey) {
+      this.cache.delete(lruKey);
+    }
+  }
+  
+  private shouldPersist(entry: CachedResponse): boolean {
+    // Persist frequently accessed or expensive responses
+    return entry.hitCount &gt; 5 || 
+           entry.response.usage.totalTokens &gt; 4000;
+  }
+}
+</code></pre>
+<h3 id="file-system-caching"><a class="header" href="#file-system-caching">File System Caching</a></h3>
+<p>File operations are frequent and can be expensive, especially on network filesystems:</p>
+<pre><code class="language-typescript">export class FileSystemCache {
+  private contentCache = new Map&lt;string, FileCacheEntry&gt;();
+  private statCache = new Map&lt;string, StatCacheEntry&gt;();
+  
+  // Watch for file changes to invalidate cache
+  private watcher = chokidar.watch([], {
+    persistent: true,
+    ignoreInitial: true
+  });
+  
+  constructor() {
+    this.watcher.on('change', path =&gt; this.invalidate(path));
+    this.watcher.on('unlink', path =&gt; this.invalidate(path));
+  }
+  
+  async readFile(path: string): Promise&lt;string&gt; {
+    const cached = this.contentCache.get(path);
+    
+    if (cached) {
+      // Verify cache validity
+      const stats = await fs.stat(path);
+      if (stats.mtimeMs &lt;= cached.mtime) {
+        cached.hits++;
+        return cached.content;
+      }
+    }
+    
+    // Cache miss - read from disk
+    const content = await fs.readFile(path, 'utf-8');
+    const stats = await fs.stat(path);
+    
+    this.contentCache.set(path, {
+      content,
+      mtime: stats.mtimeMs,
+      size: stats.size,
+      hits: 0
+    });
+    
+    // Start watching this file
+    this.watcher.add(path);
+    
+    return content;
+  }
+  
+  async glob(pattern: string, options: GlobOptions = {}): Promise&lt;string[]&gt; {
+    const cacheKey = `${pattern}:${JSON.stringify(options)}`;
+    
+    // Use cached result if recent enough
+    const cached = this.globCache.get(cacheKey);
+    if (cached &amp;&amp; Date.now() - cached.timestamp &lt; 5000) {
+      return cached.results;
+    }
+    
+    const results = await fastGlob(pattern, options);
+    
+    this.globCache.set(cacheKey, {
+      results,
+      timestamp: Date.now()
+    });
+    
+    return results;
+  }
+  
+  private invalidate(path: string): void {
+    this.contentCache.delete(path);
+    this.statCache.delete(path);
+    
+    // Invalidate glob results that might include this file
+    for (const [key, entry] of this.globCache) {
+      if (this.mightMatch(path, key)) {
+        this.globCache.delete(key);
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="repository-analysis-caching"><a class="header" href="#repository-analysis-caching">Repository Analysis Caching</a></h3>
+<p>Code intelligence features require analyzing repository structure, which can be computationally expensive:</p>
+<pre><code class="language-typescript">export class RepositoryAnalysisCache {
+  private repoMapCache = new Map&lt;string, RepoMapCache&gt;();
+  private dependencyCache = new Map&lt;string, DependencyGraph&gt;();
+  
+  async getRepoMap(
+    rootPath: string,
+    options: RepoMapOptions = {}
+  ): Promise&lt;RepoMap&gt; {
+    const cached = this.repoMapCache.get(rootPath);
+    
+    if (cached &amp;&amp; this.isCacheValid(cached)) {
+      return cached.repoMap;
+    }
+    
+    // Generate new repo map
+    const repoMap = await this.generateRepoMap(rootPath, options);
+    
+    // Cache with metadata
+    this.repoMapCache.set(rootPath, {
+      repoMap,
+      timestamp: Date.now(),
+      gitCommit: await this.getGitCommit(rootPath),
+      fileCount: repoMap.files.length
+    });
+    
+    return repoMap;
+  }
+  
+  private async isCacheValid(cache: RepoMapCache): Promise&lt;boolean&gt; {
+    // Invalidate if git commit changed
+    const currentCommit = await this.getGitCommit(cache.rootPath);
+    if (currentCommit !== cache.gitCommit) {
+      return false;
+    }
+    
+    // Invalidate if too old
+    const age = Date.now() - cache.timestamp;
+    if (age &gt; 300000) { // 5 minutes
+      return false;
+    }
+    
+    // Sample a few files to check for changes
+    const samplesToCheck = Math.min(10, cache.fileCount);
+    const samples = this.selectRandomSamples(cache.repoMap.files, samplesToCheck);
+    
+    for (const file of samples) {
+      try {
+        const stats = await fs.stat(file.path);
+        if (stats.mtimeMs &gt; cache.timestamp) {
+          return false;
+        }
+      } catch {
+        // File deleted
+        return false;
+      }
+    }
+    
+    return true;
+  }
+}
+</code></pre>
+<h2 id="database-optimization"><a class="header" href="#database-optimization">Database Optimization</a></h2>
+<p>Conversation storage requires careful optimization to handle millions of interactions efficiently:</p>
+<h3 id="indexed-storage-schema"><a class="header" href="#indexed-storage-schema">Indexed Storage Schema</a></h3>
+<p>Efficient conversation storage uses layered database architecture with strategic indexing:</p>
+<pre><code class="language-typescript">class ConversationDatabase {
+  private storage: DatabaseAdapter;
+  
+  async initialize(): Promise&lt;void&gt; {
+    await this.storage.connect();
+    await this.ensureSchema();
+  }
+  
+  private async ensureSchema(): Promise&lt;void&gt; {
+    // Conversation metadata for quick access
+    await this.storage.createTable('conversations', {
+      id: 'primary_key',
+      userId: 'indexed',
+      teamId: 'indexed',
+      title: 'indexed',
+      created: 'indexed',
+      lastActivity: 'indexed',
+      isShared: 'indexed',
+      version: 'indexed'
+    });
+    
+    // Separate table for message content to optimize loading
+    await this.storage.createTable('messages', {
+      id: 'primary_key',
+      conversationId: 'indexed',
+      sequence: 'indexed',
+      timestamp: 'indexed',
+      content: 'blob',
+      metadata: 'json'
+    });
+    
+    // Lightweight summary table for listings
+    await this.storage.createTable('conversation_summaries', {
+      id: 'primary_key',
+      title: 'indexed',
+      lastMessage: 'text',
+      messageCount: 'integer',
+      participants: 'json'
+    });
+  }
+  
+  async getThread(id: ThreadID): Promise&lt;Thread | null&gt; {
+    const transaction = this.db.transaction(['threads', 'messages'], 'readonly');
+    const threadStore = transaction.objectStore('threads');
+    const messageStore = transaction.objectStore('messages');
+    
+    // Get thread metadata
+    const thread = await this.getFromStore(threadStore, id);
+    if (!thread) return null;
+    
+    // Get messages separately for large threads
+    if (thread.messageCount &gt; 100) {
+      const messageIndex = messageStore.index('threadId');
+      const messages = await this.getAllFromIndex(messageIndex, id);
+      thread.messages = messages;
+    }
+    
+    return thread;
+  }
+  
+  async queryThreads(
+    query: ThreadQuery
+  ): Promise&lt;ThreadMeta[]&gt; {
+    const transaction = this.db.transaction(['threadMeta'], 'readonly');
+    const metaStore = transaction.objectStore('threadMeta');
+    
+    let results: ThreadMeta[] = [];
+    
+    // Use index if available
+    if (query.orderBy === 'lastActivity') {
+      const index = metaStore.index('lastActivity');
+      const range = query.after 
+        ? IDBKeyRange.lowerBound(query.after, true)
+        : undefined;
+      
+      results = await this.getCursorResults(
+        index.openCursor(range, 'prev'),
+        query.limit
+      );
+    } else {
+      // Full table scan with filtering
+      results = await this.getAllFromStore(metaStore);
+      results = this.applyFilters(results, query);
+    }
+    
+    return results;
+  }
+}
+</code></pre>
+<h3 id="write-batching"><a class="header" href="#write-batching">Write Batching</a></h3>
+<p>Frequent small writes can overwhelm storage systems. Batching improves throughput:</p>
+<pre><code class="language-typescript">export class BatchedThreadWriter {
+  private writeQueue = new Map&lt;ThreadID, PendingWrite&gt;();
+  private flushTimer?: NodeJS.Timeout;
+  
+  constructor(
+    private storage: ThreadStorage,
+    private options: BatchOptions = {}
+  ) {
+    this.options = {
+      batchSize: 50,
+      flushInterval: 1000,
+      maxWaitTime: 5000,
+      ...options
+    };
+  }
+  
+  async write(thread: Thread): Promise&lt;void&gt; {
+    const now = Date.now();
+    
+    this.writeQueue.set(thread.id, {
+      thread,
+      queuedAt: now,
+      priority: this.calculatePriority(thread)
+    });
+    
+    // Schedule flush
+    this.scheduleFlush();
+    
+    // Immediate flush for high-priority writes
+    if (this.shouldFlushImmediately(thread)) {
+      await this.flush();
+    }
+  }
+  
+  private scheduleFlush(): void {
+    if (this.flushTimer) return;
+    
+    this.flushTimer = setTimeout(() =&gt; {
+      this.flush().catch(error =&gt; 
+        logger.error('Batch flush failed:', error)
+      );
+    }, this.options.flushInterval);
+  }
+  
+  private async flush(): Promise&lt;void&gt; {
+    if (this.writeQueue.size === 0) return;
+    
+    // Clear timer
+    if (this.flushTimer) {
+      clearTimeout(this.flushTimer);
+      this.flushTimer = undefined;
+    }
+    
+    // Sort by priority and age
+    const writes = Array.from(this.writeQueue.values())
+      .sort((a, b) =&gt; {
+        if (a.priority !== b.priority) {
+          return b.priority - a.priority;
+        }
+        return a.queuedAt - b.queuedAt;
+      });
+    
+    // Process in batches
+    for (let i = 0; i &lt; writes.length; i += this.options.batchSize) {
+      const batch = writes.slice(i, i + this.options.batchSize);
+      
+      try {
+        await this.storage.batchWrite(
+          batch.map(w =&gt; w.thread)
+        );
+        
+        // Remove from queue
+        batch.forEach(w =&gt; this.writeQueue.delete(w.thread.id));
+      } catch (error) {
+        logger.error('Batch write failed:', error);
+        // Keep in queue for retry
+      }
+    }
+    
+    // Schedule next flush if items remain
+    if (this.writeQueue.size &gt; 0) {
+      this.scheduleFlush();
+    }
+  }
+  
+  private calculatePriority(thread: Thread): number {
+    let priority = 0;
+    
+    // Active threads get higher priority
+    if (thread.messages.length &gt; 0) {
+      const lastMessage = thread.messages[thread.messages.length - 1];
+      const age = Date.now() - lastMessage.timestamp;
+      if (age &lt; 60000) priority += 10; // Active in last minute
+    }
+    
+    // Shared threads need immediate sync
+    if (thread.meta?.shared) priority += 5;
+    
+    // Larger threads are more important to persist
+    priority += Math.min(thread.messages.length / 10, 5);
+    
+    return priority;
+  }
+}
+</code></pre>
+<h2 id="cdn-and-edge-computing"><a class="header" href="#cdn-and-edge-computing">CDN and Edge Computing</a></h2>
+<p>Static assets and frequently accessed data benefit from edge distribution:</p>
+<h3 id="asset-optimization"><a class="header" href="#asset-optimization">Asset Optimization</a></h3>
+<p>Amp serves static assets through a CDN with aggressive caching:</p>
+<pre><code class="language-typescript">export class AssetOptimizer {
+  private assetManifest = new Map&lt;string, AssetEntry&gt;();
+  
+  async optimizeAssets(buildDir: string): Promise&lt;void&gt; {
+    const assets = await this.findAssets(buildDir);
+    
+    for (const asset of assets) {
+      // Generate content hash
+      const content = await fs.readFile(asset.path);
+      const hash = crypto
+        .createHash('sha256')
+        .update(content)
+        .digest('hex')
+        .substring(0, 8);
+      
+      // Create versioned filename
+      const ext = path.extname(asset.path);
+      const base = path.basename(asset.path, ext);
+      const hashedName = `${base}.${hash}${ext}`;
+      
+      // Optimize based on type
+      const optimized = await this.optimizeAsset(asset, content);
+      
+      // Write optimized version
+      const outputPath = path.join(
+        buildDir, 
+        'cdn',
+        hashedName
+      );
+      await fs.writeFile(outputPath, optimized.content);
+      
+      // Update manifest
+      this.assetManifest.set(asset.originalPath, {
+        cdnPath: `/cdn/${hashedName}`,
+        size: optimized.content.length,
+        hash,
+        headers: this.getCacheHeaders(asset.type)
+      });
+    }
+    
+    // Write manifest for runtime
+    await this.writeManifest(buildDir);
+  }
+  
+  private getCacheHeaders(type: AssetType): Headers {
+    const headers = new Headers();
+    
+    // Immutable for versioned assets
+    headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    
+    // Type-specific headers
+    switch (type) {
+      case 'javascript':
+        headers.set('Content-Type', 'application/javascript');
+        break;
+      case 'css':
+        headers.set('Content-Type', 'text/css');
+        break;
+      case 'wasm':
+        headers.set('Content-Type', 'application/wasm');
+        break;
+    }
+    
+    // Enable compression
+    headers.set('Content-Encoding', 'gzip');
+    
+    return headers;
+  }
+}
+</code></pre>
+<h3 id="edge-function-patterns"><a class="header" href="#edge-function-patterns">Edge Function Patterns</a></h3>
+<p>Compute at the edge reduces latency for common operations:</p>
+<pre><code class="language-typescript">export class EdgeFunctionRouter {
+  // Deployed to Cloudflare Workers or similar
+  async handleRequest(request: Request): Promise&lt;Response&gt; {
+    const url = new URL(request.url);
+    
+    // Handle different edge-optimized endpoints
+    switch (url.pathname) {
+      case '/api/threads/list':
+        return this.handleThreadList(request);
+        
+      case '/api/auth/verify':
+        return this.handleAuthVerification(request);
+        
+      case '/api/assets/repomap':
+        return this.handleRepoMapRequest(request);
+        
+      default:
+        // Pass through to origin
+        return fetch(request);
+    }
+  }
+  
+  private async handleThreadList(
+    request: Request
+  ): Promise&lt;Response&gt; {
+    const cache = caches.default;
+    const cacheKey = new Request(request.url, {
+      method: 'GET',
+      headers: {
+        'Authorization': request.headers.get('Authorization') || ''
+      }
+    });
+    
+    // Check cache
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return cached;
+    }
+    
+    // Fetch from origin
+    const response = await fetch(request);
+    
+    // Cache successful responses
+    if (response.ok) {
+      const headers = new Headers(response.headers);
+      headers.set('Cache-Control', 'private, max-age=60');
+      
+      const cachedResponse = new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+      });
+      
+      await cache.put(cacheKey, cachedResponse.clone());
+      return cachedResponse;
+    }
+    
+    return response;
+  }
+  
+  private async handleAuthVerification(
+    request: Request
+  ): Promise&lt;Response&gt; {
+    const token = request.headers.get('Authorization')?.split(' ')[1];
+    if (!token) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+    
+    // Verify JWT at edge
+    try {
+      const payload = await this.verifyJWT(token);
+      
+      // Add user info to request headers
+      const headers = new Headers(request.headers);
+      headers.set('X-User-Id', payload.sub);
+      headers.set('X-User-Email', payload.email);
+      
+      // Forward to origin with verified user
+      return fetch(request, { headers });
+      
+    } catch (error) {
+      return new Response('Invalid token', { status: 401 });
+    }
+  }
+}
+</code></pre>
+<h3 id="global-thread-sync"><a class="header" href="#global-thread-sync">Global Thread Sync</a></h3>
+<p>Edge presence enables efficient global synchronization:</p>
+<pre><code class="language-typescript">export class GlobalSyncCoordinator {
+  private regions = ['us-east', 'eu-west', 'ap-south'];
+  
+  async syncThread(
+    thread: Thread,
+    originRegion: string
+  ): Promise&lt;void&gt; {
+    // Write to origin region first
+    await this.writeToRegion(thread, originRegion);
+    
+    // Fan out to other regions asynchronously
+    const otherRegions = this.regions.filter(r =&gt; r !== originRegion);
+    
+    await Promise.all(
+      otherRegions.map(region =&gt; 
+        this.replicateToRegion(thread, region)
+          .catch(error =&gt; {
+            logger.error(`Failed to replicate to ${region}:`, error);
+            // Queue for retry
+            this.queueReplication(thread.id, region);
+          })
+      )
+    );
+  }
+  
+  private async writeToRegion(
+    thread: Thread,
+    region: string
+  ): Promise&lt;void&gt; {
+    const endpoint = this.getRegionalEndpoint(region);
+    
+    const response = await fetch(`${endpoint}/api/threads/${thread.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Sync-Version': thread.v.toString(),
+        'X-Origin-Region': region
+      },
+      body: JSON.stringify(thread)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Regional write failed: ${response.status}`);
+    }
+  }
+  
+  async readThread(
+    threadId: ThreadID,
+    userRegion: string
+  ): Promise&lt;Thread | null&gt; {
+    // Try local region first
+    const localThread = await this.readFromRegion(threadId, userRegion);
+    if (localThread) {
+      return localThread;
+    }
+    
+    // Fall back to other regions
+    for (const region of this.regions) {
+      if (region === userRegion) continue;
+      
+      try {
+        const thread = await this.readFromRegion(threadId, region);
+        if (thread) {
+          // Replicate to user's region for next time
+          this.replicateToRegion(thread, userRegion)
+            .catch(() =&gt; {}); // Best effort
+          return thread;
+        }
+      } catch {
+        continue;
+      }
+    }
+    
+    return null;
+  }
+}
+</code></pre>
+<h2 id="load-balancing-patterns"><a class="header" href="#load-balancing-patterns">Load Balancing Patterns</a></h2>
+<p>Distributing load across multiple servers requires intelligent routing:</p>
+<h3 id="session-affinity"><a class="header" href="#session-affinity">Session Affinity</a></h3>
+<p>AI conversations benefit from session affinity to maximize cache hits:</p>
+<pre><code class="language-typescript">export class SessionAwareLoadBalancer {
+  private servers: ServerPool[] = [];
+  private sessionMap = new Map&lt;string, string&gt;();
+  
+  async routeRequest(
+    request: Request,
+    sessionId: string
+  ): Promise&lt;Response&gt; {
+    // Check for existing session affinity
+    let targetServer = this.sessionMap.get(sessionId);
+    
+    if (!targetServer || !this.isServerHealthy(targetServer)) {
+      // Select new server based on load
+      targetServer = await this.selectServer(request);
+      this.sessionMap.set(sessionId, targetServer);
+    }
+    
+    // Route to selected server
+    return this.forwardRequest(request, targetServer);
+  }
+  
+  private async selectServer(
+    request: Request
+  ): Promise&lt;string&gt; {
+    const healthyServers = this.servers.filter(s =&gt; s.healthy);
+    
+    if (healthyServers.length === 0) {
+      throw new Error('No healthy servers available');
+    }
+    
+    // Consider multiple factors
+    const scores = await Promise.all(
+      healthyServers.map(async server =&gt; ({
+        server,
+        score: await this.calculateServerScore(server, request)
+      }))
+    );
+    
+    // Select server with best score
+    scores.sort((a, b) =&gt; b.score - a.score);
+    return scores[0].server.id;
+  }
+  
+  private async calculateServerScore(
+    server: ServerPool,
+    request: Request
+  ): Promise&lt;number&gt; {
+    let score = 100;
+    
+    // Current load (lower is better)
+    score -= server.currentConnections / server.maxConnections * 50;
+    
+    // CPU usage
+    score -= server.cpuUsage * 30;
+    
+    // Memory availability
+    score -= (1 - server.memoryAvailable / server.memoryTotal) * 20;
+    
+    // Geographic proximity (if available)
+    const clientRegion = request.headers.get('CF-IPCountry');
+    if (clientRegion &amp;&amp; server.region === clientRegion) {
+      score += 10;
+    }
+    
+    // Specialized capabilities
+    if (request.url.includes('/api/code-analysis') &amp;&amp; server.hasGPU) {
+      score += 15;
+    }
+    
+    return Math.max(0, score);
+  }
+}
+</code></pre>
+<h3 id="queue-management"><a class="header" href="#queue-management">Queue Management</a></h3>
+<p>Graceful degradation under load prevents system collapse:</p>
+<pre><code class="language-typescript">export class AdaptiveQueueManager {
+  private queues = new Map&lt;Priority, Queue&lt;Task&gt;&gt;();
+  private processing = new Map&lt;string, ProcessingTask&gt;();
+  
+  constructor(
+    private options: QueueOptions = {}
+  ) {
+    this.options = {
+      maxConcurrent: 100,
+      maxQueueSize: 1000,
+      timeoutMs: 30000,
+      ...options
+    };
+    
+    // Initialize priority queues
+    for (const priority of ['critical', 'high', 'normal', 'low']) {
+      this.queues.set(priority as Priority, new Queue());
+    }
+  }
+  
+  async enqueue(
+    task: Task,
+    priority: Priority = 'normal'
+  ): Promise&lt;TaskResult&gt; {
+    // Check queue capacity
+    const queue = this.queues.get(priority)!;
+    if (queue.size &gt;= this.options.maxQueueSize) {
+      // Shed load for low priority tasks
+      if (priority === 'low') {
+        throw new Error('System overloaded, please retry later');
+      }
+      
+      // Bump up priority for important tasks
+      if (priority === 'normal') {
+        return this.enqueue(task, 'high');
+      }
+    }
+    
+    // Add to queue
+    const promise = new Promise&lt;TaskResult&gt;((resolve, reject) =&gt; {
+      queue.enqueue({
+        task,
+        resolve,
+        reject,
+        enqueuedAt: Date.now()
+      });
+    });
+    
+    // Process queue
+    this.processQueues();
+    
+    return promise;
+  }
+  
+  private async processQueues(): Promise&lt;void&gt; {
+    if (this.processing.size &gt;= this.options.maxConcurrent) {
+      return; // At capacity
+    }
+    
+    // Process in priority order
+    for (const [priority, queue] of this.queues) {
+      while (
+        queue.size &gt; 0 &amp;&amp; 
+        this.processing.size &lt; this.options.maxConcurrent
+      ) {
+        const item = queue.dequeue()!;
+        
+        // Check for timeout
+        const waitTime = Date.now() - item.enqueuedAt;
+        if (waitTime &gt; this.options.timeoutMs) {
+          item.reject(new Error('Task timeout in queue'));
+          continue;
+        }
+        
+        // Process task
+        this.processTask(item);
+      }
+    }
+  }
+  
+  private async processTask(item: QueueItem): Promise&lt;void&gt; {
+    const taskId = crypto.randomUUID();
+    
+    this.processing.set(taskId, {
+      item,
+      startedAt: Date.now()
+    });
+    
+    try {
+      const result = await item.task.execute();
+      item.resolve(result);
+    } catch (error) {
+      item.reject(error);
+    } finally {
+      this.processing.delete(taskId);
+      // Process more tasks
+      this.processQueues();
+    }
+  }
+}
+</code></pre>
+<h3 id="resource-pooling"><a class="header" href="#resource-pooling">Resource Pooling</a></h3>
+<p>Expensive resources like database connections benefit from pooling:</p>
+<pre><code class="language-typescript">export class ResourcePool&lt;T&gt; {
+  private available: T[] = [];
+  private inUse = new Map&lt;T, PooledResource&lt;T&gt;&gt;();
+  private waiting: ((resource: T) =&gt; void)[] = [];
+  
+  constructor(
+    private factory: ResourceFactory&lt;T&gt;,
+    private options: PoolOptions = {}
+  ) {
+    this.options = {
+      min: 5,
+      max: 20,
+      idleTimeoutMs: 300000,
+      createTimeoutMs: 5000,
+      ...options
+    };
+    
+    // Pre-create minimum resources
+    this.ensureMinimum();
+  }
+  
+  async acquire(): Promise&lt;PooledResource&lt;T&gt;&gt; {
+    // Return available resource
+    while (this.available.length &gt; 0) {
+      const resource = this.available.pop()!;
+      
+      // Validate resource is still good
+      if (await this.factory.validate(resource)) {
+        const pooled = this.wrapResource(resource);
+        this.inUse.set(resource, pooled);
+        return pooled;
+      } else {
+        // Destroy invalid resource
+        await this.factory.destroy(resource);
+      }
+    }
+    
+    // Create new resource if under max
+    if (this.inUse.size &lt; this.options.max) {
+      const resource = await this.createResource();
+      const pooled = this.wrapResource(resource);
+      this.inUse.set(resource, pooled);
+      return pooled;
+    }
+    
+    // Wait for available resource
+    return new Promise((resolve) =&gt; {
+      this.waiting.push((resource) =&gt; {
+        const pooled = this.wrapResource(resource);
+        this.inUse.set(resource, pooled);
+        resolve(pooled);
+      });
+    });
+  }
+  
+  private wrapResource(resource: T): PooledResource&lt;T&gt; {
+    const pooled = {
+      resource,
+      acquiredAt: Date.now(),
+      release: async () =&gt; {
+        this.inUse.delete(resource);
+        
+        // Give to waiting request
+        if (this.waiting.length &gt; 0) {
+          const waiter = this.waiting.shift()!;
+          waiter(resource);
+          return;
+        }
+        
+        // Return to available pool
+        this.available.push(resource);
+        
+        // Schedule idle check
+        setTimeout(() =&gt; {
+          this.checkIdle();
+        }, this.options.idleTimeoutMs);
+      }
+    };
+    
+    return pooled;
+  }
+  
+  private async checkIdle(): Promise&lt;void&gt; {
+    while (
+      this.available.length &gt; this.options.min &amp;&amp;
+      this.waiting.length === 0
+    ) {
+      const resource = this.available.pop()!;
+      await this.factory.destroy(resource);
+    }
+  }
+}
+
+// Example: Database connection pool
+const dbPool = new ResourcePool({
+  async create() {
+    const conn = await pg.connect({
+      host: 'localhost',
+      database: 'amp',
+      // Connection options
+    });
+    return conn;
+  },
+  
+  async validate(conn) {
+    try {
+      await conn.query('SELECT 1');
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  
+  async destroy(conn) {
+    await conn.end();
+  }
+});
+</code></pre>
+<h2 id="real-world-performance-gains"><a class="header" href="#real-world-performance-gains">Real-World Performance Gains</a></h2>
+<p>These optimization strategies compound to deliver significant performance improvements:</p>
+<h3 id="latency-reduction"><a class="header" href="#latency-reduction">Latency Reduction</a></h3>
+<p>Before optimization:</p>
+<ul>
+<li>Conversation load: 800ms (database query + message fetch)</li>
+<li>Model response: 3-5 seconds</li>
+<li>File operations: 50-200ms per file</li>
+<li>Total interaction: 5-10 seconds</li>
+</ul>
+<p>After optimization:</p>
+<ul>
+<li>Conversation load: 50ms (memory cache hit)</li>
+<li>Model response: 100ms (cached) or 2-3s (cache miss)</li>
+<li>File operations: 5-10ms (cached)</li>
+<li>Total interaction: 200ms - 3 seconds</li>
+</ul>
+<h3 id="throughput-improvements"><a class="header" href="#throughput-improvements">Throughput Improvements</a></h3>
+<p>Single server capacity:</p>
+<ul>
+<li>Before: 10-20 concurrent users</li>
+<li>After: 500-1000 concurrent users</li>
+</ul>
+<p>With load balancing:</p>
+<ul>
+<li>10 servers: 5,000-10,000 concurrent users</li>
+<li>Horizontal scaling: Linear growth with server count</li>
+</ul>
+<h3 id="resource-efficiency"><a class="header" href="#resource-efficiency">Resource Efficiency</a></h3>
+<p>Model usage optimization:</p>
+<ul>
+<li>40% reduction through response caching</li>
+<li>60% reduction in duplicate file reads</li>
+<li>80% reduction in repository analysis</li>
+</ul>
+<p>Infrastructure optimization:</p>
+<ul>
+<li>70% reduction in database operations</li>
+<li>50% reduction in bandwidth (CDN caching)</li>
+<li>30% reduction in compute (edge functions)</li>
+</ul>
+<h2 id="monitoring-and-optimization"><a class="header" href="#monitoring-and-optimization">Monitoring and Optimization</a></h2>
+<p>Performance requires continuous monitoring and adjustment:</p>
+<pre><code class="language-typescript">export class PerformanceMonitor {
+  private metrics = new Map&lt;string, MetricCollector&gt;();
+  
+  constructor(
+    private reporter: MetricReporter
+  ) {
+    // Core metrics
+    this.registerMetric('thread.load.time');
+    this.registerMetric('llm.response.time');
+    this.registerMetric('cache.hit.rate');
+    this.registerMetric('queue.depth');
+    this.registerMetric('concurrent.users');
+  }
+  
+  async trackOperation&lt;T&gt;(
+    name: string,
+    operation: () =&gt; Promise&lt;T&gt;
+  ): Promise&lt;T&gt; {
+    const start = performance.now();
+    
+    try {
+      const result = await operation();
+      
+      this.recordMetric(name, {
+        duration: performance.now() - start,
+        success: true
+      });
+      
+      return result;
+    } catch (error) {
+      this.recordMetric(name, {
+        duration: performance.now() - start,
+        success: false,
+        error: error.message
+      });
+      
+      throw error;
+    }
+  }
+  
+  private recordMetric(
+    name: string,
+    data: MetricData
+  ): void {
+    const collector = this.metrics.get(name);
+    if (!collector) return;
+    
+    collector.record(data);
+    
+    // Check for anomalies
+    if (this.isAnomalous(name, data)) {
+      this.handleAnomaly(name, data);
+    }
+  }
+  
+  private isAnomalous(
+    name: string,
+    data: MetricData
+  ): boolean {
+    const collector = this.metrics.get(name)!;
+    const stats = collector.getStats();
+    
+    // Detect significant deviations
+    if (data.duration) {
+      const deviation = Math.abs(data.duration - stats.mean) / stats.stdDev;
+      return deviation &gt; 3; // 3 sigma rule
+    }
+    
+    return false;
+  }
+}
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Performance at scale requires a multi-layered approach combining caching, database optimization, edge computing, and intelligent load balancing. Effective AI coding assistant architectures demonstrate how these patterns work together:</p>
+<ul>
+<li><strong>Aggressive caching</strong> reduces redundant work at every layer</li>
+<li><strong>Database optimization</strong> handles millions of conversations efficiently</li>
+<li><strong>Edge distribution</strong> brings compute closer to users</li>
+<li><strong>Load balancing</strong> maintains quality of service under pressure</li>
+<li><strong>Resource pooling</strong> maximizes hardware utilization</li>
+<li><strong>Queue management</strong> provides graceful degradation</li>
+</ul>
+<p>The key insight is that AI coding assistants have unique performance characteristics—long-running operations, large context windows, and complex tool interactions—that require specialized optimization strategies. By building these patterns into the architecture from the start, systems can scale from proof-of-concept to production without major rewrites.</p>
+<p>These performance patterns form the foundation for building AI coding assistants that can serve thousands of developers concurrently while maintaining the responsiveness that makes them useful in real development workflows.</p>
+<p>In the next chapter, we'll explore observability and monitoring strategies for understanding and optimizing these complex systems in production.</p>
+</main>
+</body>
+</html>

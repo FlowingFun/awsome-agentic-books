@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Authentication and Identity - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-i-foundations/chapter-3-authentication-and-identity.html -->
+<main>
+<h1 id="chapter-3-authentication-and-identity-for-developer-tools"><a class="header" href="#chapter-3-authentication-and-identity-for-developer-tools">Chapter 3: Authentication and Identity for Developer Tools</a></h1>
+<p>Authentication in collaborative AI systems presents unique challenges. Unlike traditional web applications with form-based login, AI coding assistants must authenticate seamlessly across CLIs, IDE extensions, and web interfaces while maintaining security and enabling team collaboration.</p>
+<p>This chapter explores authentication patterns that balance security, usability, and the realities of developer workflows.</p>
+<h2 id="the-authentication-challenge"><a class="header" href="#the-authentication-challenge">The Authentication Challenge</a></h2>
+<p>Building authentication for a developer tool requires solving several competing constraints:</p>
+<ol>
+<li><strong>CLI-First Experience</strong> - Developers expect to authenticate without leaving the terminal</li>
+<li><strong>IDE Integration</strong> - Extensions need to share authentication state</li>
+<li><strong>Team Collaboration</strong> - Multiple users must access shared resources</li>
+<li><strong>Enterprise Security</strong> - IT departments demand SSO and audit trails</li>
+<li><strong>Developer Workflow</strong> - Authentication can't interrupt flow states</li>
+</ol>
+<p>Traditional web authentication patterns fail in this environment. Form-based login doesn't work in a CLI. Session cookies don't transfer between applications. API keys get committed to repositories.</p>
+<h2 id="hybrid-authentication-architecture"><a class="header" href="#hybrid-authentication-architecture">Hybrid Authentication Architecture</a></h2>
+<p>Developer tools need a hybrid approach that combines the security of OAuth with the simplicity of API keys. This pattern addresses the CLI authentication challenge while maintaining enterprise security requirements.</p>
+<pre class="mermaid">sequenceDiagram
+    participant CLI
+    participant Browser
+    participant LocalServer
+    participant AmpServer
+    participant Storage
+    
+    CLI-&gt;&gt;LocalServer: Start auth server (:35789)
+    CLI-&gt;&gt;Browser: Open auth URL
+    Browser-&gt;&gt;AmpServer: OAuth flow
+    AmpServer-&gt;&gt;Browser: Redirect with token
+    Browser-&gt;&gt;LocalServer: Callback with API key
+    LocalServer-&gt;&gt;CLI: Receive API key
+    CLI-&gt;&gt;Storage: Store encrypted key
+    CLI-&gt;&gt;AmpServer: Authenticated requests
+</pre>
+<h3 id="cli-authentication-pattern"><a class="header" href="#cli-authentication-pattern">CLI Authentication Pattern</a></h3>
+<p>CLI authentication requires a different approach than web-based flows. The pattern uses a temporary local HTTP server to receive OAuth callbacks.</p>
+<p><strong>Recognition Pattern</strong>: You need CLI authentication when:</p>
+<ul>
+<li>Users work primarily in terminal environments</li>
+<li>Browser-based OAuth is available but inconvenient for CLI usage</li>
+<li>You need secure credential storage across multiple applications</li>
+</ul>
+<p><strong>Core Authentication Flow</strong>:</p>
+<ol>
+<li><strong>Generate Security Token</strong>: Create CSRF protection token</li>
+<li><strong>Start Local Server</strong>: Temporary HTTP server on localhost for OAuth callback</li>
+<li><strong>Open Browser</strong>: Launch OAuth flow in user's default browser</li>
+<li><strong>Receive Callback</strong>: Local server receives the API key from OAuth redirect</li>
+<li><strong>Store Securely</strong>: Save encrypted credentials using platform keychain</li>
+</ol>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Simplified authentication flow
+async function cliLogin(serverUrl: string): Promise&lt;void&gt; {
+  const authToken = generateSecureToken();
+  const port = await findAvailablePort();
+  
+  // Start temporary callback server
+  const apiKeyPromise = startCallbackServer(port, authToken);
+  
+  // Open browser for OAuth
+  const loginUrl = buildOAuthURL(serverUrl, authToken, port);
+  await openBrowser(loginUrl);
+  
+  // Wait for OAuth completion
+  const apiKey = await apiKeyPromise;
+  
+  // Store credentials securely
+  await secureStorage.store('apiKey', apiKey, serverUrl);
+}
+</code></pre>
+<p>The local callback server handles the OAuth response:</p>
+<pre><code class="language-typescript">function startAuthServer(
+  port: number, 
+  expectedToken: string
+): Promise&lt;string&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    const server = http.createServer((req, res) =&gt; {
+      if (req.url?.startsWith('/auth/callback')) {
+        const url = new URL(req.url, `http://127.0.0.1:${port}`);
+        const apiKey = url.searchParams.get('apiKey');
+        const authToken = url.searchParams.get('authToken');
+        
+        // Validate CSRF token
+        if (authToken !== expectedToken) {
+          res.writeHead(400);
+          res.end('Invalid authentication token');
+          reject(new Error('Invalid authentication token'));
+          return;
+        }
+        
+        if (apiKey) {
+          // Success page for user
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(`
+            &lt;html&gt;
+              &lt;body&gt;
+                &lt;h1&gt;Authentication Successful!&lt;/h1&gt;
+                &lt;p&gt;You can close this window and return to your terminal.&lt;/p&gt;
+                &lt;script&gt;window.close();&lt;/script&gt;
+              &lt;/body&gt;
+            &lt;/html&gt;
+          `);
+          
+          server.close();
+          resolve(apiKey);
+        }
+      }
+    });
+    
+    server.listen(port);
+    
+    // Timeout after 5 minutes
+    setTimeout(() =&gt; {
+      server.close();
+      reject(new Error('Authentication timeout'));
+    }, 300000);
+  });
+}
+</code></pre>
+<h3 id="token-storage-and-management"><a class="header" href="#token-storage-and-management">Token Storage and Management</a></h3>
+<p>API keys are stored securely using the system's credential storage:</p>
+<pre><code class="language-typescript">export interface ISecretStorage {
+  get(name: SecretName, scope: string): Promise&lt;string | undefined&gt;;
+  set(name: SecretName, value: string, scope: string): Promise&lt;void&gt;;
+  delete(name: SecretName, scope: string): Promise&lt;void&gt;;
+  
+  // Observable for changes
+  readonly changes: Observable&lt;SecretStorageChange&gt;;
+}
+
+// Platform-specific implementations
+class DarwinSecretStorage implements ISecretStorage {
+  async set(name: string, value: string, scope: string): Promise&lt;void&gt; {
+    const account = `${name}:${scope}`;
+    
+    // Use macOS Keychain for secure credential storage
+    // The -U flag updates existing entries instead of failing
+    await exec(`security add-generic-password \
+      -a "${account}" \
+      -s "${this.getServiceName()}" \
+      -w "${value}" \
+      -U`);
+  }
+  
+  async get(name: string, scope: string): Promise&lt;string | undefined&gt; {
+    const account = `${name}:${scope}`;
+    
+    try {
+      const result = await exec(`security find-generic-password \
+        -a "${account}" \
+        -s "${this.getServiceName()}" \
+        -w`);
+      return result.stdout.trim();
+    } catch {
+      return undefined;
+    }
+  }
+}
+
+class WindowsSecretStorage implements ISecretStorage {
+  async set(name: string, value: string, scope: string): Promise&lt;void&gt; {
+    // Use Windows Credential Manager for secure storage
+    // This integrates with Windows' built-in credential system
+    const target = `${this.getServiceName()}:${name}:${scope}`;
+    await exec(`cmdkey /generic:"${target}" /user:${this.getServiceName()} /pass:"${value}"`);
+  }
+}
+
+class LinuxSecretStorage implements ISecretStorage {
+  private secretDir = path.join(os.homedir(), '.config', this.getServiceName(), 'secrets');
+  
+  async set(name: string, value: string, scope: string): Promise&lt;void&gt; {
+    // Fallback to encrypted filesystem storage on Linux
+    // Hash scope to prevent directory traversal attacks
+    const hashedScope = crypto.createHash('sha256')
+      .update(scope)
+      .digest('hex');
+    
+    const filePath = path.join(this.secretDir, name, hashedScope);
+    
+    // Encrypt value before storage for security
+    const encrypted = await this.encrypt(value);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    // Set restrictive permissions (owner read/write only)
+    await fs.writeFile(filePath, encrypted, { mode: 0o600 });
+  }
+}
+</code></pre>
+<h3 id="request-authentication"><a class="header" href="#request-authentication">Request Authentication</a></h3>
+<p>Once authenticated, every API request includes the bearer token:</p>
+<pre><code class="language-typescript">export class AuthenticatedAPIClient {
+  constructor(
+    private baseURL: string,
+    private secrets: ISecretStorage
+  ) {}
+  
+  async request&lt;T&gt;(
+    method: string,
+    path: string,
+    body?: unknown
+  ): Promise&lt;T&gt; {
+    // Retrieve API key for this server
+    const apiKey = await this.secrets.get('apiKey', this.baseURL);
+    if (!apiKey) {
+      throw new Error('Not authenticated. Run "amp login" first.');
+    }
+    
+    const response = await fetch(new URL(path, this.baseURL), {
+      method,
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        ...this.getClientHeaders()
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    
+    if (response.status === 401) {
+      // Token expired or revoked
+      throw new AuthenticationError('Authentication failed. Please login again.');
+    }
+    
+    return response.json();
+  }
+  
+  private getClientHeaders(): Record&lt;string, string&gt; {
+    // Include client identification for analytics tracking
+    return {
+      'X-Client-Application': this.getClientName(),
+      'X-Client-Version': this.getClientVersion(),
+      'X-Client-Type': 'cli'
+    };
+  }
+}
+</code></pre>
+<h2 id="multi-environment-authentication"><a class="header" href="#multi-environment-authentication">Multi-Environment Authentication</a></h2>
+<p>Developers often work with multiple Amp instances (production, staging, local development). Amp supports this through URL-scoped credentials:</p>
+<pre><code class="language-typescript">export class MultiEnvironmentAuth {
+  constructor(private storage: ISecretStorage) {}
+  
+  async setCredential(
+    environment: string,
+    apiKey: string
+  ): Promise&lt;void&gt; {
+    const url = this.getURLForEnvironment(environment);
+    await this.storage.set('apiKey', apiKey, url);
+  }
+  
+  async getCredential(environment: string): Promise&lt;string | undefined&gt; {
+    const url = this.getURLForEnvironment(environment);
+    return this.storage.get('apiKey', url);
+  }
+  
+  private getURLForEnvironment(env: string): string {
+    const environments = {
+      'production': 'https://production.example.com',
+      'staging': 'https://staging.example.com',
+      'local': 'http://localhost:3000'
+    };
+    
+    return environments[env] || env;
+  }
+}
+
+// Usage
+const auth = new MultiEnvironmentAuth(storage);
+
+// Authenticate against different environments
+await auth.setCredential('production', prodApiKey);
+await auth.setCredential('staging', stagingApiKey);
+
+// Switch between environments
+const config = await loadConfig();
+const apiKey = await auth.getCredential(config.environment);
+</code></pre>
+<h2 id="ide-extension-authentication"><a class="header" href="#ide-extension-authentication">IDE Extension Authentication</a></h2>
+<p>IDE extensions share authentication state with the CLI through a unified storage layer:</p>
+<pre><code class="language-typescript">// VS Code extension
+export class VSCodeAuthProvider implements vscode.AuthenticationProvider {
+  private storage: ISecretStorage;
+  
+  constructor(context: vscode.ExtensionContext) {
+    // Use the same storage backend as CLI
+    this.storage = createSecretStorage();
+    
+    // Watch for authentication changes
+    this.storage.changes.subscribe(change =&gt; {
+      if (change.name === 'apiKey') {
+        this._onDidChangeSessions.fire({
+          added: change.value ? [this.createSession()] : [],
+          removed: change.value ? [] : ['*']
+        });
+      }
+    });
+  }
+  
+  async getSessions(): Promise&lt;vscode.AuthenticationSession[]&gt; {
+    const apiKey = await this.storage.get('apiKey', this.getServiceURL());
+    if (!apiKey) return [];
+    
+    return [{
+      id: 'amp-session',
+      accessToken: apiKey,
+      account: {
+        id: 'amp-user',
+        label: 'Amp User'
+      },
+      scopes: []
+    }];
+  }
+  
+  async createSession(): Promise&lt;vscode.AuthenticationSession&gt; {
+    // Trigger CLI authentication flow
+    const terminal = vscode.window.createTerminal('Amp Login');
+    terminal.sendText('amp login');
+    terminal.show();
+    
+    // Wait for authentication to complete
+    return new Promise((resolve) =&gt; {
+      const dispose = this.storage.changes.subscribe(change =&gt; {
+        if (change.name === 'apiKey' &amp;&amp; change.value) {
+          dispose();
+          resolve(this.createSessionFromKey(change.value));
+        }
+      });
+    });
+  }
+}
+</code></pre>
+<h2 id="team-and-organization-model"><a class="header" href="#team-and-organization-model">Team and Organization Model</a></h2>
+<p>While the client focuses on individual authentication, the server side manages team relationships:</p>
+<pre><code class="language-typescript">// Server-side models (inferred from client behavior)
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+  
+  // Team associations
+  teams: TeamMembership[];
+  
+  // Usage tracking
+  credits: number;
+  usage: UsageStats;
+}
+
+interface Team {
+  id: string;
+  name: string;
+  slug: string;
+  
+  // Billing
+  subscription: Subscription;
+  creditBalance: number;
+  
+  // Settings
+  settings: TeamSettings;
+  
+  // Members
+  members: TeamMembership[];
+}
+
+interface TeamMembership {
+  userId: string;
+  teamId: string;
+  role: 'owner' | 'admin' | 'member';
+  joinedAt: Date;
+}
+
+// Client receives simplified view
+interface AuthContext {
+  user: {
+    id: string;
+    email: string;
+  };
+  team?: {
+    id: string;
+    name: string;
+  };
+  permissions: string[];
+}
+</code></pre>
+<h2 id="permission-system"><a class="header" href="#permission-system">Permission System</a></h2>
+<p>Amp implements a capability-based permission system rather than traditional roles:</p>
+<pre><code class="language-typescript">export interface CommandPermission {
+  command: string;
+  allowed: boolean;
+  requiresConfirmation?: boolean;
+  reason?: string;
+}
+
+export class PermissionService {
+  private config: Config;
+  
+  async checkCommandPermission(
+    command: string,
+    workingDir: string
+  ): Promise&lt;CommandPermission&gt; {
+    const allowlist = this.config.get('commands.allowlist', []);
+    const blocklist = this.config.get('commands.blocklist', []);
+    
+    // Universal allow
+    if (allowlist.includes('*')) {
+      return { command, allowed: true };
+    }
+    
+    // Explicit block
+    if (this.matchesPattern(command, blocklist)) {
+      return {
+        command,
+        allowed: false,
+        reason: 'Command is blocked by administrator'
+      };
+    }
+    
+    // Safe commands always allowed
+    if (this.isSafeCommand(command)) {
+      return { command, allowed: true };
+    }
+    
+    // Destructive commands need confirmation
+    if (this.isDestructiveCommand(command)) {
+      return {
+        command,
+        allowed: true,
+        requiresConfirmation: true,
+        reason: 'This command may modify your system'
+      };
+    }
+    
+    // Default: require confirmation for unknown commands
+    return {
+      command,
+      allowed: true,
+      requiresConfirmation: true
+    };
+  }
+  
+  private isSafeCommand(command: string): boolean {
+    const safeCommands = [
+      'ls', 'pwd', 'echo', 'cat', 'grep', 'find',
+      'git status', 'git log', 'npm list'
+    ];
+    
+    return safeCommands.some(safe =&gt; 
+      command.startsWith(safe)
+    );
+  }
+  
+  private isDestructiveCommand(command: string): boolean {
+    const destructive = [
+      'rm', 'mv', 'dd', 'format',
+      'git push --force', 'npm publish'
+    ];
+    
+    return destructive.some(cmd =&gt; 
+      command.includes(cmd)
+    );
+  }
+}
+</code></pre>
+<h2 id="enterprise-integration"><a class="header" href="#enterprise-integration">Enterprise Integration</a></h2>
+<p>For enterprise deployments, Amp supports SSO through standard protocols:</p>
+<pre><code class="language-typescript">// SAML integration
+export class SAMLAuthProvider {
+  async initiateSAMLLogin(
+    returnUrl: string
+  ): Promise&lt;SAMLRequest&gt; {
+    const request = {
+      id: crypto.randomUUID(),
+      issueInstant: new Date().toISOString(),
+      assertionConsumerServiceURL: `${this.getServiceURL()}/auth/saml/callback`,
+      issuer: this.getServiceURL(),
+      returnUrl
+    };
+    
+    // Sign request
+    const signed = await this.signRequest(request);
+    
+    return {
+      url: `${this.idpUrl}/sso/saml`,
+      samlRequest: Buffer.from(signed).toString('base64')
+    };
+  }
+  
+  async processSAMLResponse(
+    response: string
+  ): Promise&lt;SAMLAssertion&gt; {
+    const decoded = Buffer.from(response, 'base64').toString();
+    const assertion = await this.parseAndValidate(decoded);
+    
+    // Extract user information
+    const user = {
+      email: assertion.subject.email,
+      name: assertion.attributes.name,
+      teams: assertion.attributes.groups?.map(g =&gt; ({
+        id: g.id,
+        name: g.name,
+        role: this.mapGroupToRole(g)
+      }))
+    };
+    
+    // Create API key for user
+    const apiKey = await this.createAPIKey(user);
+    
+    return { user, apiKey };
+  }
+}
+
+// OIDC integration
+export class OIDCAuthProvider {
+  async initiateOIDCFlow(): Promise&lt;OIDCAuthURL&gt; {
+    const state = crypto.randomBytes(32).toString('hex');
+    const nonce = crypto.randomBytes(32).toString('hex');
+    const codeVerifier = crypto.randomBytes(32).toString('base64url');
+    const codeChallenge = crypto
+      .createHash('sha256')
+      .update(codeVerifier)
+      .digest('base64url');
+    
+    // Store state for validation
+    await this.stateStore.set(state, {
+      nonce,
+      codeVerifier,
+      createdAt: Date.now()
+    });
+    
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: this.clientId,
+      redirect_uri: `${this.getServiceURL()}/auth/oidc/callback`,
+      scope: 'openid email profile groups',
+      state,
+      nonce,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256'
+    });
+    
+    return {
+      url: `${this.providerUrl}/authorize?${params}`,
+      state
+    };
+  }
+}
+</code></pre>
+<h2 id="usage-tracking-and-billing"><a class="header" href="#usage-tracking-and-billing">Usage Tracking and Billing</a></h2>
+<p>Authentication ties into usage tracking for billing and quotas:</p>
+<pre><code class="language-typescript">export class UsageTracker {
+  constructor(
+    private api: AuthenticatedAPIClient,
+    private cache: ICache
+  ) {}
+  
+  async checkQuota(
+    operation: 'completion' | 'tool_use',
+    estimatedTokens: number
+  ): Promise&lt;QuotaCheck&gt; {
+    // Check cached quota first to avoid API calls
+    const cached = await this.cache.get('quota');
+    if (cached &amp;&amp; cached.expiresAt &gt; Date.now()) {
+      return this.evaluateQuota(cached, operation, estimatedTokens);
+    }
+    
+    // Fetch current usage from server
+    const usage = await this.api.request&lt;UsageResponse&gt;(
+      'GET',
+      '/api/usage/current'
+    );
+    
+    // Cache for 5 minutes
+    await this.cache.set('quota', usage, {
+      expiresAt: Date.now() + 300000
+    });
+    
+    return this.evaluateQuota(usage, operation, estimatedTokens);
+  }
+  
+  private evaluateQuota(
+    usage: UsageResponse,
+    operation: string,
+    estimatedTokens: number
+  ): QuotaCheck {
+    const limits = usage.subscription.limits;
+    const used = usage.current;
+    
+    // Check token limits
+    if (used.tokens + estimatedTokens &gt; limits.tokensPerMonth) {
+      return {
+        allowed: false,
+        reason: 'Monthly token limit exceeded',
+        upgradeUrl: `${this.getServiceURL()}/billing/upgrade`
+      };
+    }
+    
+    // Check operation limits
+    if (used.operations[operation] &gt;= limits.operationsPerDay[operation]) {
+      return {
+        allowed: false,
+        reason: `Daily ${operation} limit exceeded`,
+        resetsAt: this.getNextResetTime()
+      };
+    }
+    
+    return { allowed: true };
+  }
+  
+  async trackUsage(
+    operation: string,
+    tokens: number,
+    cost: number
+  ): Promise&lt;void&gt; {
+    // Fire and forget - don't block user operations on usage tracking
+    // Failed tracking shouldn't impact user experience
+    this.api.request('POST', '/api/usage/track', {
+      operation,
+      tokens,
+      cost,
+      timestamp: new Date().toISOString()
+    }).catch(error =&gt; {
+      console.warn('Failed to track usage:', error);
+    });
+  }
+}
+</code></pre>
+<h2 id="security-best-practices"><a class="header" href="#security-best-practices">Security Best Practices</a></h2>
+<p>Amp's authentication system follows security best practices:</p>
+<h3 id="1-token-rotation"><a class="header" href="#1-token-rotation">1. Token Rotation</a></h3>
+<p>API keys can be rotated without service interruption:</p>
+<pre><code class="language-typescript">export class TokenRotation {
+  async rotateToken(): Promise&lt;void&gt; {
+    // Generate new token while old remains valid
+    const newToken = await this.api.request&lt;TokenResponse&gt;(
+      'POST',
+      '/api/auth/rotate-token'
+    );
+    
+    // Store new token
+    await this.storage.set('apiKey', newToken.key, this.serverUrl);
+    
+    // Old token remains valid for grace period
+    console.log(`Token rotated. Grace period ends: ${newToken.oldTokenExpiresAt}`);
+  }
+  
+  async setupAutoRotation(intervalDays: number = 90): Promise&lt;void&gt; {
+    // Schedule periodic rotation
+    setInterval(async () =&gt; {
+      try {
+        await this.rotateToken();
+      } catch (error) {
+        console.error('Token rotation failed:', error);
+      }
+    }, intervalDays * 24 * 60 * 60 * 1000);
+  }
+}
+</code></pre>
+<h3 id="2-scope-limitations"><a class="header" href="#2-scope-limitations">2. Scope Limitations</a></h3>
+<p>Tokens can be scoped to specific operations:</p>
+<pre><code class="language-typescript">interface ScopedToken {
+  key: string;
+  scopes: TokenScope[];
+  expiresAt?: Date;
+}
+
+interface TokenScope {
+  resource: 'threads' | 'tools' | 'admin';
+  actions: ('read' | 'write' | 'delete')[];
+}
+
+// Example: Create limited scope token for automation
+const automationToken = await createScopedToken({
+  scopes: [{
+    resource: 'threads',
+    actions: ['read']
+  }, {
+    resource: 'tools',
+    actions: ['read', 'write']
+  }],
+  expiresAt: new Date(Date.now() + 3600000) // 1 hour
+});
+</code></pre>
+<h3 id="3-audit-logging"><a class="header" href="#3-audit-logging">3. Audit Logging</a></h3>
+<p>All authenticated actions are logged:</p>
+<pre><code class="language-typescript">export class AuditLogger {
+  async logAction(
+    action: string,
+    resource: string,
+    details?: Record&lt;string, unknown&gt;
+  ): Promise&lt;void&gt; {
+    const entry: AuditEntry = {
+      timestamp: new Date().toISOString(),
+      userId: this.currentUser.id,
+      teamId: this.currentTeam?.id,
+      action,
+      resource,
+      details,
+      
+      // Client context
+      clientIP: this.request.ip,
+      clientApplication: this.request.headers['x-client-application'],
+      clientVersion: this.request.headers['x-client-version']
+    };
+    
+    await this.api.request('POST', '/api/audit/log', entry);
+  }
+}
+</code></pre>
+<h2 id="authentication-challenges-and-solutions"><a class="header" href="#authentication-challenges-and-solutions">Authentication Challenges and Solutions</a></h2>
+<p>Building authentication for Amp revealed several challenges:</p>
+<h3 id="challenge-1-browser-less-environments"><a class="header" href="#challenge-1-browser-less-environments">Challenge 1: Browser-less Environments</a></h3>
+<p>Some users work in environments without browsers (SSH sessions, containers).</p>
+<p><strong>Solution</strong>: Device authorization flow as fallback:</p>
+<pre><code class="language-typescript">export async function deviceLogin(): Promise&lt;void&gt; {
+  // Request device code
+  const device = await api.request&lt;DeviceCodeResponse&gt;(
+    'POST',
+    '/api/auth/device/code'
+  );
+  
+  console.log(`
+To authenticate, visit: ${device.verification_url}
+Enter code: ${device.user_code}
+  `);
+  
+  // Poll for completion
+  const token = await pollForDeviceToken(device.device_code);
+  await storage.set('apiKey', token);
+}
+</code></pre>
+<h3 id="challenge-2-credential-leakage"><a class="header" href="#challenge-2-credential-leakage">Challenge 2: Credential Leakage</a></h3>
+<p>Developers accidentally commit credentials to repositories.</p>
+<p><strong>Solution</strong>: Automatic credential detection:</p>
+<pre><code class="language-typescript">export class CredentialScanner {
+  private patterns = [
+    /[a-zA-Z0-9_]+_[a-zA-Z0-9]{32}/g,  // API key pattern
+    /Bearer [a-zA-Z0-9\-._~+\/]+=*/g  // Bearer tokens
+  ];
+  
+  async scanFile(path: string): Promise&lt;CredentialLeak[]&gt; {
+    const content = await fs.readFile(path, 'utf-8');
+    const leaks: CredentialLeak[] = [];
+    
+    for (const pattern of this.patterns) {
+      const matches = content.matchAll(pattern);
+      for (const match of matches) {
+        leaks.push({
+          file: path,
+          line: this.getLineNumber(content, match.index),
+          pattern: pattern.source,
+          severity: 'high'
+        });
+      }
+    }
+    
+    return leaks;
+  }
+}
+</code></pre>
+<h3 id="challenge-3-multi-account-support"><a class="header" href="#challenge-3-multi-account-support">Challenge 3: Multi-Account Support</a></h3>
+<p>Developers need to switch between personal and work accounts.</p>
+<p><strong>Solution</strong>: Profile-based authentication:</p>
+<pre><code class="language-typescript">export class AuthProfiles {
+  async createProfile(name: string): Promise&lt;void&gt; {
+    const profile: AuthProfile = {
+      name,
+      serverUrl: await this.promptForServer(),
+      createdAt: new Date()
+    };
+    
+    await this.storage.set(`profile:${name}`, profile);
+  }
+  
+  async switchProfile(name: string): Promise&lt;void&gt; {
+    const profile = await this.storage.get(`profile:${name}`);
+    if (!profile) {
+      throw new Error(`Profile ${name} not found`);
+    }
+    
+    // Update active profile
+    await this.config.set('activeProfile', name);
+    await this.config.set('serverUrl', profile.serverUrl);
+  }
+  
+  async listProfiles(): Promise&lt;AuthProfile[]&gt; {
+    const profiles = await this.storage.list('profile:*');
+    return profiles.map(p =&gt; p.value);
+  }
+}
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Amp's authentication system demonstrates how to build secure, user-friendly authentication for developer tools:</p>
+<ul>
+<li><strong>OAuth flow with CLI callback</strong> provides security without leaving the terminal</li>
+<li><strong>Platform-specific secret storage</strong> keeps credentials secure</li>
+<li><strong>URL-scoped credentials</strong> support multiple environments</li>
+<li><strong>Shared storage</strong> enables seamless IDE integration</li>
+<li><strong>Capability-based permissions</strong> offer fine-grained control</li>
+<li><strong>Enterprise integration</strong> supports SSO requirements</li>
+</ul>
+<p>The key insight is that authentication for developer tools must adapt to developer workflows, not the other way around. By meeting developers where they work—in terminals, IDEs, and CI/CD pipelines—Amp creates an authentication experience that enhances rather than interrupts productivity.</p>
+<p>In the next chapter, we'll explore how Amp manages conversation threads at scale, handling synchronization, conflicts, and version control for collaborative AI interactions.</p>
+</main>
+</body>
+</html>

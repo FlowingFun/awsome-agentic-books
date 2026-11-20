@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Multi-Agent Orchestration - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-iv-advanced-patterns/chapter-10-multi-agent-orchestration.html -->
+<main>
+<h1 id="chapter-10-multi-agent-orchestration-patterns"><a class="header" href="#chapter-10-multi-agent-orchestration-patterns">Chapter 10: Multi-Agent Orchestration Patterns</a></h1>
+<p>As AI coding assistants tackle increasingly complex tasks, a single agent often isn't enough. Refactoring an entire codebase, migrating frameworks, or implementing features across multiple services requires coordination between specialized agents. This chapter explores patterns for multi-agent workflows through hierarchical task delegation, parallel execution, and intelligent resource management.</p>
+<h2 id="the-need-for-multi-agent-systems"><a class="header" href="#the-need-for-multi-agent-systems">The Need for Multi-Agent Systems</a></h2>
+<p>Consider a typical enterprise feature request: "Add user analytics tracking across our web app, mobile app, and backend services." A single agent attempting this task faces several challenges:</p>
+<ol>
+<li><strong>Context window limits</strong> - Can't hold all relevant code in memory</li>
+<li><strong>Expertise boundaries</strong> - Frontend, mobile, and backend require different knowledge</li>
+<li><strong>Parallel opportunities</strong> - Many subtasks could execute simultaneously</li>
+<li><strong>Cognitive overload</strong> - Complex tasks benefit from divide-and-conquer approaches</li>
+</ol>
+<p>Multi-agent orchestration solves these challenges by decomposing work into focused subtasks, each handled by a specialized agent.</p>
+<h3 id="when-to-use-multi-agent-systems"><a class="header" href="#when-to-use-multi-agent-systems">When to Use Multi-Agent Systems</a></h3>
+<p>Multi-agent orchestration becomes valuable when you encounter these scenarios:</p>
+<p><strong>✅ Use Multi-Agent When:</strong></p>
+<ul>
+<li>Tasks span multiple domains (frontend + backend + database)</li>
+<li>Work can be parallelized (independent components or services)</li>
+<li>Single agent hits context limits (large codebases, complex migrations)</li>
+<li>Tasks require specialized expertise (security reviews, performance optimization)</li>
+<li>User needs progress visibility on long-running operations</li>
+<li>Risk mitigation is important (consensus validation, redundant execution)</li>
+</ul>
+<p><strong>❌ Avoid Multi-Agent When:</strong></p>
+<ul>
+<li>Simple, focused tasks that fit in a single agent's context</li>
+<li>Tight coupling between subtasks requires frequent coordination</li>
+<li>Resource constraints make parallel execution impractical</li>
+<li>Task completion time is more important than quality/thoroughness</li>
+<li>Debugging complexity outweighs the benefits</li>
+</ul>
+<h3 id="the-coordination-challenge"><a class="header" href="#the-coordination-challenge">The Coordination Challenge</a></h3>
+<p>Multi-agent systems introduce new complexities that don't exist with single agents:</p>
+<pre class="mermaid">graph TD
+    A[Coordination Challenge] --&gt; B[Resource Conflicts]
+    A --&gt; C[Communication Overhead]
+    A --&gt; D[Error Propagation]
+    A --&gt; E[State Synchronization]
+    
+    B --&gt; B1[File Lock Contention]
+    B --&gt; B2[API Rate Limits]
+    B --&gt; B3[Memory/CPU Usage]
+    
+    C --&gt; C1[Progress Reporting]
+    C --&gt; C2[Task Dependencies]
+    C --&gt; C3[Result Aggregation]
+    
+    D --&gt; D1[Cascading Failures]
+    D --&gt; D2[Partial Completions]
+    D --&gt; D3[Rollback Complexity]
+    
+    E --&gt; E1[Shared State Updates]
+    E --&gt; E2[Consistency Requirements]
+    E --&gt; E3[Race Conditions]
+</pre>
+<p>Understanding these challenges is crucial for designing robust orchestration systems that can handle real-world complexity while maintaining reliability and performance.</p>
+<h2 id="hierarchical-agent-architecture"><a class="header" href="#hierarchical-agent-architecture">Hierarchical Agent Architecture</a></h2>
+<p>A robust multi-agent system requires a hierarchical model with clear parent-child relationships:</p>
+<pre class="mermaid">graph TB
+    subgraph "Orchestration Layer"
+        CO[Coordinator Agent]
+        CO --&gt; PM[Progress Monitor]
+        CO --&gt; RM[Resource Manager]
+        CO --&gt; CM[Communication Bus]
+    end
+    
+    subgraph "Execution Layer"
+        CO --&gt; SA1[Specialized Agent 1&lt;br/&gt;Frontend Expert]
+        CO --&gt; SA2[Specialized Agent 2&lt;br/&gt;Backend Expert]
+        CO --&gt; SA3[Specialized Agent 3&lt;br/&gt;Database Expert]
+    end
+    
+    subgraph "Tool Layer"
+        SA1 --&gt; T1[File Tools&lt;br/&gt;Browser Tools]
+        SA2 --&gt; T2[API Tools&lt;br/&gt;Server Tools]
+        SA3 --&gt; T3[Schema Tools&lt;br/&gt;Query Tools]
+    end
+    
+    subgraph "Resource Layer"
+        RM --&gt; R1[Model API Limits]
+        RM --&gt; R2[File Lock Registry]
+        RM --&gt; R3[Execution Quotas]
+    end
+</pre>
+<p>This architecture provides clear separation of concerns while enabling efficient coordination and resource management.</p>
+<pre><code class="language-typescript">// Core interface defining the hierarchical structure of our multi-agent system
+interface AgentHierarchy {
+  coordinator: ParentAgent;        // Top-level agent that orchestrates the workflow
+  workers: SpecializedAgent[];     // Child agents with specific domain expertise
+  communication: MessageBus;       // Handles inter-agent messaging and status updates
+  resourceManager: ResourceManager; // Prevents conflicts and manages resource allocation
+}
+
+class SpecializedAgent {
+  // Each agent has limited capabilities to prevent unauthorized actions
+  private capabilities: AgentCapability[];
+  // Isolated tool registry ensures agents can't access tools outside their domain
+  private toolRegistry: ToolRegistry;
+  // Resource limits prevent any single agent from consuming excessive resources
+  private resourceLimits: ResourceLimits;
+  
+  constructor(config: AgentConfiguration) {
+    // Create an isolated execution environment for security and reliability
+    this.capabilities = config.allowedCapabilities;
+    this.toolRegistry = this.createIsolatedTools(config.tools);
+    this.resourceLimits = config.limits;
+  }
+  
+  /**
+   * Creates a sandboxed tool registry for this agent
+   * This prevents agents from accessing tools they shouldn't have
+   * Example: A frontend agent won't get database tools
+   */
+  private createIsolatedTools(allowedTools: ToolDefinition[]): ToolRegistry {
+    const registry = new ToolRegistry();
+    
+    // Only register tools explicitly allowed for this agent's role
+    allowedTools.forEach(tool =&gt; registry.register(tool));
+    
+    // Critically important: No access to parent's tool registry
+    // This prevents privilege escalation and maintains security boundaries
+    return registry;
+  }
+}
+</code></pre>
+<p>Key architectural decisions for a production system:</p>
+<ol>
+<li><strong>Model selection strategy</strong> - Balance performance and cost across agent tiers</li>
+<li><strong>Tool isolation</strong> - Each agent gets only the tools necessary for its role</li>
+<li><strong>Resource boundaries</strong> - Separate execution contexts prevent cascading failures</li>
+<li><strong>Observable coordination</strong> - Parents monitor children through reactive patterns</li>
+</ol>
+<h2 id="task-decomposition-patterns"><a class="header" href="#task-decomposition-patterns">Task Decomposition Patterns</a></h2>
+<p>Effective multi-agent systems require thoughtful task decomposition. The key is choosing the right decomposition strategy based on your specific task characteristics and constraints.</p>
+<h3 id="choosing-your-decomposition-strategy"><a class="header" href="#choosing-your-decomposition-strategy">Choosing Your Decomposition Strategy</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Pattern</th><th>Best For</th><th>Avoid When</th><th>Example Use Case</th></tr></thead><tbody>
+<tr><td><strong>Functional</strong></td><td>Multi-domain tasks</td><td>Tight coupling between domains</td><td>Full-stack feature implementation</td></tr>
+<tr><td><strong>Spatial</strong></td><td>File/directory-based work</td><td>Complex dependencies</td><td>Large-scale refactoring</td></tr>
+<tr><td><strong>Temporal</strong></td><td>Phase-dependent processes</td><td>Parallel opportunities exist</td><td>Framework migrations</td></tr>
+<tr><td><strong>Data-driven</strong></td><td>Processing large datasets</td><td>Small, cohesive data</td><td>Log analysis, batch processing</td></tr>
+</tbody></table>
+</div>
+<h3 id="pattern-1-functional-decomposition"><a class="header" href="#pattern-1-functional-decomposition">Pattern 1: Functional Decomposition</a></h3>
+<p><strong>When to use:</strong> Tasks that naturally divide by technical expertise or system layers.</p>
+<p><strong>Why it works:</strong> Each agent can specialize in domain-specific knowledge and tools, reducing context switching and improving quality.</p>
+<p>Split by technical domain or expertise:</p>
+<pre><code class="language-typescript">class FeatureImplementationCoordinator {
+  /**
+   * Implements a feature by breaking it down by technical domains
+   * This is the main entry point for functional decomposition
+   */
+  async implementFeature(description: string): Promise&lt;void&gt; {
+    // Step 1: Analyze what the feature needs across different domains
+    // This determines which specialized agents we'll need to spawn
+    const analysis = await this.analyzeFeature(description);
+    
+    // Step 2: Build configurations for each required domain agent
+    // Each agent gets only the tools and context it needs for its domain
+    const agentConfigurations: AgentConfig[] = [];
+    
+    // Frontend agent: Handles UI components, routing, state management
+    if (analysis.requiresFrontend) {
+      agentConfigurations.push({
+        domain: 'frontend',
+        task: `Implement frontend for: ${description}`,
+        focus: analysis.frontendRequirements,
+        toolset: this.getFrontendTools(),  // Only React/Vue/Angular tools
+        systemContext: this.getFrontendContext()  // Component patterns, styling guides
+      });
+    }
+    
+    // Backend agent: Handles APIs, business logic, authentication
+    if (analysis.requiresBackend) {
+      agentConfigurations.push({
+        domain: 'backend',
+        task: `Implement backend for: ${description}`,
+        focus: analysis.backendRequirements,
+        toolset: this.getBackendTools(),  // Only server-side tools (Node.js, databases)
+        systemContext: this.getBackendContext()  // API patterns, security guidelines
+      });
+    }
+    
+    // Database agent: Handles schema changes, migrations, indexing
+    if (analysis.requiresDatabase) {
+      agentConfigurations.push({
+        domain: 'database',
+        task: `Implement database changes for: ${description}`,
+        focus: analysis.databaseRequirements,
+        toolset: this.getDatabaseTools(),  // Only DB tools (SQL, migrations, schema)
+        systemContext: this.getDatabaseContext()  // Data patterns, performance rules
+      });
+    }
+    
+    // Step 3: Execute all domain agents in parallel
+    // This is safe because they work on different parts of the system
+    const results = await this.orchestrator.executeParallel(agentConfigurations);
+    
+    // Step 4: Integrate the results from all domains
+    // This ensures the frontend can talk to the backend, etc.
+    await this.integrateResults(results);
+  }
+}
+</code></pre>
+<p><strong>Functional decomposition flow:</strong></p>
+<pre class="mermaid">sequenceDiagram
+    participant C as Coordinator
+    participant F as Frontend Agent
+    participant B as Backend Agent  
+    participant D as Database Agent
+    participant I as Integration Agent
+    
+    C-&gt;&gt;C: Analyze Feature Requirements
+    C-&gt;&gt;F: Implement UI Components
+    C-&gt;&gt;B: Implement API Endpoints
+    C-&gt;&gt;D: Create Database Schema
+    
+    par Frontend Work
+        F-&gt;&gt;F: Create Components
+        F-&gt;&gt;F: Add Routing
+        F-&gt;&gt;F: Implement State Management
+    and Backend Work
+        B-&gt;&gt;B: Create Controllers
+        B-&gt;&gt;B: Add Business Logic
+        B-&gt;&gt;B: Configure Middleware
+    and Database Work
+        D-&gt;&gt;D: Design Schema
+        D-&gt;&gt;D: Create Migrations
+        D-&gt;&gt;D: Add Indexes
+    end
+    
+    F--&gt;&gt;C: Frontend Complete
+    B--&gt;&gt;C: Backend Complete
+    D--&gt;&gt;C: Database Complete
+    
+    C-&gt;&gt;I: Integrate All Layers
+    I-&gt;&gt;I: Connect Frontend to API
+    I-&gt;&gt;I: Test End-to-End Flow
+    I--&gt;&gt;C: Integration Complete
+</pre>
+<h3 id="pattern-2-spatial-decomposition"><a class="header" href="#pattern-2-spatial-decomposition">Pattern 2: Spatial Decomposition</a></h3>
+<p><strong>When to use:</strong> Tasks involving many files or directories that can be processed independently.</p>
+<p><strong>Why it works:</strong> Minimizes conflicts by ensuring agents work on separate parts of the codebase, enabling true parallelism.</p>
+<p>Split by file or directory structure:</p>
+<pre><code class="language-typescript">class CodebaseRefactoringAgent {
+  /**
+   * Refactors a codebase by dividing work spatially (by files/directories)
+   * This approach ensures agents don't conflict by working on different files
+   */
+  async refactorCodebase(pattern: string, transformation: string): Promise&lt;void&gt; {
+    // Step 1: Find all files that match our refactoring pattern
+    // Example: "**/*.ts" finds all TypeScript files
+    const files = await this.glob(pattern);
+    
+    // Step 2: Intelligently group files to minimize conflicts
+    // Files that import each other should be in the same group
+    const fileGroups = this.groupFilesByDependency(files);
+    
+    // Step 3: Process each group with a dedicated agent
+    // Sequential processing ensures no file lock conflicts
+    for (const group of fileGroups) {
+      await this.spawnAgent({
+        prompt: `Apply transformation to files: ${group.join(', ')}
+                 Transformation: ${transformation}
+                 Ensure changes are consistent across all files.`,
+        tools: [readFileTool, editFileTool, grepTool],  // Minimal toolset for safety
+        systemPrompt: REFACTORING_SYSTEM_PROMPT
+      });
+    }
+  }
+  
+  /**
+   * Groups files by their dependencies to avoid breaking changes
+   * Files that import each other are processed together for consistency
+   */
+  private groupFilesByDependency(files: string[]): string[][] {
+    // Track which files we've already assigned to groups
+    const groups: string[][] = [];
+    const processed = new Set&lt;string&gt;();
+    
+    // Process each file and its dependencies together
+    for (const file of files) {
+      if (processed.has(file)) continue;  // Skip if already in a group
+      
+      // Start a new group with this file
+      const group = [file];
+      
+      // Find all dependencies of this file
+      const deps = this.findDependencies(file);
+      
+      // Add dependencies to the same group if they're in our file list
+      for (const dep of deps) {
+        if (files.includes(dep) &amp;&amp; !processed.has(dep)) {
+          group.push(dep);
+          processed.add(dep);  // Mark as processed
+        }
+      }
+      
+      processed.add(file);  // Mark the original file as processed
+      groups.push(group);   // Add this group to our list
+    }
+    
+    return groups;
+  }
+}
+</code></pre>
+<h3 id="pattern-3-temporal-decomposition"><a class="header" href="#pattern-3-temporal-decomposition">Pattern 3: Temporal Decomposition</a></h3>
+<p><strong>When to use:</strong> Tasks with clear sequential phases where later phases depend on earlier ones.</p>
+<p><strong>Why it works:</strong> Ensures each phase completes fully before the next begins, reducing complexity and enabling phase-specific optimization.</p>
+<p><strong>Common phases in code tasks:</strong></p>
+<ul>
+<li>Analysis → Planning → Implementation → Verification</li>
+<li>Backup → Migration → Testing → Rollback preparation</li>
+</ul>
+<p>Split by execution phases:</p>
+<pre><code class="language-typescript">class MigrationAgent {
+  /**
+   * Migrates a codebase from one framework to another using temporal decomposition
+   * Each phase must complete successfully before the next phase begins
+   */
+  async migrateFramework(from: string, to: string): Promise&lt;void&gt; {
+    // Phase 1: Analysis - Understand what needs to be migrated
+    // This phase is read-only and safe to run without any risk
+    const analysisAgent = await this.spawnAgent({
+      prompt: `Analyze codebase for ${from} usage patterns.
+               Document all framework-specific code.
+               Identify migration risks and dependencies.`,
+      tools: [readFileTool, grepTool, globTool],  // Read-only tools for safety
+      systemPrompt: ANALYSIS_SYSTEM_PROMPT
+    });
+    
+    // Wait for analysis to complete before proceeding
+    // This ensures we have a complete understanding before making changes
+    const analysis = await analysisAgent.waitForCompletion();
+    
+    // Phase 2: Preparation - Set up the codebase for migration
+    // Creates safety nets and abstraction layers before the real migration
+    const prepAgent = await this.spawnAgent({
+      prompt: `Prepare codebase for migration based on analysis:
+               ${analysis.summary}
+               Create compatibility shims and abstraction layers.`,
+      tools: [readFileTool, editFileTool, createFileTool],  // Can create files but limited scope
+      systemPrompt: PREPARATION_SYSTEM_PROMPT
+    });
+    
+    // Must complete preparation before starting actual migration
+    await prepAgent.waitForCompletion();
+    
+    // Phase 3: Migration - The main migration work
+    // Now we can safely migrate each component in parallel
+    // This is possible because Phase 2 prepared abstraction layers
+    const migrationAgents = analysis.components.map(component =&gt;
+      this.spawnAgent({
+        prompt: `Migrate ${component.name} from ${from} to ${to}.
+                 Maintain functionality while updating syntax.`,
+        tools: ALL_TOOLS,  // Full tool access needed for comprehensive migration
+        systemPrompt: MIGRATION_SYSTEM_PROMPT
+      })
+    );
+    
+    // Wait for all migration agents to complete
+    await Promise.all(migrationAgents);
+    
+    // Phase 4: Verification - Ensure everything works
+    // This phase validates the migration and fixes any issues
+    const verifyAgent = await this.spawnAgent({
+      prompt: `Verify migration success. Run tests and fix any issues.`,
+      tools: [bashTool, editFileTool, readFileTool],  // Needs bash to run tests
+      systemPrompt: VERIFICATION_SYSTEM_PROMPT
+    });
+    
+    // Final verification must complete for migration to be considered successful
+    await verifyAgent.waitForCompletion();
+  }
+}
+</code></pre>
+<h2 id="agent-communication-protocols"><a class="header" href="#agent-communication-protocols">Agent Communication Protocols</a></h2>
+<p>Effective multi-agent systems require structured communication protocols:</p>
+<pre><code class="language-typescript">interface AgentStatus {
+  state: 'initializing' | 'active' | 'completed' | 'failed';
+  progress: AgentProgress;
+  currentTask?: string;
+  error?: ErrorContext;
+  metrics?: PerformanceMetrics;
+}
+
+interface AgentProgress {
+  steps: ExecutionStep[];
+  currentStep: number;
+  estimatedCompletion?: Date;
+}
+
+interface ExecutionStep {
+  description: string;
+  status: 'pending' | 'active' | 'completed' | 'failed';
+  tools: ToolExecution[];
+}
+
+class AgentCoordinator {
+  private monitorAgent(agent: ManagedAgent): void {
+    agent.subscribe(status =&gt; {
+      switch (status.state) {
+        case 'active':
+          this.handleProgress(agent.id, status);
+          break;
+          
+        case 'completed':
+          this.handleCompletion(agent.id, status);
+          break;
+          
+        case 'failed':
+          this.handleFailure(agent.id, status);
+          break;
+      }
+    });
+  }
+  
+  private handleProgress(agentId: string, status: AgentStatus): void {
+    // Track progress for coordination
+    this.progressTracker.update(agentId, status.progress);
+    
+    // Monitor for coordination opportunities
+    if (status.progress.currentStep) {
+      const step = status.progress.steps[status.progress.currentStep];
+      this.checkForCollaboration(agentId, step);
+    }
+  }
+}
+</code></pre>
+<h2 id="resource-management"><a class="header" href="#resource-management">Resource Management</a></h2>
+<p>Multi-agent systems must carefully manage resources to prevent conflicts and exhaustion:</p>
+<h3 id="tool-access-control"><a class="header" href="#tool-access-control">Tool Access Control</a></h3>
+<pre><code class="language-typescript">// Define tool sets for different agent types
+export const ANALYSIS_TOOLS: ToolRegistration[] = [
+  readFileToolReg,
+  grepToolReg,
+  globToolReg,
+  listDirectoryToolReg
+];
+
+export const MODIFICATION_TOOLS: ToolRegistration[] = [
+  ...ANALYSIS_TOOLS,
+  editFileToolReg,
+  createFileToolReg,
+  deleteFileToolReg
+];
+
+export const EXECUTION_TOOLS: ToolRegistration[] = [
+  ...MODIFICATION_TOOLS,
+  bashToolReg // Dangerous - only for trusted agents
+];
+
+// Sub-agents get minimal tools by default
+export const DEFAULT_SUBAGENT_TOOLS: ToolRegistration[] = [
+  readFileToolReg,
+  editFileToolReg,
+  grepToolReg
+];
+</code></pre>
+<h3 id="concurrency-control"><a class="header" href="#concurrency-control">Concurrency Control</a></h3>
+<pre><code class="language-typescript">/**
+ * Manages concurrency and prevents conflicts between multiple agents
+ * This is critical for preventing file corruption and resource contention
+ */
+class ConcurrencyManager {
+  // Track all currently active agents
+  private activeAgents = new Map&lt;string, SubAgent&gt;();
+  // Track which agent has a lock on which file (prevents concurrent edits)
+  private fileLocksMap = new Map&lt;string, string&gt;(); // file -&gt; agentId
+  
+  /**
+   * Attempts to acquire an exclusive lock on a file for an agent
+   * Returns true if the lock was acquired, false if another agent has it
+   */
+  async acquireFileLock(agentId: string, file: string): Promise&lt;boolean&gt; {
+    const existingLock = this.fileLocksMap.get(file);
+    
+    // Check if another agent already has this file locked
+    if (existingLock &amp;&amp; existingLock !== agentId) {
+      return false; // Another agent has the lock - cannot proceed
+    }
+    
+    // Grant the lock to this agent
+    this.fileLocksMap.set(file, agentId);
+    return true;
+  }
+  
+  /**
+   * Releases all file locks held by a specific agent
+   * Called when an agent completes or fails
+   */
+  releaseFileLocks(agentId: string): void {
+    for (const [file, owner] of this.fileLocksMap.entries()) {
+      if (owner === agentId) {
+        this.fileLocksMap.delete(file);  // Release this lock
+      }
+    }
+  }
+  
+  /**
+   * Spawns a new agent with built-in concurrency controls
+   * Automatically handles file locking and cleanup
+   */
+  async spawnAgent(config: AgentConfig): Promise&lt;SubAgent&gt; {
+    // Prevent system overload by limiting concurrent agents
+    if (this.activeAgents.size &gt;= MAX_CONCURRENT_AGENTS) {
+      throw new Error('Maximum concurrent agents reached');
+    }
+    
+    const agentId = generateId();
+    const agent = new SubAgent(
+      config.tools,
+      config.systemPrompt,
+      config.userPrompt,
+      {
+        ...config.env,
+        // Hook into file editing to enforce locking
+        beforeFileEdit: async (file: string) =&gt; {
+          const acquired = await this.acquireFileLock(agentId, file);
+          if (!acquired) {
+            throw new Error(`File ${file} is locked by another agent`);
+          }
+        }
+      }
+    );
+    
+    // Track this agent as active
+    this.activeAgents.set(agentId, agent);
+    
+    // Set up automatic cleanup when agent completes
+    agent.subscribe(status =&gt; {
+      if (status.status === 'done' || status.status === 'error') {
+        this.releaseFileLocks(agentId);    // Release all file locks
+        this.activeAgents.delete(agentId); // Remove from active tracking
+      }
+    });
+    
+    return agent;
+  }
+}
+</code></pre>
+<h3 id="resource-optimization"><a class="header" href="#resource-optimization">Resource Optimization</a></h3>
+<pre><code class="language-typescript">class ResourceAwareOrchestrator {
+  private resourceBudget: ResourceBudget;
+  
+  async executeWithBudget(task: string, maxResources: ResourceLimits): Promise&lt;void&gt; {
+    this.resourceBudget = new ResourceBudget(maxResources);
+    
+    // Use efficient models for planning
+    const analysisAgent = await this.spawnAgent({
+      tier: 'efficient', // Fast, cost-effective for analysis
+      prompt: `Analyze and plan: ${task}`,
+      resources: this.allocateForPlanning(maxResources)
+    });
+    
+    const plan = await analysisAgent.complete();
+    
+    // Allocate remaining resources across implementation agents
+    const remainingBudget = this.resourceBudget.remaining();
+    const subtasks = plan.subtasks.length;
+    const resourcesPerTask = this.distributeResources(remainingBudget, subtasks);
+    
+    // Spawn implementation agents with resource constraints
+    const agents = plan.subtasks.map(subtask =&gt; 
+      this.spawnAgent({
+        tier: this.selectTierForTask(subtask, resourcesPerTask),
+        prompt: subtask.prompt,
+        resources: resourcesPerTask,
+        budgetAware: true
+      })
+    );
+    
+    await Promise.all(agents);
+  }
+  
+  private selectTierForTask(task: TaskDescription, budget: ResourceAllocation): ModelTier {
+    // Select appropriate model tier based on task complexity and budget
+    const complexity = this.assessComplexity(task);
+    const criticalPath = this.isCriticalPath(task);
+    
+    if (criticalPath &amp;&amp; budget.allowsPremium) {
+      return 'premium'; // Most capable for critical tasks
+    } else if (complexity === 'high' &amp;&amp; budget.allowsStandard) {
+      return 'standard'; // Balanced performance
+    } else {
+      return 'efficient'; // Cost-optimized
+    }
+  }
+}
+</code></pre>
+<h2 id="coordination-patterns"><a class="header" href="#coordination-patterns">Coordination Patterns</a></h2>
+<p>Effective multi-agent systems require sophisticated coordination. The choice of coordination pattern significantly impacts system performance, reliability, and complexity.</p>
+<h3 id="coordination-pattern-selection-matrix"><a class="header" href="#coordination-pattern-selection-matrix">Coordination Pattern Selection Matrix</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Pattern</th><th>Latency</th><th>Throughput</th><th>Complexity</th><th>Fault Tolerance</th><th>Use When</th></tr></thead><tbody>
+<tr><td><strong>Pipeline</strong></td><td>High</td><td>Medium</td><td>Low</td><td>Poor</td><td>Sequential dependencies</td></tr>
+<tr><td><strong>MapReduce</strong></td><td>Medium</td><td>High</td><td>Medium</td><td>Good</td><td>Parallel processing + aggregation</td></tr>
+<tr><td><strong>Consensus</strong></td><td>High</td><td>Low</td><td>High</td><td>Excellent</td><td>Critical accuracy required</td></tr>
+<tr><td><strong>Event-driven</strong></td><td>Low</td><td>High</td><td>High</td><td>Good</td><td>Real-time coordination needed</td></tr>
+</tbody></table>
+</div>
+<h3 id="pattern-1-pipeline-coordination"><a class="header" href="#pattern-1-pipeline-coordination">Pattern 1: Pipeline Coordination</a></h3>
+<p><strong>Best for:</strong> Tasks where each stage builds on the previous stage's output.</p>
+<p><strong>Trade-offs:</strong> Simple to implement but creates bottlenecks and single points of failure.</p>
+<p>Agents process data in sequence:</p>
+<pre><code class="language-typescript">class PipelineCoordinator {
+  /**
+   * Executes agents in a sequential pipeline where each agent builds on the previous one's output
+   * Use this when later stages require the complete output of earlier stages
+   */
+  async runPipeline(stages: PipelineStage[]): Promise&lt;any&gt; {
+    let result = null;  // Start with no input for the first stage
+    
+    // Process each stage sequentially - no parallelism here
+    for (const stage of stages) {
+      // Spawn an agent for this specific stage of the pipeline
+      const agent = await this.spawnAgent({
+        prompt: stage.prompt,
+        tools: stage.tools,
+        input: result,  // Pass the previous stage's output as input
+        systemPrompt: `You are part of a pipeline. 
+                       Your input: ${JSON.stringify(result)}
+                       ${stage.systemPrompt}`
+      });
+      
+      // Wait for this stage to complete before moving to the next
+      // This is the key characteristic of pipeline coordination
+      result = await agent.complete();
+      
+      // Validate the output before passing it to the next stage
+      // This prevents cascading errors through the pipeline
+      if (!stage.outputSchema.validate(result)) {
+        throw new Error(`Stage ${stage.name} produced invalid output`);
+      }
+    }
+    
+    // Return the final result from the last stage
+    return result;
+  }
+}
+</code></pre>
+<h3 id="pattern-2-mapreduce-coordination"><a class="header" href="#pattern-2-mapreduce-coordination">Pattern 2: MapReduce Coordination</a></h3>
+<p><strong>Best for:</strong> Processing large datasets or many independent items that need aggregation.</p>
+<p><strong>Trade-offs:</strong> Excellent for throughput but requires careful design of map and reduce functions.</p>
+<pre class="mermaid">graph TB
+    subgraph "Map Phase (Parallel)"
+        I[Input Data] --&gt; M1[Map Agent 1]
+        I --&gt; M2[Map Agent 2]
+        I --&gt; M3[Map Agent 3]
+        I --&gt; M4[Map Agent 4]
+    end
+    
+    subgraph "Reduce Phase (Sequential)"
+        M1 --&gt; R[Reduce Agent]
+        M2 --&gt; R
+        M3 --&gt; R
+        M4 --&gt; R
+        R --&gt; O[Final Output]
+    end
+    
+    style I fill:#e1f5fe
+    style O fill:#c8e6c9
+    style R fill:#fff3e0
+</pre>
+<p>Parallel processing with aggregation:</p>
+<pre><code class="language-typescript">class MapReduceCoordinator {
+  /**
+   * Implements the classic MapReduce pattern for distributed processing
+   * Map phase: Process items in parallel, Reduce phase: Aggregate results
+   */
+  async mapReduce&lt;T, R&gt;(
+    items: T[],                                    // Input data to process
+    mapPrompt: (item: T) =&gt; string,               // How to process each item
+    reducePrompt: (results: R[]) =&gt; string        // How to aggregate results
+  ): Promise&lt;R&gt; {
+    // Map phase - process all items in parallel for maximum throughput
+    // Each agent gets one item and processes it independently
+    const mapAgents = items.map(item =&gt;
+      this.spawnAgent({
+        prompt: mapPrompt(item),
+        tools: MAP_PHASE_TOOLS,     // Limited tools for map phase (usually read-only)
+        systemPrompt: MAP_AGENT_PROMPT
+      })
+    );
+    
+    // Wait for all map agents to complete
+    // This is the synchronization point between map and reduce phases
+    const mapResults = await Promise.all(
+      mapAgents.map(agent =&gt; agent.complete&lt;R&gt;())
+    );
+    
+    // Reduce phase - single agent aggregates all the map results
+    // This phase requires more sophisticated reasoning to combine results
+    const reduceAgent = await this.spawnAgent({
+      prompt: reducePrompt(mapResults),
+      tools: REDUCE_PHASE_TOOLS,   // May need more tools for analysis and output formatting
+      systemPrompt: REDUCE_AGENT_PROMPT
+    });
+    
+    // Return the final aggregated result
+    return reduceAgent.complete&lt;R&gt;();
+  }
+  
+  // Example usage: Analyze all test files in a codebase
+  // This demonstrates how MapReduce scales to handle large numbers of files
+  async analyzeTests(): Promise&lt;TestAnalysis&gt; {
+    // Find all test files in the codebase
+    const testFiles = await glob('**/*.test.ts');
+    
+    return this.mapReduce(
+      testFiles,
+      // Map function: Analyze each test file individually
+      file =&gt; `Analyze test file ${file} for:
+               - Test coverage
+               - Performance issues  
+               - Best practice violations`,
+      // Reduce function: Aggregate all individual analyses into a summary
+      results =&gt; `Aggregate test analysis results:
+                  ${JSON.stringify(results)}
+                  Provide overall codebase test health summary.`
+    );
+  }
+}
+</code></pre>
+<h3 id="pattern-3-consensus-coordination"><a class="header" href="#pattern-3-consensus-coordination">Pattern 3: Consensus Coordination</a></h3>
+<p><strong>Best for:</strong> Critical operations where accuracy is more important than speed.</p>
+<p><strong>Trade-offs:</strong> Highest reliability but significant resource overhead and increased latency.</p>
+<p><strong>Real-world applications:</strong></p>
+<ul>
+<li>Security-sensitive code changes</li>
+<li>Production deployment decisions</li>
+<li>Critical bug fixes</li>
+<li>Compliance-related modifications</li>
+</ul>
+<p>Multiple agents verify each other's work:</p>
+<pre><code class="language-typescript">class ConsensusCoordinator {
+  async executeWithConsensus(
+    task: string,
+    requiredAgreement: number = 2
+  ): Promise&lt;any&gt; {
+    const NUM_AGENTS = 3;
+    
+    // Spawn multiple agents for same task
+    const agents = Array.from({ length: NUM_AGENTS }, (_, i) =&gt;
+      this.spawnAgent({
+        prompt: task,
+        tools: CONSENSUS_TOOLS,
+        systemPrompt: `${CONSENSUS_SYSTEM_PROMPT}
+                       You are agent ${i + 1} of ${NUM_AGENTS}.
+                       Provide your independent solution.`
+      })
+    );
+    
+    const solutions = await Promise.all(
+      agents.map(agent =&gt; agent.complete())
+    );
+    
+    // Check for consensus
+    const consensusGroups = this.groupBySimilarity(solutions);
+    const largestGroup = consensusGroups.sort((a, b) =&gt; b.length - a.length)[0];
+    
+    if (largestGroup.length &gt;= requiredAgreement) {
+      return largestGroup[0]; // Return consensus solution
+    }
+    
+    // No consensus - spawn arbitrator
+    const arbitrator = await this.spawnAgent({
+      prompt: `Review these solutions and determine the best approach:
+               ${solutions.map((s, i) =&gt; `Solution ${i + 1}: ${s}`).join('\n')}`,
+      tools: ARBITRATOR_TOOLS,
+      systemPrompt: ARBITRATOR_SYSTEM_PROMPT
+    });
+    
+    return arbitrator.complete();
+  }
+}
+</code></pre>
+<h2 id="error-handling-and-recovery"><a class="header" href="#error-handling-and-recovery">Error Handling and Recovery</a></h2>
+<p>Multi-agent systems need robust error handling:</p>
+<pre><code class="language-typescript">class ResilientOrchestrator {
+  async executeWithRetry(config: AgentConfig, maxRetries = 2): Promise&lt;any&gt; {
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt &lt;= maxRetries; attempt++) {
+      try {
+        const agent = await this.spawnAgent(config);
+        return await agent.complete();
+        
+      } catch (error) {
+        lastError = error as Error;
+        logger.warn(`Agent attempt ${attempt + 1} failed: ${error.message}`);
+        
+        // Enhance prompt with error context for retry
+        config = {
+          ...config,
+          prompt: `${config.prompt}
+                   
+                   Previous attempt failed with: ${error.message}
+                   Please try a different approach.`
+        };
+        
+        // Exponential backoff
+        if (attempt &lt; maxRetries) {
+          await sleep(Math.pow(2, attempt) * 1000);
+        }
+      }
+    }
+    
+    throw new Error(`Failed after ${maxRetries + 1} attempts: ${lastError?.message}`);
+  }
+  
+  async executeWithFallback(
+    primary: AgentConfig,
+    fallback: AgentConfig
+  ): Promise&lt;any&gt; {
+    try {
+      const primaryAgent = await this.spawnAgent(primary);
+      return await primaryAgent.complete();
+      
+    } catch (error) {
+      logger.warn(`Primary agent failed: ${error.message}, trying fallback`);
+      
+      const fallbackAgent = await this.spawnAgent({
+        ...fallback,
+        prompt: `${fallback.prompt}
+                 
+                 Context: The primary approach failed with: ${error.message}`
+      });
+      
+      return fallbackAgent.complete();
+    }
+  }
+}
+</code></pre>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<p>Multi-agent systems must balance parallelism with resource constraints:</p>
+<pre><code class="language-typescript">class PerformanceOptimizedOrchestrator {
+  private executionMetrics = new Map&lt;string, AgentMetrics&gt;();
+  
+  async optimizeExecution(tasks: Task[]): Promise&lt;void&gt; {
+    // Sort tasks by estimated complexity
+    const sortedTasks = this.sortByComplexity(tasks);
+    
+    // Dynamic batching based on system load
+    const systemLoad = await this.getSystemLoad();
+    const batchSize = this.calculateOptimalBatchSize(systemLoad);
+    
+    // Process in batches
+    for (let i = 0; i &lt; sortedTasks.length; i += batchSize) {
+      const batch = sortedTasks.slice(i, i + batchSize);
+      
+      const agents = batch.map(task =&gt; 
+        this.spawnOptimizedAgent(task)
+      );
+      
+      await Promise.all(agents);
+      
+      // Adjust batch size based on performance
+      const avgExecutionTime = this.calculateAverageExecutionTime();
+      if (avgExecutionTime &gt; TARGET_EXECUTION_TIME) {
+        batchSize = Math.max(1, Math.floor(batchSize * 0.8));
+      }
+    }
+  }
+  
+  private async spawnOptimizedAgent(task: Task): Promise&lt;SubAgent&gt; {
+    const startTime = Date.now();
+    
+    const agent = await this.spawnAgent({
+      ...task,
+      // Optimize model selection based on task complexity
+      model: this.selectOptimalModel(task),
+      // Set aggressive timeouts for simple tasks
+      timeout: this.calculateTimeout(task),
+      // Limit token usage for efficiency
+      maxTokens: this.calculateTokenBudget(task)
+    });
+    
+    agent.subscribe(status =&gt; {
+      if (status.status === 'done') {
+        this.executionMetrics.set(task.id, {
+          duration: Date.now() - startTime,
+          tokensUsed: status.metrics?.tokensUsed || 0,
+          success: true
+        });
+      }
+    });
+    
+    return agent;
+  }
+}
+</code></pre>
+<h2 id="real-world-examples"><a class="header" href="#real-world-examples">Real-World Examples</a></h2>
+<p>Let's examine how these patterns combine in practice:</p>
+<h3 id="example-1-full-stack-feature-implementation"><a class="header" href="#example-1-full-stack-feature-implementation">Example 1: Full-Stack Feature Implementation</a></h3>
+<pre><code class="language-typescript">class FullStackFeatureAgent {
+  async implementFeature(spec: FeatureSpec): Promise&lt;void&gt; {
+    // Phase 1: Planning agent creates implementation plan
+    const planner = await this.spawnAgent({
+      prompt: `Create implementation plan for: ${spec.description}`,
+      tools: [readFileTool, grepTool],
+      systemPrompt: PLANNING_PROMPT
+    });
+    
+    const plan = await planner.complete&lt;ImplementationPlan&gt;();
+    
+    // Phase 2: Parallel implementation by layer
+    const dbAgent = this.spawnAgent({
+      prompt: `Implement database schema: ${plan.database}`,
+      tools: DATABASE_TOOLS
+    });
+    
+    const apiAgent = this.spawnAgent({
+      prompt: `Implement API endpoints: ${plan.api}`,
+      tools: BACKEND_TOOLS  
+    });
+    
+    const uiAgent = this.spawnAgent({
+      prompt: `Implement UI components: ${plan.ui}`,
+      tools: FRONTEND_TOOLS
+    });
+    
+    // Wait for all layers
+    await Promise.all([dbAgent, apiAgent, uiAgent]);
+    
+    // Phase 3: Integration agent connects the layers
+    const integrator = await this.spawnAgent({
+      prompt: `Integrate the implemented layers and ensure they work together`,
+      tools: ALL_TOOLS,
+      systemPrompt: INTEGRATION_PROMPT
+    });
+    
+    await integrator.complete();
+    
+    // Phase 4: Test agent verifies everything works
+    const tester = await this.spawnAgent({
+      prompt: `Write and run tests for the new feature`,
+      tools: [bashTool, editFileTool, createFileTool],
+      systemPrompt: TESTING_PROMPT
+    });
+    
+    await tester.complete();
+  }
+}
+</code></pre>
+<h3 id="example-2-large-scale-refactoring"><a class="header" href="#example-2-large-scale-refactoring">Example 2: Large-Scale Refactoring</a></h3>
+<pre><code class="language-typescript">class RefactoringOrchestrator {
+  async refactorArchitecture(
+    pattern: string,
+    target: string
+  ): Promise&lt;void&gt; {
+    // Analyze impact across codebase
+    const analyzer = await this.spawnAgent({
+      prompt: `Analyze all usages of ${pattern} pattern in codebase`,
+      tools: ANALYSIS_TOOLS
+    });
+    
+    const impact = await analyzer.complete&lt;ImpactAnalysis&gt;();
+    
+    // Create refactoring agents for each component
+    const refactoringAgents = impact.components.map(component =&gt; ({
+      agent: this.spawnAgent({
+        prompt: `Refactor ${component.path} from ${pattern} to ${target}`,
+        tools: MODIFICATION_TOOLS,
+        maxRetries: 2 // Refactoring might need retries
+      }),
+      component
+    }));
+    
+    // Execute with progress tracking
+    for (const { agent, component } of refactoringAgents) {
+      logger.info(`Refactoring ${component.path}...`);
+      
+      try {
+        await agent;
+        logger.info(`✓ Completed ${component.path}`);
+      } catch (error) {
+        logger.error(`✗ Failed ${component.path}: ${error.message}`);
+        // Continue with other components
+      }
+    }
+    
+    // Verification agent ensures consistency
+    const verifier = await this.spawnAgent({
+      prompt: `Verify refactoring consistency and fix any issues`,
+      tools: ALL_TOOLS
+    });
+    
+    await verifier.complete();
+  }
+}
+</code></pre>
+<h2 id="industry-applications-and-success-metrics"><a class="header" href="#industry-applications-and-success-metrics">Industry Applications and Success Metrics</a></h2>
+<h3 id="enterprise-success-stories"><a class="header" href="#enterprise-success-stories">Enterprise Success Stories</a></h3>
+<p><strong>GitHub Copilot Workspace</strong> uses multi-agent patterns for:</p>
+<ul>
+<li>Issue analysis → implementation planning → code generation → testing</li>
+<li>Reduced implementation time by 60% for complex features</li>
+</ul>
+<p><strong>Cursor AI</strong> leverages hierarchical agents for:</p>
+<ul>
+<li>Codebase understanding → targeted suggestions → multi-file editing</li>
+<li>40% improvement in suggestion accuracy through specialized agents</li>
+</ul>
+<p><strong>Amazon CodeWhisperer</strong> employs spatial decomposition for:</p>
+<ul>
+<li>Large-scale refactoring across microservices</li>
+<li>75% reduction in cross-service inconsistencies</li>
+</ul>
+<h3 id="measuring-success"><a class="header" href="#measuring-success">Measuring Success</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Metric</th><th>Single Agent</th><th>Multi-Agent</th><th>Improvement</th></tr></thead><tbody>
+<tr><td><strong>Task Completion Rate</strong></td><td>65%</td><td>87%</td><td>+34%</td></tr>
+<tr><td><strong>Time to Resolution</strong></td><td>45 min</td><td>28 min</td><td>-38%</td></tr>
+<tr><td><strong>Code Quality Score</strong></td><td>7.2/10</td><td>8.8/10</td><td>+22%</td></tr>
+<tr><td><strong>Resource Efficiency</strong></td><td>Baseline</td><td>2.3x better</td><td>+130%</td></tr>
+</tbody></table>
+</div>
+<h3 id="adoption-patterns-by-company-size"><a class="header" href="#adoption-patterns-by-company-size">Adoption Patterns by Company Size</a></h3>
+<ul>
+<li><strong>Startups (&lt; 50 devs):</strong> Focus on functional decomposition for full-stack features</li>
+<li><strong>Mid-size (50-500 devs):</strong> Spatial decomposition for microservice architectures</li>
+<li><strong>Enterprise (500+ devs):</strong> All patterns with emphasis on consensus for critical paths</li>
+</ul>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<p>Here are key best practices for multi-agent orchestration in production systems:</p>
+<ol>
+<li><strong>Clear task boundaries</strong> - Each agent should have a well-defined, completable task</li>
+<li><strong>Appropriate tool selection</strong> - Give agents only the tools they need for their specific role</li>
+<li><strong>Resource-conscious model selection</strong> - Use appropriate model tiers based on task complexity</li>
+<li><strong>Parallel when possible</strong> - Identify independent subtasks for concurrent execution</li>
+<li><strong>Progress visibility</strong> - Monitor agent status for debugging and user feedback</li>
+<li><strong>Graceful degradation</strong> - Handle agent failures without crashing the entire operation</li>
+<li><strong>Resource limits</strong> - Prevent runaway agents with timeouts and resource constraints</li>
+<li><strong>Verification layers</strong> - Use additional agents to verify critical operations</li>
+</ol>
+<h3 id="implementation-roadmap"><a class="header" href="#implementation-roadmap">Implementation Roadmap</a></h3>
+<h4 id="phase-1-foundation-weeks-1-2"><a class="header" href="#phase-1-foundation-weeks-1-2">Phase 1: Foundation (Weeks 1-2)</a></h4>
+<ul>
+<li>Implement hierarchical architecture</li>
+<li>Add basic functional decomposition</li>
+<li>Create progress monitoring system</li>
+</ul>
+<h4 id="phase-2-specialization-weeks-3-4"><a class="header" href="#phase-2-specialization-weeks-3-4">Phase 2: Specialization (Weeks 3-4)</a></h4>
+<ul>
+<li>Add spatial and temporal patterns</li>
+<li>Implement resource management</li>
+<li>Create agent-specific tool registries</li>
+</ul>
+<h4 id="phase-3-advanced-coordination-weeks-5-6"><a class="header" href="#phase-3-advanced-coordination-weeks-5-6">Phase 3: Advanced Coordination (Weeks 5-6)</a></h4>
+<ul>
+<li>Add MapReduce and consensus patterns</li>
+<li>Implement sophisticated error handling</li>
+<li>Optimize resource allocation</li>
+</ul>
+<h4 id="phase-4-production-hardening-weeks-7-8"><a class="header" href="#phase-4-production-hardening-weeks-7-8">Phase 4: Production Hardening (Weeks 7-8)</a></h4>
+<ul>
+<li>Add comprehensive monitoring</li>
+<li>Implement performance optimization</li>
+<li>Create operational runbooks</li>
+</ul>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Multi-agent orchestration transforms AI coding assistants from single-threaded helpers into sophisticated development teams. Effective orchestration requires:</p>
+<ul>
+<li><strong>Hierarchical architecture</strong> with clear coordination relationships</li>
+<li><strong>Resource isolation</strong> to prevent conflicts and enable parallelism</li>
+<li><strong>Intelligent resource allocation</strong> through strategic model and tool selection</li>
+<li><strong>Robust communication</strong> protocols for monitoring and coordination</li>
+<li><strong>Error resilience</strong> to handle the increased complexity of distributed execution</li>
+</ul>
+<p>The future of AI-assisted development lies not in more powerful individual agents, but in orchestrating specialized agents that work together like a well-coordinated development team. As tasks grow more complex, the ability to decompose, delegate, and coordinate becomes the key differentiator.</p>
+<p>These patterns provide a foundation for building systems that can tackle enterprise-scale development challenges while maintaining reliability and cost efficiency.</p>
+<h2 id="sources-and-further-reading"><a class="header" href="#sources-and-further-reading">Sources and Further Reading</a></h2>
+<ol>
+<li>
+<p><strong>Multi-agent Systems in Software Engineering</strong>: <a href="https://google.github.io/adk-docs/agents/multi-agents/">Google Agent Development Kit Documentation</a> - Comprehensive guide to hierarchical agent patterns</p>
+</li>
+<li>
+<p><strong>LangGraph Multi-Agent Workflows</strong>: <a href="https://blog.langchain.dev/langgraph-multi-agent-workflows/">LangChain Blog</a> - Practical patterns for agent coordination</p>
+</li>
+<li>
+<p><strong>Amazon Bedrock Multi-Agent Collaboration</strong>: <a href="https://aws.amazon.com/blogs/aws/introducing-multi-agent-collaboration-capability-for-amazon-bedrock/">AWS Blog</a> - Enterprise-scale coordination mechanisms</p>
+</li>
+<li>
+<p><strong>Multi-Agent Collaboration Mechanisms Survey</strong>: <a href="https://arxiv.org/html/2501.06322v1">ArXiv</a> - Academic research on LLM-based coordination</p>
+</li>
+<li>
+<p><strong>Agent Orchestration Patterns</strong>: <a href="https://www.getdynamiq.ai/post/agent-orchestration-patterns-in-multi-agent-systems-linear-and-adaptive-approaches-with-dynamiq">Dynamiq Documentation</a> - Linear and adaptive coordination approaches</p>
+</li>
+</ol>
+<p>In the next chapter, we'll explore how to maintain performance as these multi-agent systems scale to handle increasing workloads.</p>
+</main>
+</body>
+</html>

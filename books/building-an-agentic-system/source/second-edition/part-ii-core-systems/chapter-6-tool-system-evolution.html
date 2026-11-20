@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Tool System Evolution - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-ii-core-systems/chapter-6-tool-system-evolution.html -->
+<main>
+<h1 id="chapter-6-tool-system-architecture-evolution"><a class="header" href="#chapter-6-tool-system-architecture-evolution">Chapter 6: Tool System Architecture Evolution</a></h1>
+<p>Tools are the hands of an AI coding assistant. They transform conversations into concrete actions—reading files, running commands, searching codebases, and modifying code. As AI assistants evolved from single-user to collaborative systems, their tool architectures had to evolve as well.</p>
+<p>This chapter explores how tool systems evolve to support distributed execution, external integrations, and sophisticated resource management while maintaining security and performance at scale.</p>
+<h2 id="the-tool-system-challenge"><a class="header" href="#the-tool-system-challenge">The Tool System Challenge</a></h2>
+<p>Building tools for collaborative AI assistants introduces unique requirements:</p>
+<ol>
+<li><strong>Safety at Scale</strong> - Thousands of users running arbitrary commands</li>
+<li><strong>Resource Management</strong> - Preventing runaway processes and quota exhaustion</li>
+<li><strong>Extensibility</strong> - Supporting third-party tool integrations</li>
+<li><strong>Auditability</strong> - Tracking who changed what and when</li>
+<li><strong>Performance</strong> - Parallel execution without conflicts</li>
+<li><strong>Rollback</strong> - Undoing tool actions when things go wrong</li>
+</ol>
+<p>Traditional CLI tools weren't designed for these constraints. Amp had to rethink tool architecture from the ground up.</p>
+<h2 id="tool-system-architecture-evolution"><a class="header" href="#tool-system-architecture-evolution">Tool System Architecture Evolution</a></h2>
+<p>Tool systems evolve through distinct generations as they mature from simple execution to collaborative systems.</p>
+<p><strong>Recognition Pattern</strong>: You need tool architecture evolution when:</p>
+<ul>
+<li>Moving from single-user to multi-user environments</li>
+<li>Adding safety and permission requirements</li>
+<li>Supporting long-running and cancellable operations</li>
+<li>Integrating with external systems and APIs</li>
+</ul>
+<h3 id="generation-1-direct-execution"><a class="header" href="#generation-1-direct-execution">Generation 1: Direct Execution</a></h3>
+<p>Simple, immediate tool execution suitable for single-user environments.</p>
+<pre><code class="language-typescript">// Direct execution pattern
+interface SimpleTool {
+  execute(args: ToolArgs): Promise&lt;string&gt;;
+}
+
+// Example: Basic file edit
+class FileEditTool implements SimpleTool {
+  async execute(args: { path: string; content: string }): Promise&lt;string&gt; {
+    await writeFile(args.path, args.content);
+    return `Wrote ${args.path}`;
+  }
+}
+</code></pre>
+<p><strong>Limitations</strong>: No safety checks, no rollback, no collaboration support.</p>
+<h3 id="generation-2-stateful-execution"><a class="header" href="#generation-2-stateful-execution">Generation 2: Stateful Execution</a></h3>
+<p>Adds state tracking, validation, and undo capabilities for better reliability.</p>
+<pre><code class="language-typescript">// Stateful execution pattern
+interface StatefulTool {
+  execute(args: ToolArgs, context: ToolContext): Promise&lt;ToolResult&gt;;
+}
+
+interface ToolResult {
+  message: string;
+  undo?: () =&gt; Promise&lt;void&gt;;
+  filesChanged?: string[];
+}
+
+// Example: File edit with undo
+class StatefulFileEditTool implements StatefulTool {
+  async execute(args: EditArgs, context: ToolContext): Promise&lt;ToolResult&gt; {
+    // Validate and track changes
+    const before = await readFile(args.path);
+    await writeFile(args.path, args.content);
+    
+    return {
+      message: `Edited ${args.path}`,
+      undo: () =&gt; writeFile(args.path, before),
+      filesChanged: [args.path]
+    };
+  }
+}
+</code></pre>
+<p><strong>Benefits</strong>: Rollback support, change tracking, basic safety.</p>
+<h3 id="generation-3-observable-tool-system"><a class="header" href="#generation-3-observable-tool-system">Generation 3: Observable Tool System</a></h3>
+<p>Reactive system with permissions, progress tracking, and collaborative features.</p>
+<pre><code class="language-typescript">// Observable execution pattern
+type ToolRun&lt;T&gt; = 
+  | { status: 'queued' }
+  | { status: 'blocked-on-user'; permissions?: string[] }
+  | { status: 'in-progress'; progress?: T }
+  | { status: 'done'; result: T }
+  | { status: 'error'; error: Error };
+
+interface ObservableTool&lt;T&gt; {
+  execute(args: ToolArgs): Observable&lt;ToolRun&lt;T&gt;&gt;;
+  cancel?(runId: string): Promise&lt;void&gt;;
+}
+</code></pre>
+<p><strong>Benefits</strong>: Real-time progress, cancellation, permission handling, collaborative safety.</p>
+<h2 id="the-tool-service-architecture"><a class="header" href="#the-tool-service-architecture">The Tool Service Architecture</a></h2>
+<p>Amp's ToolService orchestrates all tool operations:</p>
+<pre><code class="language-typescript">export class ToolService implements IToolService {
+  private tools = new Map&lt;string, ToolRegistration&lt;any&gt;&gt;();
+  private activeCalls = new Map&lt;string, ActiveToolCall&gt;();
+  private fileTracker: FileChangeTracker;
+  private permissionService: ToolPermissionService;
+  
+  constructor(
+    private config: ConfigService,
+    private mcpService?: MCPService
+  ) {
+    this.registerBuiltinTools();
+    this.registerMCPTools();
+  }
+  
+  private registerBuiltinTools(): void {
+    // Register core tools
+    this.register(createFileEditTool());
+    this.register(createBashTool());
+    this.register(createGrepTool());
+    this.register(createTaskTool());
+    // ... more tools
+  }
+  
+  private registerMCPTools(): void {
+    if (!this.mcpService) return;
+    
+    // Watch for MCP tool changes
+    this.mcpService.observeTools().subscribe(tools =&gt; {
+      // Unregister old MCP tools
+      for (const [name, tool] of this.tools) {
+        if (tool.spec.source.mcp) {
+          this.tools.delete(name);
+        }
+      }
+      
+      // Register new MCP tools
+      for (const mcpTool of tools) {
+        this.register({
+          spec: {
+            name: mcpTool.name,
+            description: mcpTool.description,
+            inputSchema: mcpTool.inputSchema,
+            source: { mcp: mcpTool.serverId }
+          },
+          fn: (args, env) =&gt; this.callMCPTool(mcpTool, args, env)
+        });
+      }
+    });
+  }
+  
+  async callTool(
+    name: string,
+    args: unknown,
+    env: ToolEnvironment
+  ): Promise&lt;Observable&lt;ToolRun&gt;&gt; {
+    const tool = this.getEnabledTool(name);
+    if (!tool) {
+      throw new Error(`Tool ${name} not found or disabled`);
+    }
+    
+    // Create execution context
+    const callId = generateId();
+    const run$ = new BehaviorSubject&lt;ToolRun&gt;({ status: 'queued' });
+    
+    this.activeCalls.set(callId, {
+      tool,
+      run$,
+      startTime: Date.now(),
+      env
+    });
+    
+    // Execute asynchronously
+    this.executeTool(callId, tool, args, env).catch(error =&gt; {
+      run$.next({ status: 'error', error: error.message });
+      run$.complete();
+    });
+    
+    return run$.asObservable();
+  }
+  
+  private async executeTool(
+    callId: string,
+    tool: ToolRegistration&lt;any&gt;,
+    args: unknown,
+    env: ToolEnvironment
+  ): Promise&lt;void&gt; {
+    const run$ = this.activeCalls.get(callId)!.run$;
+    
+    try {
+      // Check permissions
+      const permission = await this.checkPermission(tool, args, env);
+      if (permission.requiresApproval) {
+        run$.next({ 
+          status: 'blocked-on-user',
+          toAllow: permission.toAllow 
+        });
+        
+        const approved = await this.waitForApproval(callId);
+        if (!approved) {
+          run$.next({ status: 'rejected-by-user' });
+          return;
+        }
+      }
+      
+      // Preprocess arguments
+      if (tool.preprocessArgs) {
+        args = await tool.preprocessArgs(args, env);
+      }
+      
+      // Start execution
+      run$.next({ status: 'in-progress' });
+      
+      // Track file changes
+      const fileTracker = this.fileTracker.startTracking(callId);
+      
+      // Execute with timeout
+      const result = await this.withTimeout(
+        tool.fn(args, {
+          ...env,
+          onProgress: (progress) =&gt; {
+            run$.next({ 
+              status: 'in-progress',
+              progress 
+            });
+          }
+        }),
+        env.timeout || 120000 // 2 minute default
+      );
+      
+      // Get modified files
+      const files = await fileTracker.getModifiedFiles();
+      
+      run$.next({ 
+        status: 'done',
+        result,
+        files 
+      });
+      
+    } finally {
+      run$.complete();
+      this.activeCalls.delete(callId);
+    }
+  }
+}
+</code></pre>
+<h2 id="file-change-tracking"><a class="header" href="#file-change-tracking">File Change Tracking</a></h2>
+<p>Every tool operation tracks file modifications for auditability and rollback:</p>
+<pre><code class="language-typescript">export class FileChangeTracker {
+  private changes = new Map&lt;string, FileChangeRecord[]&gt;();
+  private backupDir: string;
+  
+  constructor() {
+    this.backupDir = path.join(os.tmpdir(), 'amp-backups');
+  }
+  
+  startTracking(operationId: string): FileOperationTracker {
+    const tracker = new FileOperationTracker(operationId, this);
+    
+    // Set up file system monitoring
+    const fsWatcher = chokidar.watch('.', {
+      ignored: /(^|[\/\\])\../, // Skip hidden files
+      persistent: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 100,
+        pollInterval: 50
+      }
+    });
+    
+    // Track different types of file changes
+    fsWatcher.on('change', async (filePath) =&gt; {
+      await tracker.recordModification(filePath, 'modify');
+    });
+    
+    fsWatcher.on('add', async (filePath) =&gt; {
+      await tracker.recordModification(filePath, 'create');
+    });
+    
+    fsWatcher.on('unlink', async (filePath) =&gt; {
+      await tracker.recordModification(filePath, 'delete');
+    });
+    
+    return tracker;
+  }
+  
+  async recordChange(
+    operationId: string,
+    filePath: string,
+    type: 'create' | 'modify' | 'delete',
+    content?: string
+  ): Promise&lt;void&gt; {
+    const changes = this.changes.get(operationId) || [];
+    
+    // Create backup of original
+    const backupPath = path.join(
+      this.backupDir,
+      operationId,
+      filePath
+    );
+    
+    if (type !== 'create') {
+      try {
+        const original = await fs.readFile(filePath, 'utf-8');
+        await fs.mkdir(path.dirname(backupPath), { recursive: true });
+        await fs.writeFile(backupPath, original);
+      } catch (error) {
+        // File might already be deleted
+      }
+    }
+    
+    changes.push({
+      id: generateId(),
+      filePath,
+      type,
+      timestamp: Date.now(),
+      backupPath: type !== 'create' ? backupPath : undefined,
+      newContent: content,
+      operationId
+    });
+    
+    this.changes.set(operationId, changes);
+  }
+  
+  async rollback(operationId: string): Promise&lt;void&gt; {
+    const changes = this.changes.get(operationId) || [];
+    
+    // Rollback in reverse order
+    for (const change of changes.reverse()) {
+      try {
+        switch (change.type) {
+          case 'create':
+            // Delete created file
+            await fs.unlink(change.filePath);
+            break;
+            
+          case 'modify':
+            // Restore from backup
+            if (change.backupPath) {
+              const backup = await fs.readFile(change.backupPath, 'utf-8');
+              await fs.writeFile(change.filePath, backup);
+            }
+            break;
+            
+          case 'delete':
+            // Restore deleted file
+            if (change.backupPath) {
+              const backup = await fs.readFile(change.backupPath, 'utf-8');
+              await fs.writeFile(change.filePath, backup);
+            }
+            break;
+        }
+      } catch (error) {
+        logger.error(`Failed to rollback ${change.filePath}:`, error);
+      }
+    }
+    
+    // Clean up backups
+    const backupDir = path.join(this.backupDir, operationId);
+    await fs.rm(backupDir, { recursive: true, force: true });
+    
+    this.changes.delete(operationId);
+  }
+}
+</code></pre>
+<h2 id="tool-security-and-permissions"><a class="header" href="#tool-security-and-permissions">Tool Security and Permissions</a></h2>
+<p>Amp implements defense-in-depth for tool security:</p>
+<h3 id="layer-1-tool-enablement"><a class="header" href="#layer-1-tool-enablement">Layer 1: Tool Enablement</a></h3>
+<pre><code class="language-typescript">export function toolEnablement(
+  tool: ToolSpec,
+  config: Config
+): ToolStatusEnablement {
+  // Check if tool is explicitly disabled
+  const disabled = config.get('tools.disable', []);
+  
+  if (disabled.includes('*')) {
+    return { enabled: false, reason: 'All tools disabled' };
+  }
+  
+  if (disabled.includes(tool.name)) {
+    return { enabled: false, reason: 'Tool explicitly disabled' };
+  }
+  
+  // Check source-based disabling
+  if (tool.source.mcp &amp;&amp; disabled.includes('mcp:*')) {
+    return { enabled: false, reason: 'MCP tools disabled' };
+  }
+  
+  // Check feature flags
+  if (tool.name === 'task' &amp;&amp; !config.get('subagents.enabled')) {
+    return { enabled: false, reason: 'Sub-agents not enabled' };
+  }
+  
+  return { enabled: true };
+}
+</code></pre>
+<h3 id="layer-2-command-approval"><a class="header" href="#layer-2-command-approval">Layer 2: Command Approval</a></h3>
+<pre><code class="language-typescript">export class CommandApprovalService {
+  private userAllowlist: Set&lt;string&gt;;
+  private sessionAllowlist: Set&lt;string&gt;;
+  
+  async checkCommand(
+    command: string,
+    workingDir: string
+  ): Promise&lt;ApprovalResult&gt; {
+    const parsed = this.parseCommand(command);
+    const validation = this.validateCommand(parsed, workingDir);
+    
+    if (!validation.safe) {
+      return {
+        approved: false,
+        requiresApproval: true,
+        reason: validation.reason,
+        toAllow: validation.suggestions
+      };
+    }
+    
+    // Check allowlists
+    if (this.isAllowed(command)) {
+      return { approved: true };
+    }
+    
+    // Check if it's a safe read-only command
+    if (this.isSafeCommand(parsed.command)) {
+      return { approved: true };
+    }
+    
+    // Requires user approval
+    return {
+      approved: false,
+      requiresApproval: true,
+      toAllow: [command, parsed.command, '*']
+    };
+  }
+  
+  private isSafeCommand(cmd: string): boolean {
+    const SAFE_COMMANDS = [
+      'ls', 'pwd', 'echo', 'cat', 'grep', 'find', 'head', 'tail',
+      'wc', 'sort', 'uniq', 'diff', 'git status', 'git log',
+      'npm list', 'yarn list', 'pip list'
+    ];
+    
+    return SAFE_COMMANDS.some(safe =&gt; 
+      cmd === safe || cmd.startsWith(safe + ' ')
+    );
+  }
+  
+  private validateCommand(
+    parsed: ParsedCommand,
+    workingDir: string
+  ): ValidationResult {
+    // Check for path traversal
+    for (const arg of parsed.args) {
+      if (arg.includes('../') || arg.includes('..\\')) {
+        return {
+          safe: false,
+          reason: 'Path traversal detected'
+        };
+      }
+    }
+    
+    // Check for dangerous commands
+    const DANGEROUS = ['rm -rf', 'dd', 'format', ':(){ :|:&amp; };:'];
+    if (DANGEROUS.some(d =&gt; parsed.full.includes(d))) {
+      return {
+        safe: false,
+        reason: 'Potentially dangerous command'
+      };
+    }
+    
+    // Check for output redirection to sensitive files
+    if (parsed.full.match(/&gt;\s*\/etc|&gt;\s*~\/\.|&gt;\s*\/sys/)) {
+      return {
+        safe: false,
+        reason: 'Output redirection to sensitive location'
+      };
+    }
+    
+    return { safe: true };
+  }
+}
+</code></pre>
+<h3 id="layer-3-resource-limits"><a class="header" href="#layer-3-resource-limits">Layer 3: Resource Limits</a></h3>
+<pre><code class="language-typescript">export class ResourceLimiter {
+  private limits: ResourceLimits = {
+    maxOutputSize: 50_000,         // 50KB
+    maxExecutionTime: 120_000,     // 2 minutes
+    maxConcurrentTools: 10,
+    maxFileSize: 10_000_000,       // 10MB
+    maxFilesPerOperation: 100
+  };
+  
+  async enforceOutputLimit(
+    stream: Readable,
+    limit = this.limits.maxOutputSize
+  ): Promise&lt;string&gt; {
+    let output = '';
+    let truncated = false;
+    
+    for await (const chunk of stream) {
+      output += chunk;
+      
+      if (output.length &gt; limit) {
+        output = output.slice(0, limit);
+        truncated = true;
+        break;
+      }
+    }
+    
+    if (truncated) {
+      output += '\n\n[Output truncated - exceeded 50KB limit]';
+    }
+    
+    return output;
+  }
+  
+  createTimeout(ms = this.limits.maxExecutionTime): AbortSignal {
+    const controller = new AbortController();
+    
+    const timeout = setTimeout(() =&gt; {
+      controller.abort(new Error(`Operation timed out after ${ms}ms`));
+    }, ms);
+    
+    // Clean up timeout if operation completes
+    controller.signal.addEventListener('abort', () =&gt; {
+      clearTimeout(timeout);
+    });
+    
+    return controller.signal;
+  }
+  
+  async checkFileLimits(files: string[]): Promise&lt;void&gt; {
+    if (files.length &gt; this.limits.maxFilesPerOperation) {
+      throw new Error(
+        `Too many files (${files.length}). ` +
+        `Maximum ${this.limits.maxFilesPerOperation} files per operation.`
+      );
+    }
+    
+    for (const file of files) {
+      const stats = await fs.stat(file);
+      if (stats.size &gt; this.limits.maxFileSize) {
+        throw new Error(
+          `File ${file} exceeds size limit ` +
+          `(${stats.size} &gt; ${this.limits.maxFileSize})`
+        );
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="external-tool-integration"><a class="header" href="#external-tool-integration">External Tool Integration</a></h2>
+<p>Amp supports external tool integration through standardized protocols:</p>
+<pre><code class="language-typescript">// Manages connections to external tool providers
+export class ExternalToolService {
+  private activeConnections = new Map&lt;string, ToolProvider&gt;();
+  private availableTools$ = new BehaviorSubject&lt;ExternalTool[]&gt;([]);
+  
+  constructor(private configService: ConfigService) {
+    this.initializeProviders();
+  }
+  
+  private async initializeProviders(): Promise&lt;void&gt; {
+    const providers = this.configService.get('external.toolProviders', {});
+    
+    for (const [name, config] of Object.entries(providers)) {
+      try {
+        const provider = await this.createProvider(name, config);
+        this.activeConnections.set(name, provider);
+        
+        // Monitor tool availability changes
+        provider.observeTools().subscribe(tools =&gt; {
+          this.updateAvailableTools();
+        });
+      } catch (error) {
+        console.error(`Failed to initialize tool provider ${name}:`, error);
+      }
+    }
+  }
+  
+  private async createProvider(
+    name: string,
+    config: ProviderConfig
+  ): Promise&lt;ToolProvider&gt; {
+    if (config.type === 'stdio') {
+      return new StdioToolProvider(name, config);
+    } else if (config.type === 'http') {
+      return new HTTPToolProvider(name, config);
+    }
+    
+    throw new Error(`Unknown tool provider type: ${config.type}`);
+  }
+  
+  observeAvailableTools(): Observable&lt;ExternalTool[]&gt; {
+    return this.availableTools$.asObservable();
+  }
+  
+  async executeTool(
+    providerId: string,
+    toolName: string,
+    args: unknown
+  ): Promise&lt;unknown&gt; {
+    const provider = this.activeConnections.get(providerId);
+    if (!provider) {
+      throw new Error(`Tool provider ${providerId} not found`);
+    }
+    
+    return provider.executeTool({ name: toolName, arguments: args });
+  }
+}
+
+// Example stdio-based tool provider implementation
+class StdioToolProvider implements ToolProvider {
+  private childProcess: ChildProcess;
+  private availableTools = new BehaviorSubject&lt;Tool[]&gt;([]);
+  
+  constructor(
+    private providerName: string,
+    private configuration: StdioProviderConfig
+  ) {
+    this.spawnProcess();
+  }
+  
+  private spawnProcess(): void {
+    this.childProcess = spawn(this.configuration.command, this.configuration.args, {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: { ...process.env, ...this.configuration.env }
+    });
+    
+    // Set up communication channel
+    const transport = new StdioTransport(
+      this.childProcess.stdin,
+      this.childProcess.stdout
+    );
+    
+    this.rpcClient = new JSONRPCClient(transport);
+    
+    // Initialize provider connection
+    this.initializeConnection();
+  }
+  
+  private async initializeConnection(): Promise&lt;void&gt; {
+    // Send initialization handshake
+    const response = await this.rpcClient.request('initialize', {
+      protocolVersion: '1.0',
+      clientInfo: {
+        name: 'amp',
+        version: this.configuration.version
+      }
+    });
+    
+    // Request available tools list
+    const toolsResponse = await this.rpcClient.request('tools/list', {});
+    this.availableTools.next(toolsResponse.tools);
+  }
+  
+  observeTools(): Observable&lt;Tool[]&gt; {
+    return this.availableTools.asObservable();
+  }
+  
+  async executeTool(params: ToolExecutionParams): Promise&lt;unknown&gt; {
+    const response = await this.rpcClient.request('tools/execute', params);
+    return response.result;
+  }
+  
+  async dispose(): Promise&lt;void&gt; {
+    this.childProcess.kill();
+    await new Promise(resolve =&gt; this.childProcess.once('exit', resolve));
+  }
+}
+</code></pre>
+<h2 id="sub-agent-orchestration"><a class="header" href="#sub-agent-orchestration">Sub-Agent Orchestration</a></h2>
+<p>The Task tool enables hierarchical execution for complex workflows:</p>
+<pre><code class="language-typescript">// Implements delegated task execution through sub-agents
+export class TaskTool implements Tool {
+  name = 'task';
+  description = 'Delegate a specific task to a specialized sub-agent';
+  
+  async execute(
+    args: { prompt: string; context?: string },
+    env: ToolEnvironment
+  ): Promise&lt;Observable&lt;TaskProgress&gt;&gt; {
+    const progress$ = new Subject&lt;TaskProgress&gt;();
+    
+    // Initialize sub-agent with restricted capabilities
+    const subAgent = new SubAgent({
+      availableTools: this.getRestrictedToolSet(),
+      systemPrompt: this.constructSystemPrompt(args.context),
+      taskDescription: args.prompt,
+      environment: {
+        ...env,
+        threadId: `${env.threadId}:subtask:${this.generateTaskId()}`,
+        isSubAgent: true
+      }
+    });
+    
+    // Stream execution progress
+    subAgent.observeExecutionStatus().subscribe(status =&gt; {
+      progress$.next({
+        type: 'status',
+        state: status.currentState,
+        message: status.description
+      });
+    });
+    
+    subAgent.observeToolExecutions().subscribe(toolExecution =&gt; {
+      progress$.next({
+        type: 'tool-execution',
+        toolName: toolExecution.name,
+        arguments: toolExecution.args,
+        result: toolExecution.result
+      });
+    });
+    
+    // Begin asynchronous execution
+    this.executeSubAgent(subAgent, progress$);
+    
+    return progress$.asObservable();
+  }
+  
+  private getRestrictedToolSet(): Tool[] {
+    // Sub-agents operate with limited tool access for safety
+    return [
+      'read_file',
+      'write_file', 
+      'edit_file',
+      'list_directory',
+      'search',
+      'bash' // With enhanced restrictions
+    ].map(name =&gt; this.toolService.getToolByName(name))
+     .filter(Boolean);
+  }
+  
+  private async executeSubAgent(
+    agent: SubAgent,
+    progress$: Subject&lt;TaskProgress&gt;
+  ): Promise&lt;void&gt; {
+    try {
+      const executionResult = await agent.executeTask();
+      
+      progress$.next({
+        type: 'complete',
+        summary: executionResult.taskSummary,
+        toolExecutions: executionResult.toolExecutions,
+        modifiedFiles: executionResult.modifiedFiles
+      });
+      
+    } catch (error) {
+      progress$.next({
+        type: 'error',
+        errorMessage: error.message
+      });
+    } finally {
+      progress$.complete();
+      agent.cleanup();
+    }
+  }
+}
+
+// Sub-agent implementation with isolated execution context
+export class SubAgent {
+  private toolService: ToolService;
+  private llmService: LLMService;
+  private changeTracker: FileChangeTracker;
+  
+  constructor(private configuration: SubAgentConfig) {
+    // Create restricted tool service for sub-agent
+    this.toolService = new ToolService({
+      availableTools: configuration.availableTools,
+      permissionLevel: 'restricted'
+    });
+    
+    this.changeTracker = new FileChangeTracker();
+  }
+  
+  async executeTask(): Promise&lt;SubAgentResult&gt; {
+    const conversationHistory: Message[] = [
+      {
+        role: 'system',
+        content: this.configuration.systemPrompt || DEFAULT_SUB_AGENT_PROMPT
+      },
+      {
+        role: 'user',
+        content: this.configuration.taskDescription
+      }
+    ];
+    
+    const maxExecutionCycles = 10;
+    let currentCycle = 0;
+    
+    while (currentCycle &lt; maxExecutionCycles) {
+      currentCycle++;
+      
+      // Generate next response
+      const llmResponse = await this.llmService.generateResponse({
+        messages: conversationHistory,
+        availableTools: this.toolService.getToolSchemas(),
+        temperature: 0.2, // Lower temperature for focused task execution
+        maxTokens: 4000
+      });
+      
+      conversationHistory.push(llmResponse.message);
+      
+      // Execute any tool calls
+      if (llmResponse.toolCalls) {
+        const toolResults = await this.executeToolCalls(llmResponse.toolCalls);
+        conversationHistory.push({
+          role: 'tool',
+          content: toolResults
+        });
+        continue;
+      }
+      
+      // Task completed
+      break;
+    }
+    
+    return {
+      taskSummary: this.generateTaskSummary(conversationHistory),
+      toolExecutions: this.changeTracker.getExecutionHistory(),
+      modifiedFiles: await this.changeTracker.getModifiedFiles()
+    };
+  }
+}
+</code></pre>
+<h2 id="performance-optimization-strategies"><a class="header" href="#performance-optimization-strategies">Performance Optimization Strategies</a></h2>
+<p>Amp employs several techniques to maintain tool execution performance:</p>
+<h3 id="1-parallel-tool-execution"><a class="header" href="#1-parallel-tool-execution">1. Parallel Tool Execution</a></h3>
+<pre><code class="language-typescript">// Executes independent tools in parallel while respecting dependencies
+export class ParallelToolExecutor {
+  async executeToolBatch(
+    toolCalls: ToolCall[]
+  ): Promise&lt;ToolResult[]&gt; {
+    // Analyze dependencies and group tools
+    const executionGroups = this.analyzeExecutionDependencies(toolCalls);
+    
+    const allResults: ToolResult[] = [];
+    
+    // Execute groups sequentially, tools within groups in parallel
+    for (const group of executionGroups) {
+      const groupResults = await Promise.all(
+        group.map(call =&gt; this.executeSingleTool(call))
+      );
+      allResults.push(...groupResults);
+    }
+    
+    return allResults;
+  }
+  
+  private analyzeExecutionDependencies(calls: ToolCall[]): ToolCall[][] {
+    const executionGroups: ToolCall[][] = [];
+    const processedCalls = new Set&lt;string&gt;();
+    
+    for (const call of calls) {
+      // Identify tool dependencies (e.g., file reads before writes)
+      const dependencies = this.identifyDependencies(call, calls);
+      
+      // Find suitable execution group
+      let targetGroup = executionGroups.length;
+      for (let i = 0; i &lt; executionGroups.length; i++) {
+        const groupCallIds = new Set(executionGroups[i].map(c =&gt; c.id));
+        const hasBlockingDependency = dependencies.some(dep =&gt; groupCallIds.has(dep));
+        
+        if (!hasBlockingDependency) {
+          targetGroup = i;
+          break;
+        }
+      }
+      
+      if (targetGroup === executionGroups.length) {
+        executionGroups.push([]);
+      }
+      
+      executionGroups[targetGroup].push(call);
+    }
+    
+    return executionGroups;
+  }
+}
+</code></pre>
+<h3 id="2-intelligent-result-caching"><a class="header" href="#2-intelligent-result-caching">2. Intelligent Result Caching</a></h3>
+<pre><code class="language-typescript">// Caches tool results for read-only operations with dependency tracking
+export class CachingToolExecutor {
+  private resultCache = new LRUCache&lt;string, CachedResult&gt;({
+    max: 1000,
+    ttl: 1000 * 60 * 5 // 5-minute TTL
+  });
+  
+  async executeWithCaching(
+    tool: Tool,
+    args: unknown,
+    env: ToolEnvironment
+  ): Promise&lt;unknown&gt; {
+    // Generate cache key from tool and arguments
+    const cacheKey = this.generateCacheKey(tool.name, args, env);
+    
+    // Check cache for read-only operations
+    if (tool.spec.metadata?.readonly) {
+      const cachedResult = this.resultCache.get(cacheKey);
+      if (cachedResult &amp;&amp; !this.isCacheStale(cachedResult)) {
+        return cachedResult.result;
+      }
+    }
+    
+    // Execute tool and get result
+    const result = await tool.implementation(args, env);
+    
+    // Cache result if tool is cacheable
+    if (tool.spec.metadata?.cacheable) {
+      this.resultCache.set(cacheKey, {
+        result,
+        timestamp: Date.now(),
+        dependencies: await this.extractFileDependencies(tool, args)
+      });
+    }
+    
+    return result;
+  }
+  
+  private isCacheStale(cached: CachedResult): boolean {
+    // Check if dependent files have been modified since caching
+    for (const dependency of cached.dependencies) {
+      const currentModTime = fs.statSync(dependency.path).mtime.getTime();
+      if (currentModTime &gt; cached.timestamp) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+}
+</code></pre>
+<h3 id="3-streaming-output-for-long-running-operations"><a class="header" href="#3-streaming-output-for-long-running-operations">3. Streaming Output for Long-Running Operations</a></h3>
+<pre><code class="language-typescript">// Provides real-time output streaming for shell command execution
+export class StreamingCommandTool implements Tool {
+  async execute(
+    args: { command: string },
+    env: ToolEnvironment
+  ): Promise&lt;Observable&lt;CommandProgress&gt;&gt; {
+    const progress$ = new Subject&lt;CommandProgress&gt;();
+    
+    const process = spawn('bash', ['-c', args.command], {
+      cwd: env.workingDirectory,
+      env: env.environmentVariables
+    });
+    
+    // Stream standard output
+    process.stdout.on('data', (chunk) =&gt; {
+      progress$.next({
+        type: 'stdout',
+        content: chunk.toString()
+      });
+    });
+    
+    // Stream error output
+    process.stderr.on('data', (chunk) =&gt; {
+      progress$.next({
+        type: 'stderr',
+        content: chunk.toString()
+      });
+    });
+    
+    // Handle process completion
+    process.on('exit', (exitCode) =&gt; {
+      progress$.next({
+        type: 'completion',
+        exitCode
+      });
+      progress$.complete();
+    });
+    
+    // Handle process errors
+    process.on('error', (error) =&gt; {
+      progress$.error(error);
+    });
+    
+    return progress$.asObservable();
+  }
+}
+</code></pre>
+<h2 id="tool-testing-infrastructure"><a class="header" href="#tool-testing-infrastructure">Tool Testing Infrastructure</a></h2>
+<p>Amp provides comprehensive testing utilities for tool development:</p>
+<pre><code class="language-typescript">// Test harness for isolated tool testing
+export class ToolTestHarness {
+  private mockFileSystem = new MockFileSystem();
+  private mockProcessManager = new MockProcessManager();
+  
+  async runToolTest(
+    tool: Tool,
+    testScenario: TestScenario
+  ): Promise&lt;TestResult&gt; {
+    // Initialize mock environment
+    this.mockFileSystem.setup(testScenario.initialFiles);
+    this.mockProcessManager.setup(testScenario.processesSetup);
+    
+    const testEnvironment: ToolEnvironment = {
+      workingDirectory: '/test-workspace',
+      fileSystem: this.mockFileSystem,
+      processManager: this.mockProcessManager,
+      ...testScenario.environment
+    };
+    
+    // Execute tool under test
+    const executionResult = await tool.execute(testScenario.arguments, testEnvironment);
+    
+    // Validate results against expectations
+    const validationErrors: string[] = [];
+    
+    // Verify file system changes
+    for (const expectedFile of testScenario.expectedFiles) {
+      const actualContent = this.mockFileSystem.readFileSync(expectedFile.path);
+      if (actualContent !== expectedFile.content) {
+        validationErrors.push(
+          `File ${expectedFile.path} content mismatch:\n` +
+          `Expected: ${expectedFile.content}\n` +
+          `Actual: ${actualContent}`
+        );
+      }
+    }
+    
+    // Verify process executions
+    const actualProcessCalls = this.mockProcessManager.getExecutionHistory();
+    if (testScenario.expectedProcessCalls) {
+      // Validate process call expectations
+    }
+    
+    return {
+      passed: validationErrors.length === 0,
+      validationErrors,
+      executionResult
+    };
+  }
+}
+
+// Example test scenario
+const editFileScenario: TestScenario = {
+  tool: 'edit_file',
+  args: {
+    path: 'test.js',
+    old_string: 'console.log("hello")',
+    new_string: 'console.log("goodbye")'
+  },
+  files: {
+    'test.js': 'console.log("hello")\nmore code'
+  },
+  expectedFiles: [{
+    path: 'test.js',
+    content: 'console.log("goodbye")\nmore code'
+  }]
+};
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>This chapter explored the evolution from simple tool execution to sophisticated orchestration systems:</p>
+<ul>
+<li><strong>Observable execution patterns</strong> enable progress tracking and cancellation</li>
+<li><strong>Layered security architectures</strong> protect against dangerous operations</li>
+<li><strong>Comprehensive audit trails</strong> provide rollback and accountability</li>
+<li><strong>External integration protocols</strong> allow third-party tool extensions</li>
+<li><strong>Hierarchical execution models</strong> enable complex multi-tool workflows</li>
+<li><strong>Resource management systems</strong> prevent abuse and runaway processes</li>
+<li><strong>Performance optimization strategies</strong> maintain responsiveness at scale</li>
+</ul>
+<p>The key insight: modern tool systems must balance expressive power with safety constraints, extensibility with security, and performance with correctness through architectural discipline.</p>
+<p>The next chapter examines collaboration and permission systems that enable secure multi-user workflows while preserving privacy and control.</p>
+</main>
+</body>
+</html>

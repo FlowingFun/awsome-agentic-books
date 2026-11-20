@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Case Studies - Amping Up an Agentic System</title></head>
+<body>
+<!-- Source: https://github.com/gerred/building-an-agentic-system/blob/eec7f0226fb0d0019c67dc6f209a80b61720117e/src/second-edition/part-v-implementation/chapter-15-case-studies.md -->
+<main>
+<h1 id="chapter-15-implementation-case-studies"><a class="header" href="#chapter-15-implementation-case-studies">Chapter 15: Implementation Case Studies</a></h1>
+<p>Building collaborative AI coding assistants sounds great in theory, but how do they perform in the real world? This chapter examines four deployments across different scales and contexts. Each case study reveals specific challenges, solutions, and lessons that shaped how teams think about AI-assisted development.</p>
+<h2 id="case-study-1-fintech-startup"><a class="header" href="#case-study-1-fintech-startup">Case Study 1: FinTech Startup</a></h2>
+<h3 id="background"><a class="header" href="#background">Background</a></h3>
+<p>A 40-person payments startup adopted collaborative AI coding to address velocity challenges while maintaining PCI compliance requirements. Their engineering team of 15 developers found that every feature touched multiple services, and the compliance burden meant extensive documentation and testing.</p>
+<h3 id="initial-deployment"><a class="header" href="#initial-deployment">Initial Deployment</a></h3>
+<p>The team started with a pilot program involving their platform team (4 engineers). They configured the AI assistant with:</p>
+<ul>
+<li>Custom tools for their compliance checker</li>
+<li>Integration with their internal documentation wiki</li>
+<li>Access to sanitized production logs</li>
+<li>Strict permission boundaries around payment processing code</li>
+</ul>
+<p>Initial metrics from the 30-day pilot:</p>
+<pre><code>Code review turnaround: -47% (8.2 hours → 4.3 hours)
+Documentation coverage: +83% (42% → 77%)
+Test coverage: +31% (68% → 89%)
+Deployment frequency: +2.1x (3.2/week → 6.7/week)
+</code></pre>
+<h3 id="challenges-and-adaptations"><a class="header" href="#challenges-and-adaptations">Challenges and Adaptations</a></h3>
+<p><strong>Permission Boundaries Gone Wrong</strong></p>
+<p>Two weeks in, a junior engineer accidentally exposed production database credentials in a thread. The AI assistant correctly refused to process them, but the incident highlighted gaps in their secret scanning.</p>
+<p>Solution: They implemented pre-commit hooks that ran the same secret detection the AI used, preventing credentials from entering version control. They also added egress filtering to prevent the AI from accessing external services during local development.</p>
+<p><strong>Context Overload</strong></p>
+<p>Their monorepo contained 2.8 million lines of code across 14 services. The AI assistant struggled with context limits when developers asked broad architectural questions.</p>
+<p>Solution: They built a custom indexing tool that created service-level summaries updated nightly. Instead of loading entire codebases, the AI could reference these summaries and drill down only when needed.</p>
+<pre><code class="language-typescript">// Service summary example
+export interface ServiceSummary {
+  name: string;
+  version: string;
+  dependencies: string[];
+  apiEndpoints: EndpointSummary[];
+  recentChanges: CommitSummary[];
+  healthMetrics: {
+    errorRate: number;
+    latency: P95Latency;
+    lastIncident: Date;
+  };
+}
+</code></pre>
+<p><strong>Compliance Integration</strong></p>
+<p>Every code change needed compliance review, creating a bottleneck. Initially, developers would finish features, then wait days for compliance approval.</p>
+<p>Solution: They created a compliance-aware tool that pre-validated changes during development:</p>
+<pre><code class="language-typescript">class ComplianceValidator implements Tool {
+  async execute(context: ToolContext): Promise&lt;ValidationResult&gt; {
+    const changes = await this.detectChanges(context);
+    
+    // Check PCI DSS requirements
+    if (changes.touchesPaymentFlow) {
+      const validations = await this.validatePCIDSS(changes);
+      if (!validations.passed) {
+        return this.suggestCompliantAlternative(validations);
+      }
+    }
+    
+    // Generate compliance documentation
+    const docs = await this.generateComplianceDocs(changes);
+    return { passed: true, documentation: docs };
+  }
+}
+</code></pre>
+<h3 id="results-after-6-months"><a class="header" href="#results-after-6-months">Results After 6 Months</a></h3>
+<p>The expanded deployment across all engineering teams showed:</p>
+<ul>
+<li>72% reduction in compliance-related delays</li>
+<li>91% of PRs passed compliance review on first attempt (up from 34%)</li>
+<li>3.2x increase in developer productivity for greenfield features</li>
+<li>1.8x increase for legacy code modifications</li>
+<li>$340K saved in avoided compliance violations</li>
+</ul>
+<h3 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned</a></h3>
+<ol>
+<li>
+<p><strong>Start with guardrails</strong>: Permission systems aren't just nice-to-have. One security incident can derail an entire AI initiative.</p>
+</li>
+<li>
+<p><strong>Context is expensive</strong>: Don't try to give the AI everything. Build intelligent summarization and filtering.</p>
+</li>
+<li>
+<p><strong>Integrate with existing workflows</strong>: The compliance tool succeeded because it fit into their existing process rather than replacing it.</p>
+</li>
+<li>
+<p><strong>Measure what matters</strong>: They initially tracked "AI interactions per day" but switched to business metrics like deployment frequency and compliance pass rates.</p>
+</li>
+</ol>
+<h2 id="case-study-2-enterprise-migration"><a class="header" href="#case-study-2-enterprise-migration">Case Study 2: Enterprise Migration</a></h2>
+<h3 id="background-1"><a class="header" href="#background-1">Background</a></h3>
+<p>A Fortune 500 retailer with 3,000 engineers across 15 countries faced a massive challenge: migrating from their 15-year-old Java monolith to microservices. Previous attempts had failed due to the sheer complexity and lack of institutional knowledge.</p>
+<h3 id="phased-rollout"><a class="header" href="#phased-rollout">Phased Rollout</a></h3>
+<p><strong>Phase 1: Knowledge Extraction (Months 1-3)</strong></p>
+<p>Before any coding, they used AI assistants to document the existing system:</p>
+<pre><code>Threads created for documentation: 12,847
+Code paths analyzed: 847,291
+Business rules extracted: 4,923
+Undocumented APIs found: 1,247
+</code></pre>
+<p>The AI assistants ran overnight, analyzing code paths and generating documentation. Human engineers reviewed and validated findings each morning.</p>
+<p><strong>Phase 2: Pilot Team (Months 4-6)</strong></p>
+<p>A tiger team of 20 senior engineers began the actual migration, using AI assistants configured with:</p>
+<ul>
+<li>Read-only access to the monolith</li>
+<li>Write access to new microservices</li>
+<li>Custom tools for dependency analysis</li>
+<li>Integration with their JIRA workflow</li>
+</ul>
+<p>Performance metrics from the pilot:</p>
+<pre><code>Migration velocity: 3,200 lines/day (vs 450 lines/day manual)
+Defect rate: 0.31 per KLOC (vs 2.1 historical average)
+Rollback rate: 2% (vs 18% historical average)
+</code></pre>
+<p><strong>Phase 3: Scaled Deployment (Months 7-12)</strong></p>
+<p>Based on pilot success, they expanded to 200 engineers with specialized configurations:</p>
+<ul>
+<li><strong>Migration Engineers</strong>: Full access to AI-assisted refactoring tools</li>
+<li><strong>Feature Teams</strong>: Read-only monolith access, focused on new services</li>
+<li><strong>QA Teams</strong>: AI assistants configured for test generation and validation</li>
+<li><strong>SRE Teams</strong>: Monitoring and performance analysis tools</li>
+</ul>
+<h3 id="technical-challenges"><a class="header" href="#technical-challenges">Technical Challenges</a></h3>
+<p><strong>Distributed State Management</strong></p>
+<p>The monolith relied heavily on database transactions. Microservices needed distributed state management, leading to subtle bugs.</p>
+<p>Solution: They built an AI tool that analyzed transaction boundaries and suggested saga patterns:</p>
+<pre><code class="language-typescript">interface TransactionAnalysis {
+  originalTransaction: DatabaseTransaction;
+  suggestedSaga: {
+    steps: SagaStep[];
+    compensations: CompensationAction[];
+    consistencyLevel: 'eventual' | 'strong';
+  };
+  riskAssessment: {
+    dataInconsistencyRisk: 'low' | 'medium' | 'high';
+    performanceImpact: number; // estimated latency increase
+  };
+}
+</code></pre>
+<p><strong>Knowledge Silos</strong></p>
+<p>Different regions had modified the monolith independently, creating hidden dependencies. AI assistants trained on one region's code gave incorrect suggestions for others.</p>
+<p>Solution: They implemented region-aware context loading:</p>
+<pre><code class="language-typescript">class RegionalContextLoader {
+  async loadContext(threadId: string, region: string): Promise&lt;Context&gt; {
+    const baseContext = await this.loadSharedContext();
+    const regionalOverrides = await this.loadRegionalCustomizations(region);
+    
+    // Merge with conflict resolution
+    return this.mergeContexts(baseContext, regionalOverrides, {
+      conflictResolution: 'regional-priority',
+      warnOnOverride: true
+    });
+  }
+}
+</code></pre>
+<p><strong>Performance at Scale</strong></p>
+<p>With 200 engineers creating threads simultaneously, the system struggled. Thread operations that took 200ms in the pilot jumped to 8-15 seconds.</p>
+<p>Solution: They implemented aggressive caching and sharding:</p>
+<ul>
+<li>Thread state sharded by team</li>
+<li>Read replicas for historical thread access</li>
+<li>Precomputed embeddings for common code patterns</li>
+<li>Edge caching for frequently accessed documentation</li>
+</ul>
+<h3 id="results-after-12-months"><a class="header" href="#results-after-12-months">Results After 12 Months</a></h3>
+<ul>
+<li>47% of monolith successfully migrated (target was 30%)</li>
+<li>89% reduction in production incidents for migrated services</li>
+<li>$4.2M saved in reduced downtime</li>
+<li>67% reduction in time-to-market for new features</li>
+<li>94% developer satisfaction (up from 41%)</li>
+</ul>
+<h3 id="lessons-learned-1"><a class="header" href="#lessons-learned-1">Lessons Learned</a></h3>
+<ol>
+<li>
+<p><strong>AI for archaeology</strong>: Using AI to understand legacy systems before modifying them prevented countless issues.</p>
+</li>
+<li>
+<p><strong>Specialization matters</strong>: Different roles needed different AI configurations. One-size-fits-all failed dramatically.</p>
+</li>
+<li>
+<p><strong>Performance is a feature</strong>: Slow AI assistants are worse than no AI. Engineers will abandon tools that interrupt their flow.</p>
+</li>
+<li>
+<p><strong>Regional differences are real</strong>: Global deployments need to account for local modifications and practices.</p>
+</li>
+</ol>
+<h2 id="case-study-3-open-source-project"><a class="header" href="#case-study-3-open-source-project">Case Study 3: Open Source Project</a></h2>
+<h3 id="background-2"><a class="header" href="#background-2">Background</a></h3>
+<p>A popular graph database written in Rust had a contribution problem. Despite 50K GitHub stars, only 12 people had made significant contributions in the past year. The codebase's complexity scared away potential contributors.</p>
+<h3 id="community-driven-deployment"><a class="header" href="#community-driven-deployment">Community-Driven Deployment</a></h3>
+<p>The maintainers deployed a public instance of the AI assistant with:</p>
+<ul>
+<li>Read-only access to the entire codebase</li>
+<li>Integration with GitHub issues and discussions</li>
+<li>Custom tools for Rust-specific patterns</li>
+<li>Rate limiting to prevent abuse</li>
+</ul>
+<h3 id="immediate-impact"><a class="header" href="#immediate-impact">Immediate Impact</a></h3>
+<p>First month statistics:</p>
+<pre><code>New contributor PRs: 73 (previous record: 8)
+Average PR quality score: 8.2/10 (up from 4.1/10)
+Time to first PR: 4.7 hours (down from 3.2 weeks)
+Documentation contributions: 147 (previous year total: 23)
+</code></pre>
+<h3 id="challenges"><a class="header" href="#challenges">Challenges</a></h3>
+<p><strong>Maintaining Code Style</strong></p>
+<p>New contributors used AI to generate code that worked but didn't match project conventions. The review burden on maintainers increased.</p>
+<p>Solution: They created a style-aware tool that learned from accepted PRs:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// AI learned patterns like preferring explicit types in public APIs
+// Bad (AI initially generated)
+pub fn process(data: impl Iterator&lt;Item = _&gt;) -&gt; Result&lt;_, Error&gt;
+
+// Good (after style learning)
+pub fn process&lt;T&gt;(data: impl Iterator&lt;Item = T&gt;) -&gt; Result&lt;ProcessedData, GraphError&gt;
+where
+    T: Node + Send + Sync
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Intellectual Property Concerns</strong></p>
+<p>Some contributors worried about AI training on their code. Others questioned whether AI-assisted contributions were "authentic."</p>
+<p>Solution: Clear policies and attribution:</p>
+<ol>
+<li>AI never trained on project code, only assisted with it</li>
+<li>Contributors must understand and test AI-suggested code</li>
+<li>AI assistance disclosed in PR descriptions</li>
+<li>Monthly transparency reports on AI usage</li>
+</ol>
+<p><strong>Scaling Community Support</strong></p>
+<p>AI assistant costs grew linearly with contributors, but the project had no funding.</p>
+<p>Solution: Tiered access model:</p>
+<ul>
+<li><strong>Explorers</strong>: Basic read access, 100 queries/month</li>
+<li><strong>Contributors</strong>: Full access after first accepted PR</li>
+<li><strong>Maintainers</strong>: Unlimited access plus admin tools</li>
+<li><strong>Sponsors</strong>: Priority access for GitHub sponsors</li>
+</ul>
+<h3 id="long-term-results-1-year"><a class="header" href="#long-term-results-1-year">Long-term Results (1 Year)</a></h3>
+<ul>
+<li>Active contributors increased from 12 to 178</li>
+<li>Monthly releases (previously quarterly)</li>
+<li>93% reduction in "how do I contribute" issues</li>
+<li>4 new corporate sponsors citing easier onboarding</li>
+<li>2 full-time maintainers funded by sponsorships</li>
+</ul>
+<h3 id="lessons-learned-2"><a class="header" href="#lessons-learned-2">Lessons Learned</a></h3>
+<ol>
+<li>
+<p><strong>Lower barriers dramatically</strong>: AI assistants can make complex codebases approachable to newcomers.</p>
+</li>
+<li>
+<p><strong>Style matters in open source</strong>: Consistency is more important than correctness for project health.</p>
+</li>
+<li>
+<p><strong>Transparency builds trust</strong>: Being open about AI usage prevented community backlash.</p>
+</li>
+<li>
+<p><strong>Sustainable funding models</strong>: Success creates costs. Plan for them early.</p>
+</li>
+</ol>
+<h2 id="case-study-4-research-lab"><a class="header" href="#case-study-4-research-lab">Case Study 4: Research Lab</a></h2>
+<h3 id="background-3"><a class="header" href="#background-3">Background</a></h3>
+<p>A computational biology lab with 25 researchers faced a unique challenge. Their PhDs in biology needed to write complex data analysis code but had limited programming experience. Previous attempts with traditional IDEs and notebooks hadn't scaled.</p>
+<h3 id="scientific-workflow-integration"><a class="header" href="#scientific-workflow-integration">Scientific Workflow Integration</a></h3>
+<p>They deployed AI assistants integrated with:</p>
+<ul>
+<li>JupyterLab for interactive analysis</li>
+<li>SLURM for cluster job submission</li>
+<li>Domain-specific libraries (BioPython, ScanPy, etc.)</li>
+<li>Paper reference database</li>
+</ul>
+<h3 id="novel-use-cases"><a class="header" href="#novel-use-cases">Novel Use Cases</a></h3>
+<p><strong>Literature-Aware Coding</strong></p>
+<p>Researchers could reference papers directly in threads:</p>
+<pre><code class="language-python"># User: Implement the normalization method from Smith et al. 2023
+# AI: I'll implement the SCTransform normalization described in that paper
+
+def sctransform_normalize(adata, n_genes=3000, min_cells=5):
+    """
+    Implements SCTransform normalization from Smith et al. 2023
+    'Improved normalization for single-cell RNA sequencing'
+    
+    Key innovation: Uses Pearson residuals from regularized negative binomial regression
+    """
+    # Implementation following paper's Algorithm 1
+    ...
+</code></pre>
+<p><strong>Experiment Tracking</strong></p>
+<p>AI assistants automatically logged experimental parameters:</p>
+<pre><code class="language-python">class ExperimentTracker(Tool):
+    def track_analysis(self, code: str, results: Any) -&gt; ExperimentLog:
+        return {
+            'timestamp': datetime.now(),
+            'code_hash': hashlib.sha256(code.encode()).hexdigest(),
+            'parameters': self.extract_parameters(code),
+            'data_sources': self.detect_data_sources(code),
+            'results_summary': self.summarize_results(results),
+            'reproducibility_score': self.assess_reproducibility(code)
+        }
+</code></pre>
+<h3 id="challenges-1"><a class="header" href="#challenges-1">Challenges</a></h3>
+<p><strong>Scientific Correctness</strong></p>
+<p>Biology has domain-specific gotchas. Standard AI training didn't know that comparing gene names across species requires orthologue mapping.</p>
+<p>Solution: Domain-specific validation tools:</p>
+<pre><code class="language-python">class BiologyValidator(Tool):
+    def validate_analysis(self, code: str) -&gt; ValidationResult:
+        warnings = []
+        
+        # Check for common issues
+        if 'gene_name' in code and not 'species' in code:
+            warnings.append("Gene names are species-specific. Specify organism.")
+            
+        if 'p_value' in code and not 'multiple_testing_correction' in code:
+            warnings.append("Multiple testing correction recommended for p-values")
+            
+        return warnings
+</code></pre>
+<p><strong>Reproducibility Requirements</strong></p>
+<p>Scientific code needs perfect reproducibility. AI suggestions sometimes included non-deterministic operations.</p>
+<p>Solution: Reproducibility-first code generation:</p>
+<pre><code class="language-python"># AI learned to always set random seeds
+np.random.seed(42)
+torch.manual_seed(42)
+
+# And to version-pin dependencies
+# requirements.txt generated with every analysis
+scanpy==1.9.3
+pandas==1.5.3
+numpy==1.24.3
+</code></pre>
+<h3 id="results"><a class="header" href="#results">Results</a></h3>
+<ul>
+<li>73% reduction in time from hypothesis to results</li>
+<li>92% of generated analyses were reproducible (up from 34%)</li>
+<li>8 papers published citing AI-assisted analysis</li>
+<li>$1.2M in new grants citing improved productivity</li>
+<li>100% of researchers reported improved confidence in coding</li>
+</ul>
+<h3 id="lessons-learned-3"><a class="header" href="#lessons-learned-3">Lessons Learned</a></h3>
+<ol>
+<li>
+<p><strong>Domain expertise matters</strong>: Generic AI needs domain-specific guardrails for specialized fields.</p>
+</li>
+<li>
+<p><strong>Reproducibility by default</strong>: Scientific computing has different requirements than web development.</p>
+</li>
+<li>
+<p><strong>Bridge skill gaps carefully</strong>: AI can help non-programmers code, but they still need to understand what they're running.</p>
+</li>
+<li>
+<p><strong>Track everything</strong>: Scientific workflows benefit enormously from automatic experiment tracking.</p>
+</li>
+</ol>
+<h2 id="cross-case-analysis"><a class="header" href="#cross-case-analysis">Cross-Case Analysis</a></h2>
+<p>Looking across all four deployments, several patterns emerge:</p>
+<h3 id="performance-benchmarks"><a class="header" href="#performance-benchmarks">Performance Benchmarks</a></h3>
+<p>Average metrics across deployments:</p>
+<pre><code>Initial productivity gain: 2.3x - 3.8x
+Steady-state productivity: 1.8x - 2.7x
+Code quality improvement: 67% - 89%
+Developer satisfaction: +53 percentage points
+Time to proficiency: -72%
+</code></pre>
+<h3 id="common-challenges"><a class="header" href="#common-challenges">Common Challenges</a></h3>
+<ol>
+<li><strong>Context Management</strong>: Every deployment hit context limits and needed custom solutions</li>
+<li><strong>Permission Boundaries</strong>: Security incidents happened early until proper guardrails were established</li>
+<li><strong>Performance at Scale</strong>: Initial pilots always needed optimization for broader deployment</li>
+<li><strong>Cultural Resistance</strong>: 20-30% of developers initially resisted, requiring careful change management</li>
+</ol>
+<h3 id="success-factors"><a class="header" href="#success-factors">Success Factors</a></h3>
+<ol>
+<li><strong>Start Small</strong>: Pilot programs identified issues before they became critical</li>
+<li><strong>Measure Business Metrics</strong>: Focus on outcomes, not AI usage statistics</li>
+<li><strong>Integrate Deeply</strong>: Success came from fitting into existing workflows</li>
+<li><strong>Specialize by Role</strong>: Different users need different configurations</li>
+<li><strong>Plan for Scale</strong>: Costs and performance need early attention</li>
+</ol>
+<h3 id="user-feedback-patterns"><a class="header" href="#user-feedback-patterns">User Feedback Patterns</a></h3>
+<p>Feedback evolved predictably across deployments:</p>
+<p><strong>Weeks 1-2</strong>: "This is helpful! It wrote a whole function!"</p>
+<p><strong>Weeks 3-4</strong>: "It doesn't understand our codebase"</p>
+<p><strong>Weeks 5-8</strong>: "These guardrails are too restrictive"</p>
+<p><strong>Weeks 9-12</strong>: "OK, this is actually helpful now"</p>
+<p><strong>Months 4-6</strong>: "I can't imagine working without it"</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<p>These case studies reveal that successful collaborative AI deployment isn't about the technology alone. It's about understanding your specific context and adapting the system to fit.</p>
+<p>FinTech needed compliance integration. Enterprises needed scale and specialization. Open source needed community trust. Research labs needed domain awareness.</p>
+<p>The tools and architecture patterns we've covered throughout this book provide the foundation. But real success comes from thoughtful adaptation to your unique challenges.</p>
+<p>The next chapter examines how to maintain and evolve these systems once deployed, ensuring they continue delivering value as your needs change.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Team Workflows - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-iii-collaboration/chapter-8-team-workflows.html -->
+<main>
+<h1 id="chapter-8-team-workflow-patterns"><a class="header" href="#chapter-8-team-workflow-patterns">Chapter 8: Team Workflow Patterns</a></h1>
+<p>When multiple developers work with AI coding assistants, coordination becomes critical. This chapter explores collaboration patterns for AI-assisted development, from concurrent editing strategies to enterprise audit requirements. We'll examine how individual-focused architectures extend naturally to team scenarios.</p>
+<h2 id="the-challenge-of-concurrent-ai-sessions"><a class="header" href="#the-challenge-of-concurrent-ai-sessions">The Challenge of Concurrent AI Sessions</a></h2>
+<p>Traditional version control handles concurrent human edits through merge strategies. But AI-assisted development introduces new complexities. When two developers prompt their AI assistants to modify the same codebase simultaneously, the challenges multiply:</p>
+<pre><code class="language-typescript">// Developer A's session
+"Refactor the authentication module to use JWT tokens"
+
+// Developer B's session (at the same time)
+"Add OAuth2 support to the authentication system"
+</code></pre>
+<p>Both AI agents begin analyzing the code, generating modifications, and executing file edits. Without coordination, they'll create conflicting changes that are harder to resolve than typical merge conflicts—because each AI's changes might span multiple files with interdependent modifications.</p>
+<h2 id="building-on-amps-thread-architecture"><a class="header" href="#building-on-amps-thread-architecture">Building on Amp's Thread Architecture</a></h2>
+<p>Amp's thread-based architecture provides a foundation for team coordination. Each developer's conversation exists as a separate thread, with its own state and history. The <code>ThreadSyncService</code> already handles synchronization between local and server state:</p>
+<pre><code class="language-typescript">export interface ThreadSyncService {
+    sync(): Promise&lt;void&gt;
+    updateThreadMeta(threadID: ThreadID, meta: ThreadMeta): Promise&lt;void&gt;
+    threadSyncInfo(threadIDs: ThreadID[]): Observable&lt;Record&lt;ThreadID, ThreadSyncInfo&gt;&gt;
+}
+</code></pre>
+<p>This synchronization mechanism can extend to team awareness. When multiple developers work on related code, their thread metadata could include:</p>
+<pre><code class="language-typescript">interface TeamThreadMeta extends ThreadMeta {
+    activeFiles: string[]          // Files being modified
+    activeBranch: string           // Git branch context
+    teamMembers: string[]          // Other users with access
+    lastActivity: number           // Timestamp for presence
+    intentSummary?: string         // AI-generated work summary
+}
+</code></pre>
+<h2 id="concurrent-editing-strategies"><a class="header" href="#concurrent-editing-strategies">Concurrent Editing Strategies</a></h2>
+<p>The key to managing concurrent AI edits lies in early detection and intelligent coordination. Here's how Amp's architecture could handle this:</p>
+<h3 id="file-level-locking"><a class="header" href="#file-level-locking">File-Level Locking</a></h3>
+<p>The simplest approach prevents conflicts by establishing exclusive access:</p>
+<pre><code class="language-typescript">class FileCoordinator {
+    private fileLocks = new Map&lt;string, FileLock&gt;()
+    
+    async acquireLock(
+        filePath: string, 
+        threadID: ThreadID,
+        intent?: string
+    ): Promise&lt;LockResult&gt; {
+        const existingLock = this.fileLocks.get(filePath)
+        
+        if (existingLock &amp;&amp; !this.isLockExpired(existingLock)) {
+            return {
+                success: false,
+                owner: existingLock.threadID,
+                intent: existingLock.intent,
+                expiresAt: existingLock.expiresAt
+            }
+        }
+        
+        const lock: FileLock = {
+            threadID,
+            filePath,
+            acquiredAt: Date.now(),
+            expiresAt: Date.now() + LOCK_DURATION,
+            intent
+        }
+        
+        this.fileLocks.set(filePath, lock)
+        this.broadcastLockUpdate(filePath, lock)
+        
+        return { success: true, lock }
+    }
+}
+</code></pre>
+<p>But hard locks frustrate developers. A better approach uses soft coordination with conflict detection:</p>
+<h3 id="optimistic-concurrency-control"><a class="header" href="#optimistic-concurrency-control">Optimistic Concurrency Control</a></h3>
+<p>Instead of blocking edits, track them and detect conflicts as they occur:</p>
+<pre><code class="language-typescript">class EditTracker {
+    private activeEdits = new Map&lt;string, ActiveEdit[]&gt;()
+    
+    async proposeEdit(
+        filePath: string,
+        edit: ProposedEdit
+    ): Promise&lt;EditProposal&gt; {
+        const concurrent = this.activeEdits.get(filePath) || []
+        const conflicts = this.detectConflicts(edit, concurrent)
+        
+        if (conflicts.length &gt; 0) {
+            // AI can attempt to merge changes
+            const resolution = await this.aiMergeStrategy(
+                edit, 
+                conflicts,
+                await this.getFileContent(filePath)
+            )
+            
+            if (resolution.success) {
+                return {
+                    type: 'merged',
+                    edit: resolution.mergedEdit,
+                    originalConflicts: conflicts
+                }
+            }
+            
+            return {
+                type: 'conflict',
+                conflicts,
+                suggestions: resolution.suggestions
+            }
+        }
+        
+        // No conflicts, proceed with edit
+        this.activeEdits.set(filePath, [...concurrent, {
+            ...edit,
+            timestamp: Date.now()
+        }])
+        
+        return { type: 'clear', edit }
+    }
+}
+</code></pre>
+<h3 id="ai-assisted-merge-resolution"><a class="header" href="#ai-assisted-merge-resolution">AI-Assisted Merge Resolution</a></h3>
+<p>When conflicts occur, the AI can help resolve them by understanding both developers' intents:</p>
+<pre><code class="language-typescript">async function aiMergeStrategy(
+    proposedEdit: ProposedEdit,
+    conflicts: ActiveEdit[],
+    currentContent: string
+): Promise&lt;MergeResolution&gt; {
+    const prompt = `
+        Multiple developers are editing the same file concurrently.
+        
+        Current file content:
+        ${currentContent}
+        
+        Proposed edit (${proposedEdit.threadID}):
+        Intent: ${proposedEdit.intent}
+        Changes: ${proposedEdit.changes}
+        
+        Conflicting edits:
+        ${conflicts.map(c =&gt; `
+            Thread ${c.threadID}:
+            Intent: ${c.intent}
+            Changes: ${c.changes}
+        `).join('\n')}
+        
+        Can these changes be merged? If so, provide a unified edit.
+        If not, explain the conflict and suggest resolution options.
+    `
+    
+    const response = await inferenceService.complete(prompt)
+    return parseMergeResolution(response)
+}
+</code></pre>
+<h2 id="presence-and-awareness-features"><a class="header" href="#presence-and-awareness-features">Presence and Awareness Features</a></h2>
+<p>Effective collaboration requires knowing what your teammates are doing. Amp's reactive architecture makes presence features straightforward to implement.</p>
+<h3 id="active-thread-awareness"><a class="header" href="#active-thread-awareness">Active Thread Awareness</a></h3>
+<p>The thread view state already tracks what each session is doing:</p>
+<pre><code class="language-typescript">export type ThreadViewState = ThreadWorkerStatus &amp; {
+    waitingForUserInput: 'tool-use' | 'user-message-initial' | 'user-message-reply' | false
+}
+</code></pre>
+<p>This extends naturally to team awareness:</p>
+<pre><code class="language-typescript">interface TeamPresence {
+    threadID: ThreadID
+    user: string
+    status: ThreadViewState
+    currentFiles: string[]
+    lastHeartbeat: number
+    currentPrompt?: string  // Sanitized/summarized
+}
+
+class PresenceService {
+    private presence = new BehaviorSubject&lt;Map&lt;string, TeamPresence&gt;&gt;(new Map())
+    
+    broadcastPresence(update: PresenceUpdate): void {
+        const current = this.presence.getValue()
+        current.set(update.user, {
+            ...update,
+            lastHeartbeat: Date.now()
+        })
+        this.presence.next(current)
+        
+        // Clean up stale presence after timeout
+        setTimeout(() =&gt; this.cleanupStale(), PRESENCE_TIMEOUT)
+    }
+    
+    getActiveUsersForFile(filePath: string): Observable&lt;TeamPresence[]&gt; {
+        return this.presence.pipe(
+            map(presenceMap =&gt; 
+                Array.from(presenceMap.values())
+                    .filter(p =&gt; p.currentFiles.includes(filePath))
+            )
+        )
+    }
+}
+</code></pre>
+<h3 id="visual-indicators"><a class="header" href="#visual-indicators">Visual Indicators</a></h3>
+<p>In the UI, presence appears as subtle indicators:</p>
+<pre><code class="language-typescript">const FilePresenceIndicator: React.FC&lt;{ filePath: string }&gt; = ({ filePath }) =&gt; {
+    const activeUsers = useActiveUsers(filePath)
+    
+    if (activeUsers.length === 0) return null
+    
+    return (
+        &lt;div className="presence-indicators"&gt;
+            {activeUsers.map(user =&gt; (
+                &lt;Tooltip key={user.user} content={user.currentPrompt || 'Active'}&gt;
+                    &lt;Avatar 
+                        user={user.user}
+                        status={user.status.state}
+                        pulse={user.status.state === 'active'}
+                    /&gt;
+                &lt;/Tooltip&gt;
+            ))}
+        &lt;/div&gt;
+    )
+}
+</code></pre>
+<h3 id="workspace-coordination"><a class="header" href="#workspace-coordination">Workspace Coordination</a></h3>
+<p>Beyond individual files, teams need workspace-level coordination:</p>
+<pre><code class="language-typescript">interface WorkspaceActivity {
+    recentThreads: ThreadSummary[]
+    activeRefactorings: RefactoringOperation[]
+    toolExecutions: ToolExecution[]
+    modifiedFiles: FileModification[]
+}
+
+class WorkspaceCoordinator {
+    async getWorkspaceActivity(
+        since: number
+    ): Promise&lt;WorkspaceActivity&gt; {
+        const [threads, tools, files] = await Promise.all([
+            this.getRecentThreads(since),
+            this.getActiveTools(since),
+            this.getModifiedFiles(since)
+        ])
+        
+        const refactorings = this.detectRefactorings(threads, files)
+        
+        return {
+            recentThreads: threads,
+            activeRefactorings: refactorings,
+            toolExecutions: tools,
+            modifiedFiles: files
+        }
+    }
+    
+    private detectRefactorings(
+        threads: ThreadSummary[], 
+        files: FileModification[]
+    ): RefactoringOperation[] {
+        // Analyze threads and file changes to detect large-scale refactorings
+        // that might affect other developers
+        return threads
+            .filter(t =&gt; this.isRefactoring(t))
+            .map(t =&gt; ({
+                threadID: t.id,
+                user: t.user,
+                description: t.summary,
+                affectedFiles: this.getAffectedFiles(t, files),
+                status: this.getRefactoringStatus(t)
+            }))
+    }
+}
+</code></pre>
+<h2 id="notification-systems"><a class="header" href="#notification-systems">Notification Systems</a></h2>
+<p>Effective notifications balance awareness with focus. Too many interruptions destroy productivity, while too few leave developers unaware of important changes.</p>
+<h3 id="intelligent-notification-routing"><a class="header" href="#intelligent-notification-routing">Intelligent Notification Routing</a></h3>
+<p>Not all team activity requires immediate attention:</p>
+<pre><code class="language-typescript">class NotificationRouter {
+    private rules: NotificationRule[] = [
+        {
+            condition: (event) =&gt; event.type === 'conflict',
+            priority: 'high',
+            delivery: 'immediate'
+        },
+        {
+            condition: (event) =&gt; event.type === 'refactoring_started' &amp;&amp; 
+                                  event.affectedFiles.length &gt; 10,
+            priority: 'medium',
+            delivery: 'batched'
+        },
+        {
+            condition: (event) =&gt; event.type === 'file_modified',
+            priority: 'low',
+            delivery: 'digest'
+        }
+    ]
+    
+    async route(event: TeamEvent): Promise&lt;void&gt; {
+        const rule = this.rules.find(r =&gt; r.condition(event))
+        if (!rule) return
+        
+        const relevantUsers = await this.getRelevantUsers(event)
+        
+        switch (rule.delivery) {
+            case 'immediate':
+                await this.sendImmediate(event, relevantUsers)
+                break
+            case 'batched':
+                this.batchQueue.add(event, relevantUsers)
+                break
+            case 'digest':
+                this.digestQueue.add(event, relevantUsers)
+                break
+        }
+    }
+    
+    private async getRelevantUsers(event: TeamEvent): Promise&lt;string[]&gt; {
+        // Determine who needs to know about this event
+        const directlyAffected = await this.getUsersWorkingOn(event.affectedFiles)
+        const interested = await this.getUsersInterestedIn(event.context)
+        
+        return [...new Set([...directlyAffected, ...interested])]
+    }
+}
+</code></pre>
+<h3 id="context-aware-notifications"><a class="header" href="#context-aware-notifications">Context-Aware Notifications</a></h3>
+<p>Notifications should provide enough context for quick decision-making:</p>
+<pre><code class="language-typescript">interface RichNotification {
+    id: string
+    type: NotificationType
+    title: string
+    summary: string
+    context: {
+        thread?: ThreadSummary
+        files?: FileSummary[]
+        conflicts?: ConflictInfo[]
+        suggestions?: string[]
+    }
+    actions: NotificationAction[]
+    priority: Priority
+    timestamp: number
+}
+
+class NotificationBuilder {
+    buildConflictNotification(
+        conflict: EditConflict
+    ): RichNotification {
+        const summary = this.generateConflictSummary(conflict)
+        const suggestions = this.generateResolutionSuggestions(conflict)
+        
+        return {
+            id: newNotificationID(),
+            type: 'conflict',
+            title: `Edit conflict in ${conflict.filePath}`,
+            summary,
+            context: {
+                files: [conflict.file],
+                conflicts: [conflict],
+                suggestions
+            },
+            actions: [
+                {
+                    label: 'View Conflict',
+                    action: 'open_conflict_view',
+                    params: { conflictId: conflict.id }
+                },
+                {
+                    label: 'Auto-merge',
+                    action: 'attempt_auto_merge',
+                    params: { conflictId: conflict.id },
+                    requiresConfirmation: true
+                }
+            ],
+            priority: 'high',
+            timestamp: Date.now()
+        }
+    }
+}
+</code></pre>
+<h2 id="audit-trails-and-compliance"><a class="header" href="#audit-trails-and-compliance">Audit Trails and Compliance</a></h2>
+<p>Enterprise environments require comprehensive audit trails. Every AI interaction, code modification, and team coordination event needs tracking for compliance and debugging.</p>
+<h3 id="comprehensive-event-logging"><a class="header" href="#comprehensive-event-logging">Comprehensive Event Logging</a></h3>
+<p>Amp's thread deltas provide a natural audit mechanism:</p>
+<pre><code class="language-typescript">interface AuditEvent {
+    id: string
+    timestamp: number
+    threadID: ThreadID
+    user: string
+    type: string
+    details: Record&lt;string, any&gt;
+    hash: string  // For tamper detection
+}
+
+class AuditService {
+    private auditStore: AuditStore
+    
+    async logThreadDelta(
+        threadID: ThreadID,
+        delta: ThreadDelta,
+        user: string
+    ): Promise&lt;void&gt; {
+        const event: AuditEvent = {
+            id: newAuditID(),
+            timestamp: Date.now(),
+            threadID,
+            user,
+            type: `thread.${delta.type}`,
+            details: this.sanitizeDelta(delta),
+            hash: this.computeHash(threadID, delta, user)
+        }
+        
+        await this.auditStore.append(event)
+        
+        // Special handling for sensitive operations
+        if (this.isSensitiveOperation(delta)) {
+            await this.notifyCompliance(event)
+        }
+    }
+    
+    private sanitizeDelta(delta: ThreadDelta): Record&lt;string, any&gt; {
+        // Remove sensitive data while preserving audit value
+        const sanitized = { ...delta }
+        
+        if (delta.type === 'tool:data' &amp;&amp; delta.data.status === 'success') {
+            // Keep metadata but potentially redact output
+            sanitized.data = {
+                ...delta.data,
+                output: this.redactSensitive(delta.data.output)
+            }
+        }
+        
+        return sanitized
+    }
+}
+</code></pre>
+<h3 id="chain-of-custody"><a class="header" href="#chain-of-custody">Chain of Custody</a></h3>
+<p>For regulated environments, maintaining a clear chain of custody for AI-generated code is crucial:</p>
+<pre><code class="language-typescript">interface CodeProvenance {
+    threadID: ThreadID
+    messageID: string
+    generatedBy: 'human' | 'ai'
+    prompt?: string
+    model?: string
+    timestamp: number
+    reviewedBy?: string[]
+    approvedBy?: string[]
+}
+
+class ProvenanceTracker {
+    async trackFileModification(
+        filePath: string,
+        modification: FileModification,
+        source: CodeProvenance
+    ): Promise&lt;void&gt; {
+        const existing = await this.getFileProvenance(filePath)
+        
+        const updated = {
+            ...existing,
+            modifications: [
+                ...existing.modifications,
+                {
+                    ...modification,
+                    provenance: source,
+                    diff: await this.computeDiff(filePath, modification)
+                }
+            ]
+        }
+        
+        await this.store.update(filePath, updated)
+        
+        // Generate compliance report if needed
+        if (this.requiresComplianceReview(modification)) {
+            await this.triggerComplianceReview(filePath, modification, source)
+        }
+    }
+}
+</code></pre>
+<h3 id="compliance-reporting"><a class="header" href="#compliance-reporting">Compliance Reporting</a></h3>
+<p>Audit data becomes valuable through accessible reporting:</p>
+<pre><code class="language-typescript">class ComplianceReporter {
+    async generateReport(
+        timeRange: TimeRange,
+        options: ReportOptions
+    ): Promise&lt;ComplianceReport&gt; {
+        const events = await this.auditService.getEvents(timeRange)
+        
+        return {
+            summary: {
+                totalSessions: this.countUniqueSessions(events),
+                totalModifications: this.countModifications(events),
+                aiGeneratedCode: this.calculateAICodePercentage(events),
+                reviewedCode: this.calculateReviewPercentage(events)
+            },
+            userActivity: this.aggregateByUser(events),
+            modelUsage: this.aggregateByModel(events),
+            sensitiveOperations: this.extractSensitiveOps(events),
+            anomalies: await this.detectAnomalies(events)
+        }
+    }
+    
+    private async detectAnomalies(
+        events: AuditEvent[]
+    ): Promise&lt;Anomaly[]&gt; {
+        const anomalies: Anomaly[] = []
+        
+        // Unusual activity patterns
+        const userPatterns = this.analyzeUserPatterns(events)
+        anomalies.push(...userPatterns.filter(p =&gt; p.isAnomalous))
+        
+        // Suspicious file access
+        const fileAccess = this.analyzeFileAccess(events)
+        anomalies.push(...fileAccess.filter(a =&gt; a.isSuspicious))
+        
+        // Model behavior changes
+        const modelBehavior = this.analyzeModelBehavior(events)
+        anomalies.push(...modelBehavior.filter(b =&gt; b.isUnexpected))
+        
+        return anomalies
+    }
+}
+</code></pre>
+<h2 id="implementation-considerations"><a class="header" href="#implementation-considerations">Implementation Considerations</a></h2>
+<p>Implementing team workflows requires balancing collaboration benefits with system complexity:</p>
+<h3 id="performance-at-scale"><a class="header" href="#performance-at-scale">Performance at Scale</a></h3>
+<p>Team features multiply the data flowing through the system. Batching and debouncing patterns prevent overload while maintaining responsiveness:</p>
+<pre><code class="language-typescript">class TeamDataProcessor {
+    private updateQueues = new Map&lt;string, Observable&lt;Set&lt;string&gt;&gt;&gt;()
+    
+    initializeBatching(): void {
+        // Different update types need different batching strategies
+        const presenceQueue = new BehaviorSubject&lt;Set&lt;string&gt;&gt;(new Set())
+        
+        presenceQueue.pipe(
+            filter(updates =&gt; updates.size &gt; 0),
+            debounceTime(3000), // Batch closely-timed changes
+            map(updates =&gt; Array.from(updates))
+        ).subscribe(userIDs =&gt; {
+            this.processBatchedPresenceUpdates(userIDs)
+        })
+    }
+    
+    queuePresenceUpdate(userID: string): void {
+        const queue = this.updateQueues.get('presence') as BehaviorSubject&lt;Set&lt;string&gt;&gt;
+        const current = queue.value
+        current.add(userID)
+        queue.next(current)
+    }
+}
+</code></pre>
+<p>This pattern applies to presence updates, notifications, and audit events, ensuring system stability under team collaboration load.</p>
+<h3 id="security-and-privacy"><a class="header" href="#security-and-privacy">Security and Privacy</a></h3>
+<p>Team features must enforce appropriate boundaries while enabling collaboration:</p>
+<pre><code class="language-typescript">class TeamAccessController {
+    async filterTeamData(
+        data: TeamData,
+        requestingUser: string
+    ): Promise&lt;FilteredTeamData&gt; {
+        const userContext = await this.getUserContext(requestingUser)
+        
+        return {
+            // User always sees their own work
+            ownSessions: data.sessions.filter(s =&gt; s.userID === requestingUser),
+            
+            // Team data based on membership and sharing settings
+            teamSessions: data.sessions.filter(session =&gt; 
+                this.canViewSession(session, userContext)
+            ),
+            
+            // Aggregate metrics without individual details
+            teamMetrics: this.aggregateWithPrivacy(data.sessions, userContext),
+            
+            // Presence data with privacy controls
+            teamPresence: this.filterPresenceData(data.presence, userContext)
+        }
+    }
+    
+    private canViewSession(
+        session: Session,
+        userContext: UserContext
+    ): boolean {
+        // Own sessions
+        if (session.userID === userContext.userID) return true
+        
+        // Explicitly shared
+        if (session.sharedWith?.includes(userContext.userID)) return true
+        
+        // Team visibility with proper membership
+        if (session.teamVisible &amp;&amp; userContext.teamMemberships.includes(session.teamID)) {
+            return true
+        }
+        
+        // Public sessions
+        return session.visibility === 'public'
+    }
+}
+</code></pre>
+<h3 id="graceful-degradation"><a class="header" href="#graceful-degradation">Graceful Degradation</a></h3>
+<p>Team features should enhance rather than hinder individual productivity:</p>
+<pre><code class="language-typescript">class ResilientTeamFeatures {
+    private readonly essentialFeatures = new Set(['core_sync', 'basic_sharing'])
+    private readonly optionalFeatures = new Set(['presence', 'notifications', 'analytics'])
+    
+    async initialize(): Promise&lt;FeatureAvailability&gt; {
+        const availability = {
+            essential: new Map&lt;string, boolean&gt;(),
+            optional: new Map&lt;string, boolean&gt;()
+        }
+        
+        // Essential features must work
+        for (const feature of this.essentialFeatures) {
+            try {
+                await this.enableFeature(feature)
+                availability.essential.set(feature, true)
+            } catch (error) {
+                availability.essential.set(feature, false)
+                this.logger.error(`Critical feature ${feature} failed`, error)
+            }
+        }
+        
+        // Optional features fail silently
+        for (const feature of this.optionalFeatures) {
+            try {
+                await this.enableFeature(feature)
+                availability.optional.set(feature, true)
+            } catch (error) {
+                availability.optional.set(feature, false)
+                this.logger.warn(`Optional feature ${feature} unavailable`, error)
+            }
+        }
+        
+        return availability
+    }
+    
+    async adaptToFailure(failedFeature: string): Promise&lt;void&gt; {
+        if (this.essentialFeatures.has(failedFeature)) {
+            // Find alternative or fallback for essential features
+            await this.activateFallback(failedFeature)
+        } else {
+            // Simply disable optional features
+            this.disableFeature(failedFeature)
+        }
+    }
+}
+</code></pre>
+<h2 id="the-human-element"><a class="header" href="#the-human-element">The Human Element</a></h2>
+<p>Technology enables collaboration, but human factors determine its success. The best team features feel invisible—they surface information when needed without creating friction.</p>
+<p>Consider how developers actually work. They context-switch between tasks, collaborate asynchronously, and need deep focus time. Team features should enhance these natural patterns, not fight them.</p>
+<p>The AI assistant becomes a team member itself, one that never forgets context, always follows standards, and can coordinate seamlessly across sessions. But it needs the right infrastructure to fulfill this role.</p>
+<h2 id="looking-forward"><a class="header" href="#looking-forward">Looking Forward</a></h2>
+<p>Team workflows in AI-assisted development are still evolving. As models become more capable and developers more comfortable with AI assistance, new patterns will emerge. The foundation Amp provides—reactive architecture, thread-based conversations, and robust synchronization—creates space for this evolution.</p>
+<p>The next chapter explores how these team features integrate with existing enterprise systems, from authentication providers to development toolchains. The boundaries between AI assistants and traditional development infrastructure continue to blur, creating new possibilities for how teams build software together.</p>
+</main>
+</body>
+</html>

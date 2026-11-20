@@ -293,6 +293,7 @@ body {
 .volume-toc { border-right: 1px solid var(--rule); padding-right: 1rem; font-size: 0.85rem; }
 .volume-toc h2 { margin: 0 0 0.75rem; font-size: 1rem; }
 .volume-toc ol { margin: 0; padding-left: 1.6rem; }
+.volume-toc ul { margin: 0; padding-left: 0; list-style: none; }
 .volume-toc li { margin: 0.4rem 0; }
 .volume-toc a { color: var(--muted); text-decoration: none; }
 .volume-toc a:hover { text-decoration: underline; }

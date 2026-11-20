@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Collaborative Architecture Overview - The Agentic Systems Series</title></head>
+<body>
+<!-- Source: https://gerred.github.io/building-an-agentic-system/second-edition/part-i-foundations/chapter-2-amp-architecture-overview.html -->
+<main>
+<h1 id="chapter-2-service-oriented-architecture-for-ai-systems"><a class="header" href="#chapter-2-service-oriented-architecture-for-ai-systems">Chapter 2: Service-Oriented Architecture for AI Systems</a></h1>
+<p>Building a collaborative AI coding assistant requires careful architectural decisions. How do you create a system that feels responsive to individual users while managing the complexity of distributed state, multi-user collaboration, and AI model interactions?</p>
+<p>This chapter explores service-oriented architecture patterns for AI systems, reactive state management approaches, and the design decisions that enable teams to work together seamlessly while maintaining system reliability.</p>
+<h2 id="core-design-principles"><a class="header" href="#core-design-principles">Core Design Principles</a></h2>
+<p>AI systems require architecture that balances responsiveness, collaboration, and reliability. Five key principles guide technical decisions:</p>
+<h3 id="1-service-isolation-by-domain"><a class="header" href="#1-service-isolation-by-domain">1. Service Isolation by Domain</a></h3>
+<p>Each service owns a specific domain and communicates through well-defined interfaces. This prevents tight coupling between AI processing, state management, and collaboration features.</p>
+<p><strong>Recognition Pattern</strong>: You need service isolation when:</p>
+<ul>
+<li>Different parts of your system have distinct failure modes</li>
+<li>Teams need to deploy features independently</li>
+<li>You're mixing real-time collaboration with AI processing</li>
+</ul>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Service interface defines clear boundaries
+interface IThreadService {
+  modifyThread(id: string, modifier: ThreadModifier): Promise&lt;Thread&gt;;
+  observeThread(id: string): Observable&lt;Thread&gt;;
+}
+
+// Implementation handles domain logic without external dependencies
+class ThreadService implements IThreadService {
+  constructor(
+    private storage: IThreadStorage,
+    private syncService: ISyncService
+  ) {}
+}
+</code></pre>
+<h3 id="2-observable-first-communication"><a class="header" href="#2-observable-first-communication">2. Observable-First Communication</a></h3>
+<p>Replace callbacks and promises with reactive streams for state changes. This pattern handles the complex data flow between AI responses, user actions, and collaboration updates.</p>
+<p><strong>Recognition Pattern</strong>: You need reactive communication when:</p>
+<ul>
+<li>Multiple components need to react to the same state changes</li>
+<li>You're handling real-time updates from multiple sources</li>
+<li>UI needs to stay synchronized with rapidly changing AI output</li>
+</ul>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Services expose Observable interfaces
+interface IThreadService {
+  observeThread(id: string): Observable&lt;Thread&gt;;
+  observeActiveThread(): Observable&lt;Thread | null&gt;;
+}
+
+// Consumers compose reactive streams
+threadService.observeActiveThread().pipe(
+  filter(thread =&gt; thread !== null),
+  switchMap(thread =&gt; combineLatest([
+    of(thread),
+    syncService.observeSyncStatus(thread.id)
+  ]))
+).subscribe(([thread, syncStatus]) =&gt; {
+  updateUI(thread, syncStatus);
+});
+</code></pre>
+<h3 id="3-optimistic-updates"><a class="header" href="#3-optimistic-updates">3. Optimistic Updates</a></h3>
+<p>Update local state immediately while syncing in the background. This provides responsive user experience even with high-latency AI operations or network issues.</p>
+<p><strong>Recognition Pattern</strong>: You need optimistic updates when:</p>
+<ul>
+<li>Users expect immediate feedback for their actions</li>
+<li>Network latency affects user experience</li>
+<li>AI operations take multiple seconds to complete</li>
+</ul>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Apply changes locally first, sync later
+class OptimisticUpdateService {
+  async updateThread(id: string, update: ThreadUpdate): Promise&lt;void&gt; {
+    // 1. Apply locally for immediate UI response
+    this.applyLocalUpdate(id, update);
+    
+    // 2. Queue for background synchronization
+    this.syncQueue.add({ threadId: id, update, timestamp: Date.now() });
+    
+    // 3. Process queue without blocking user
+    this.processSyncQueue();
+  }
+}
+</code></pre>
+<h3 id="4-graceful-degradation"><a class="header" href="#4-graceful-degradation">4. Graceful Degradation</a></h3>
+<p>Continue functioning even when external services are unavailable. AI systems depend on many external services (models, APIs, collaboration servers) that can fail independently.</p>
+<p><strong>Recognition Pattern</strong>: You need graceful degradation when:</p>
+<ul>
+<li>Your system depends on external AI APIs or collaboration servers</li>
+<li>Users need to work during network outages</li>
+<li>System components have different availability requirements</li>
+</ul>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Fallback patterns for service failures
+class ResilientService {
+  async fetchData(id: string): Promise&lt;Data&gt; {
+    try {
+      const data = await this.remoteAPI.get(`/data/${id}`);
+      await this.localCache.set(id, data); // Cache for offline use
+      return data;
+    } catch (error) {
+      if (this.isNetworkError(error)) {
+        return this.localCache.get(id) || this.getDefaultData(id);
+      }
+      throw error;
+    }
+  }
+}
+</code></pre>
+<h3 id="5-explicit-resource-management"><a class="header" href="#5-explicit-resource-management">5. Explicit Resource Management</a></h3>
+<p>Prevent memory leaks and resource exhaustion through consistent lifecycle patterns. AI systems often create many subscriptions, connections, and cached resources.</p>
+<p><strong>Recognition Pattern</strong>: You need explicit resource management when:</p>
+<ul>
+<li>Creating Observable subscriptions or WebSocket connections</li>
+<li>Caching AI model responses or user data</li>
+<li>Managing background processing tasks</li>
+</ul>
+<p><strong>Implementation Approach</strong>:</p>
+<pre><code class="language-typescript">// Base class ensures consistent cleanup
+abstract class BaseService implements IDisposable {
+  protected disposables: IDisposable[] = [];
+  
+  protected addDisposable(disposable: IDisposable): void {
+    this.disposables.push(disposable);
+  }
+  
+  dispose(): void {
+    this.disposables.forEach(d =&gt; d.dispose());
+    this.disposables.length = 0;
+  }
+}
+</code></pre>
+<h2 id="service-architecture-patterns"><a class="header" href="#service-architecture-patterns">Service Architecture Patterns</a></h2>
+<p>AI systems benefit from layered architecture where each layer has specific responsibilities and failure modes. This separation allows different parts to evolve independently.</p>
+<pre class="mermaid">graph TB
+    subgraph "Interface Layer"
+        CLI[CLI Interface]
+        IDE[IDE Extension]
+        Web[Web Interface]
+    end
+    
+    subgraph "Session Layer"
+        Session[Session Management]
+        Commands[Command Processing]
+    end
+    
+    subgraph "Core Services"
+        State[State Management]
+        Sync[Synchronization]
+        Auth[Authentication]
+        Tools[Tool Execution]
+        Config[Configuration]
+    end
+    
+    subgraph "Infrastructure"
+        Storage[Persistent Storage]
+        Network[Network/API]
+        External[External Services]
+        Events[Event System]
+    end
+    
+    CLI --&gt; Session
+    IDE --&gt; Session
+    Web --&gt; Session
+    
+    Session --&gt; State
+    Session --&gt; Tools
+    Commands --&gt; State
+    
+    State --&gt; Storage
+    State --&gt; Sync
+    Sync --&gt; Network
+    Tools --&gt; External
+    
+    Events -.-&gt;|Reactive Updates| State
+    Events -.-&gt;|Reactive Updates| Sync
+</pre>
+<p><strong>Key Architectural Decisions</strong>:</p>
+<ul>
+<li><strong>Interface Layer</strong>: Multiple interfaces (CLI, IDE, web) share the same session layer</li>
+<li><strong>Session Layer</strong>: Manages user context and coordinates service interactions</li>
+<li><strong>Core Services</strong>: Business logic isolated from infrastructure concerns</li>
+<li><strong>Infrastructure</strong>: Handles persistence, networking, and external integrations</li>
+</ul>
+<h3 id="state-management-conversation-threading"><a class="header" href="#state-management-conversation-threading">State Management: Conversation Threading</a></h3>
+<p>The conversation state service demonstrates key patterns for managing AI conversation state with collaborative features.</p>
+<p><strong>Core Responsibilities</strong>:</p>
+<ul>
+<li>Maintain conversation state and history</li>
+<li>Ensure single-writer semantics to prevent conflicts</li>
+<li>Provide reactive updates to UI components</li>
+<li>Handle auto-saving and background synchronization</li>
+</ul>
+<p><strong>Key Patterns</strong>:</p>
+<pre><code class="language-typescript">// 1. Single-writer pattern prevents state conflicts
+interface IStateManager&lt;T&gt; {
+  observeState(id: string): Observable&lt;T&gt;;
+  modifyState(id: string, modifier: (state: T) =&gt; T): Promise&lt;T&gt;;
+}
+
+// 2. Auto-save with throttling prevents excessive I/O
+class AutoSaveService {
+  setupAutoSave(state$: Observable&lt;State&gt;): void {
+    state$.pipe(
+      skip(1), // Skip initial value
+      throttleTime(1000), // Limit saves to once per second
+      switchMap(state =&gt; this.storage.save(state))
+    ).subscribe();
+  }
+}
+
+// 3. Lazy loading with caching improves performance
+class LazyStateLoader {
+  getState(id: string): Observable&lt;State&gt; {
+    if (!this.cache.has(id)) {
+      this.cache.set(id, this.loadFromStorage(id));
+    }
+    return this.cache.get(id);
+  }
+}
+</code></pre>
+<h3 id="sync-service-bridging-local-and-remote"><a class="header" href="#sync-service-bridging-local-and-remote">Sync Service: Bridging Local and Remote</a></h3>
+<p>The ThreadSyncService manages the complex dance of keeping local and server state synchronized:</p>
+<pre><code class="language-typescript">export class ThreadSyncService extends BaseService {
+  private syncQueue = new Map&lt;string, SyncQueueItem&gt;();
+  private syncStatus$ = new Map&lt;string, BehaviorSubject&lt;SyncStatus&gt;&gt;();
+  private socket?: WebSocket;
+  
+  constructor(
+    private api: ServerAPIClient,
+    private threadService: IThreadService
+  ) {
+    super();
+    this.initializeWebSocket();
+    this.startSyncLoop();
+  }
+  
+  private initializeWebSocket(): void {
+    this.socket = new WebSocket(this.api.wsEndpoint);
+    
+    this.socket.on('message', (data) =&gt; {
+      const message = JSON.parse(data);
+      this.handleServerMessage(message);
+    });
+    
+    // Reconnection logic
+    this.socket.on('close', () =&gt; {
+      setTimeout(() =&gt; this.initializeWebSocket(), 5000);
+    });
+  }
+  
+  async queueSync(threadId: string, thread: Thread): Promise&lt;void&gt; {
+    // Calculate changes from last known server state
+    const serverVersion = await this.getServerVersion(threadId);
+    const changes = this.calculateChanges(thread, serverVersion);
+    
+    // Add to sync queue
+    this.syncQueue.set(threadId, {
+      threadId,
+      changes,
+      localVersion: thread.version,
+      serverVersion,
+      attempts: 0,
+      lastAttempt: null
+    });
+    
+    // Update sync status
+    this.updateSyncStatus(threadId, 'pending');
+  }
+  
+  private async processSyncQueue(): Promise&lt;void&gt; {
+    for (const [threadId, item] of this.syncQueue) {
+      if (this.shouldSync(item)) {
+        try {
+          await this.syncThread(item);
+          this.syncQueue.delete(threadId);
+          this.updateSyncStatus(threadId, 'synced');
+        } catch (error) {
+          this.handleSyncError(threadId, item, error);
+        }
+      }
+    }
+  }
+  
+  private async syncThread(item: SyncQueueItem): Promise&lt;void&gt; {
+    const response = await this.api.syncThread({
+      threadId: item.threadId,
+      changes: item.changes,
+      baseVersion: item.serverVersion
+    });
+    
+    if (response.conflict) {
+      // Handle conflict resolution using standard patterns
+      await this.resolveConflict(item.threadId, response);
+    }
+  }
+  
+  private handleServerMessage(message: ServerMessage): void {
+    switch (message.type) {
+      case 'thread-updated':
+        this.handleRemoteUpdate(message);
+        break;
+      case 'presence-update':
+        this.handlePresenceUpdate(message);
+        break;
+      case 'permission-changed':
+        this.handlePermissionChange(message);
+        break;
+    }
+  }
+}
+</code></pre>
+<h3 id="observable-system-the-reactive-foundation"><a class="header" href="#observable-system-the-reactive-foundation">Observable System: The Reactive Foundation</a></h3>
+<p>Amp's custom Observable implementation provides the foundation for reactive state management:</p>
+<pre><code class="language-typescript">// Core Observable implementation
+export abstract class Observable&lt;T&gt; {
+  abstract subscribe(observer: Observer&lt;T&gt;): Subscription;
+  
+  pipe&lt;R&gt;(...operators: Operator&lt;any, any&gt;[]): Observable&lt;R&gt; {
+    return operators.reduce(
+      (source, operator) =&gt; operator(source),
+      this as Observable&lt;any&gt;
+    );
+  }
+}
+
+// BehaviorSubject maintains current value
+export class BehaviorSubject&lt;T&gt; extends Subject&lt;T&gt; {
+  constructor(private currentValue: T) {
+    super();
+  }
+  
+  get value(): T {
+    return this.currentValue;
+  }
+  
+  next(value: T): void {
+    this.currentValue = value;
+    super.next(value);
+  }
+  
+  subscribe(observer: Observer&lt;T&gt;): Subscription {
+    // Emit current value immediately
+    observer.next(this.currentValue);
+    return super.subscribe(observer);
+  }
+}
+
+// Rich operator library
+export const operators = {
+  map: &lt;T, R&gt;(fn: (value: T) =&gt; R) =&gt; 
+    (source: Observable&lt;T&gt;): Observable&lt;R&gt; =&gt; 
+      new MapObservable(source, fn),
+      
+  filter: &lt;T&gt;(predicate: (value: T) =&gt; boolean) =&gt;
+    (source: Observable&lt;T&gt;): Observable&lt;T&gt; =&gt;
+      new FilterObservable(source, predicate),
+      
+  switchMap: &lt;T, R&gt;(fn: (value: T) =&gt; Observable&lt;R&gt;) =&gt;
+    (source: Observable&lt;T&gt;): Observable&lt;R&gt; =&gt;
+      new SwitchMapObservable(source, fn),
+      
+  throttleTime: &lt;T&gt;(ms: number) =&gt;
+    (source: Observable&lt;T&gt;): Observable&lt;T&gt; =&gt;
+      new ThrottleTimeObservable(source, ms)
+};
+</code></pre>
+<h2 id="thread-model-and-data-flow"><a class="header" href="#thread-model-and-data-flow">Thread Model and Data Flow</a></h2>
+<p>Amp's thread model supports complex conversations with tool use, sub-agents, and rich metadata:</p>
+<pre><code class="language-typescript">interface Thread {
+  id: string;                    // Unique identifier
+  version: number;               // Version for optimistic updates
+  title?: string;                // Thread title
+  createdAt: string;             // Creation timestamp
+  updatedAt: string;             // Last update timestamp
+  sharing?: ThreadSharing;       // Visibility scope
+  messages: Message[];           // Conversation history
+  metadata?: ThreadMetadata;     // Additional properties
+  
+  // Thread relationships for hierarchical conversations
+  summaryThreadId?: string;      // Link to summary thread
+  parentThreadId?: string;       // Parent thread reference
+  childThreadIds?: string[];     // Child thread references
+}
+
+interface Message {
+  id: string;
+  type: 'user' | 'assistant' | 'info';
+  content: string;
+  timestamp: string;
+  
+  // Tool interactions
+  toolUse?: ToolUseBlock[];
+  toolResults?: ToolResultBlock[];
+  
+  // Rich content
+  attachments?: Attachment[];
+  mentions?: FileMention[];
+  
+  // Metadata
+  model?: string;
+  cost?: UsageCost;
+  error?: ErrorInfo;
+}
+</code></pre>
+<h3 id="data-flow-through-the-system"><a class="header" href="#data-flow-through-the-system">Data Flow Through the System</a></h3>
+<p>When a user sends a message, it flows through multiple services:</p>
+<pre class="mermaid">sequenceDiagram
+    participant User
+    participant UI
+    participant ThreadService
+    participant ToolService
+    participant LLMService
+    participant SyncService
+    participant Server
+    
+    User-&gt;&gt;UI: Type message
+    UI-&gt;&gt;ThreadService: addMessage()
+    ThreadService-&gt;&gt;ThreadService: Update thread state
+    ThreadService-&gt;&gt;ToolService: Process tool requests
+    ToolService-&gt;&gt;LLMService: Generate completion
+    LLMService-&gt;&gt;ToolService: Stream response
+    ToolService-&gt;&gt;ThreadService: Update with results
+    ThreadService-&gt;&gt;UI: Observable update
+    ThreadService-&gt;&gt;SyncService: Queue sync
+    SyncService-&gt;&gt;Server: Sync changes
+    Server-&gt;&gt;SyncService: Acknowledge
+</pre>
+<h2 id="service-integration-patterns"><a class="header" href="#service-integration-patterns">Service Integration Patterns</a></h2>
+<p>Services in Amp integrate through several patterns that promote loose coupling:</p>
+<h3 id="1-constructor-injection"><a class="header" href="#1-constructor-injection">1. Constructor Injection</a></h3>
+<p>Dependencies are explicitly declared and injected:</p>
+<pre><code class="language-typescript">export class ThreadSession {
+  constructor(
+    private threadService: IThreadService,
+    private toolService: IToolService,
+    private configService: IConfigService,
+    @optional private syncService?: IThreadSyncService
+  ) {
+    // Services are injected, not created
+    this.initialize();
+  }
+}
+</code></pre>
+<h3 id="2-interface-segregation"><a class="header" href="#2-interface-segregation">2. Interface Segregation</a></h3>
+<p>Services depend on interfaces, not implementations:</p>
+<pre><code class="language-typescript">// Minimal interface for consumers
+export interface IThreadReader {
+  observeThread(id: string): Observable&lt;Thread | null&gt;;
+  observeThreadList(): Observable&lt;ThreadListItem[]&gt;;
+}
+
+// Extended interface for writers
+export interface IThreadWriter extends IThreadReader {
+  modifyThread(id: string, modifier: ThreadModifier): Promise&lt;Thread&gt;;
+  deleteThread(id: string): Promise&lt;void&gt;;
+}
+
+// Full service interface
+export interface IThreadService extends IThreadWriter {
+  openThread(id: string): Promise&lt;void&gt;;
+  closeThread(id: string): Promise&lt;void&gt;;
+  createThread(options?: CreateThreadOptions): Promise&lt;Thread&gt;;
+}
+</code></pre>
+<h3 id="3-event-driven-communication"><a class="header" href="#3-event-driven-communication">3. Event-Driven Communication</a></h3>
+<p>Services communicate through Observable streams:</p>
+<pre><code class="language-typescript">class ConfigService {
+  private config$ = new BehaviorSubject&lt;Config&gt;(defaultConfig);
+  
+  observeConfig(): Observable&lt;Config&gt; {
+    return this.config$.asObservable();
+  }
+  
+  updateConfig(updates: Partial&lt;Config&gt;): void {
+    const current = this.config$.value;
+    const updated = { ...current, ...updates };
+    this.config$.next(updated);
+  }
+}
+
+// Other services react to config changes
+class ThemeService {
+  constructor(private configService: ConfigService) {
+    configService.observeConfig().pipe(
+      map(config =&gt; config.theme),
+      distinctUntilChanged()
+    ).subscribe(theme =&gt; {
+      this.applyTheme(theme);
+    });
+  }
+}
+</code></pre>
+<h3 id="4-resource-lifecycle-management"><a class="header" href="#4-resource-lifecycle-management">4. Resource Lifecycle Management</a></h3>
+<p>Services manage resources consistently:</p>
+<pre><code class="language-typescript">abstract class BaseService implements IDisposable {
+  protected disposables: IDisposable[] = [];
+  protected subscriptions: Subscription[] = [];
+  
+  protected addDisposable(disposable: IDisposable): void {
+    this.disposables.push(disposable);
+  }
+  
+  protected addSubscription(subscription: Subscription): void {
+    this.subscriptions.push(subscription);
+  }
+  
+  dispose(): void {
+    // Clean up in reverse order
+    [...this.subscriptions].reverse().forEach(s =&gt; s.unsubscribe());
+    [...this.disposables].reverse().forEach(d =&gt; d.dispose());
+    
+    this.subscriptions = [];
+    this.disposables = [];
+  }
+}
+</code></pre>
+<h2 id="performance-patterns"><a class="header" href="#performance-patterns">Performance Patterns</a></h2>
+<p>Amp employs several patterns to maintain responsiveness at scale:</p>
+<h3 id="1-lazy-loading-with-observables"><a class="header" href="#1-lazy-loading-with-observables">1. Lazy Loading with Observables</a></h3>
+<p>Data is loaded on-demand and cached:</p>
+<pre><code class="language-typescript">class LazyDataService {
+  private cache = new Map&lt;string, BehaviorSubject&lt;Data | null&gt;&gt;();
+  
+  observeData(id: string): Observable&lt;Data | null&gt; {
+    if (!this.cache.has(id)) {
+      const subject = new BehaviorSubject&lt;Data | null&gt;(null);
+      this.cache.set(id, subject);
+      
+      // Load data asynchronously
+      this.loadData(id).then(data =&gt; {
+        subject.next(data);
+      });
+    }
+    
+    return this.cache.get(id)!.asObservable();
+  }
+  
+  private async loadData(id: string): Promise&lt;Data&gt; {
+    // Check memory cache, disk cache, then network
+    return this.memCache.get(id) 
+        || await this.diskCache.get(id)
+        || await this.api.fetchData(id);
+  }
+}
+</code></pre>
+<h3 id="2-backpressure-handling"><a class="header" href="#2-backpressure-handling">2. Backpressure Handling</a></h3>
+<p>Operators prevent overwhelming downstream consumers:</p>
+<pre><code class="language-typescript">// Throttle rapid updates
+threadService.observeActiveThread().pipe(
+  throttleTime(100), // Max 10 updates per second
+  distinctUntilChanged((a, b) =&gt; a?.version === b?.version)
+).subscribe(thread =&gt; {
+  updateExpensiveUI(thread);
+});
+
+// Debounce user input
+searchInput$.pipe(
+  debounceTime(300), // Wait for typing to stop
+  distinctUntilChanged(),
+  switchMap(query =&gt; searchService.search(query))
+).subscribe(results =&gt; {
+  displayResults(results);
+});
+</code></pre>
+<h3 id="3-optimistic-concurrency-control"><a class="header" href="#3-optimistic-concurrency-control">3. Optimistic Concurrency Control</a></h3>
+<p>Version numbers prevent lost updates:</p>
+<pre><code class="language-typescript">class OptimisticUpdateService {
+  async updateThread(id: string, updates: ThreadUpdate): Promise&lt;Thread&gt; {
+    const maxRetries = 3;
+    let attempts = 0;
+    
+    while (attempts &lt; maxRetries) {
+      try {
+        const current = await this.getThread(id);
+        const updated = {
+          ...current,
+          ...updates,
+          version: current.version + 1
+        };
+        
+        return await this.api.updateThread(id, updated);
+      } catch (error) {
+        if (error.code === 'VERSION_CONFLICT' &amp;&amp; attempts &lt; maxRetries - 1) {
+          attempts++;
+          await this.delay(attempts * 100); // Exponential backoff
+          continue;
+        }
+        throw error;
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="security-and-isolation"><a class="header" href="#security-and-isolation">Security and Isolation</a></h2>
+<p>Amp's architecture enforces security boundaries at multiple levels:</p>
+<h3 id="1-service-level-permissions"><a class="header" href="#1-service-level-permissions">1. Service-Level Permissions</a></h3>
+<p>Each service validates permissions independently:</p>
+<pre><code class="language-typescript">class SecureThreadService extends ThreadService {
+  async modifyThread(
+    id: string, 
+    modifier: ThreadModifier
+  ): Promise&lt;Thread&gt; {
+    // Check permissions first
+    const canModify = await this.permissionService.check({
+      user: this.currentUser,
+      action: 'thread:modify',
+      resource: id
+    });
+    
+    if (!canModify) {
+      throw new PermissionError('Cannot modify thread');
+    }
+    
+    return super.modifyThread(id, modifier);
+  }
+}
+</code></pre>
+<h3 id="2-data-isolation"><a class="header" href="#2-data-isolation">2. Data Isolation</a></h3>
+<p>Services maintain separate data stores per team:</p>
+<pre><code class="language-typescript">class TeamIsolatedStorage implements IThreadStorage {
+  constructor(
+    private teamId: string,
+    private baseStorage: IStorage
+  ) {}
+  
+  private getTeamPath(threadId: string): string {
+    return `teams/${this.teamId}/threads/${threadId}`;
+  }
+  
+  async loadThread(id: string): Promise&lt;Thread&gt; {
+    const path = this.getTeamPath(id);
+    const data = await this.baseStorage.read(path);
+    
+    // Verify access permissions
+    if (data.teamId !== this.teamId) {
+      throw new Error('Access denied: insufficient permissions');
+    }
+    
+    return data;
+  }
+}
+</code></pre>
+<h3 id="3-api-gateway-protection"><a class="header" href="#3-api-gateway-protection">3. API Gateway Protection</a></h3>
+<p>The server API client enforces authentication:</p>
+<pre><code class="language-typescript">class AuthenticatedAPIClient extends ServerAPIClient {
+  constructor(
+    endpoint: string,
+    private authService: IAuthService
+  ) {
+    super(endpoint);
+  }
+  
+  protected async request&lt;T&gt;(
+    method: string,
+    path: string,
+    data?: any
+  ): Promise&lt;T&gt; {
+    const token = await this.authService.getAccessToken();
+    
+    const response = await fetch(`${this.endpoint}${path}`, {
+      method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: data ? JSON.stringify(data) : undefined
+    });
+    
+    if (response.status === 401) {
+      // Token expired, refresh and retry
+      await this.authService.refreshToken();
+      return this.request(method, path, data);
+    }
+    
+    return response.json();
+  }
+}
+</code></pre>
+<h2 id="scaling-considerations"><a class="header" href="#scaling-considerations">Scaling Considerations</a></h2>
+<p>Amp's architecture supports horizontal scaling through several design decisions:</p>
+<h3 id="1-stateless-services"><a class="header" href="#1-stateless-services">1. Stateless Services</a></h3>
+<p>Most services maintain no local state beyond caches:</p>
+<pre><code class="language-typescript">// Services can be instantiated per-request for horizontal scaling
+class StatelessThreadService {
+  constructor(
+    private storage: IThreadStorage,
+    private cache: ICache
+  ) {
+    // No instance state maintained for scalability
+  }
+  
+  async getThread(id: string): Promise&lt;Thread&gt; {
+    // Check cache first for performance
+    const cached = await this.cache.get(`thread:${id}`);
+    if (cached) return cached;
+    
+    // Load from persistent storage
+    const thread = await this.storage.load(id);
+    await this.cache.set(`thread:${id}`, thread, { ttl: 300 });
+    
+    return thread;
+  }
+}
+</code></pre>
+<h3 id="2-distributed-caching"><a class="header" href="#2-distributed-caching">2. Distributed Caching</a></h3>
+<p>Cache layers can be shared across instances:</p>
+<pre><code class="language-typescript">interface IDistributedCache {
+  get&lt;T&gt;(key: string): Promise&lt;T | null&gt;;
+  set&lt;T&gt;(key: string, value: T, options?: CacheOptions): Promise&lt;void&gt;;
+  delete(key: string): Promise&lt;void&gt;;
+  
+  // Pub/sub for cache invalidation
+  subscribe(pattern: string, handler: (key: string) =&gt; void): void;
+  publish(key: string, event: CacheEvent): void;
+}
+</code></pre>
+<h3 id="3-load-balancing-support"><a class="header" href="#3-load-balancing-support">3. Load Balancing Support</a></h3>
+<p>WebSocket connections support sticky sessions:</p>
+<pre><code class="language-typescript">class WebSocketManager {
+  private servers: string[] = [
+    'wss://server1.example.com',
+    'wss://server2.example.com',
+    'wss://server3.example.com'
+  ];
+  
+  async connect(sessionId: string): Promise&lt;WebSocket&gt; {
+    // Use consistent hashing for session affinity
+    const serverIndex = this.hash(sessionId) % this.servers.length;
+    const server = this.servers[serverIndex];
+    
+    const ws = new WebSocket(`${server}?session=${sessionId}`);
+    await this.waitForConnection(ws);
+    
+    return ws;
+  }
+}
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Amp's architecture demonstrates how to build a production-ready collaborative AI system:</p>
+<ul>
+<li><strong>Service isolation</strong> ensures maintainability and testability</li>
+<li><strong>Observable patterns</strong> enable reactive, real-time updates</li>
+<li><strong>Optimistic updates</strong> provide responsive user experience</li>
+<li><strong>Careful resource management</strong> prevents memory leaks</li>
+<li><strong>Security boundaries</strong> protect user data</li>
+<li><strong>Scaling considerations</strong> support growth</li>
+</ul>
+<p>The combination of these patterns creates a foundation that can evolve from serving individual developers to supporting entire engineering organizations. In the next chapter, we'll explore how Amp's authentication and identity system enables secure multi-user collaboration while maintaining the simplicity users expect.</p>
+</main>
+</body>
+</html>

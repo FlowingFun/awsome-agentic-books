@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Deployment Guide - Amping Up an Agentic System</title></head>
+<body>
+<!-- Source: https://github.com/gerred/building-an-agentic-system/blob/eec7f0226fb0d0019c67dc6f209a80b61720117e/src/second-edition/appendices/appendix-b-deployment-guide.md -->
+<main>
+<h1 id="appendix-b-deployment-pattern-guide"><a class="header" href="#appendix-b-deployment-pattern-guide">Appendix B: Deployment Pattern Guide</a></h1>
+<p>This guide covers deployment principles and strategies for collaborative AI coding assistants, focusing on architectural patterns, capacity planning, and operational practices that scale from small teams to enterprise deployments.</p>
+<h2 id="deployment-strategy-overview"><a class="header" href="#deployment-strategy-overview">Deployment Strategy Overview</a></h2>
+<h3 id="containerization-strategy"><a class="header" href="#containerization-strategy">Containerization Strategy</a></h3>
+<p>Real-time AI systems benefit from containerized deployments that isolate dependencies, enable consistent environments, and support rapid scaling. Key principles:</p>
+<p><strong>Service Separation</strong>: Split application into discrete services—API servers, background workers, real-time sync handlers, and tool execution environments. Each service scales independently based on load patterns.</p>
+<p><strong>Stateless Design</strong>: Design application containers to be stateless, storing all persistent data in external databases and caches. This enables horizontal scaling and simplified deployment rollouts.</p>
+<p><strong>Health Check Integration</strong>: Implement comprehensive health endpoints that check not just process health but dependencies like databases, external APIs, and cache layers.</p>
+<p><strong>Resource Boundaries</strong>: Set explicit CPU and memory limits based on workload characteristics. AI-heavy workloads often require more memory for model loading and context management.</p>
+<pre><code class="language-yaml"># Example container resource strategy
+small_team_deployment:  # 1-50 users
+  api_servers:
+    replicas: 2
+    cpu: "1000m"
+    memory: "2Gi"
+  workers:
+    replicas: 3
+    cpu: "500m" 
+    memory: "1Gi"
+    
+enterprise_deployment:  # 500+ users  
+  api_servers:
+    replicas: 6
+    cpu: "2000m"
+    memory: "4Gi"
+  workers:
+    replicas: 12
+    cpu: "1000m"
+    memory: "2Gi"
+</code></pre>
+<h3 id="architecture-patterns"><a class="header" href="#architecture-patterns">Architecture Patterns</a></h3>
+<p><strong>Single-Region Pattern</strong>: For teams under 100 users, deploy all components in a single region with local redundancy. Use load balancers for high availability and database read replicas for query performance.</p>
+<p><strong>Multi-Region Active-Passive</strong>: For global teams, deploy primary infrastructure in your main region with read-only replicas in secondary regions. Route users to nearest read endpoints while writes go to primary.</p>
+<p><strong>Multi-Region Active-Active</strong>: For enterprise scale, run fully active deployments in multiple regions with eventual consistency patterns. Requires careful design around data conflicts and user session affinity.</p>
+<p><strong>Hybrid Cloud</strong>: Combine cloud infrastructure for scalability with on-premises components for sensitive data or compliance requirements. Use secure tunnels or API gateways for communication.</p>
+<h2 id="capacity-planning-framework"><a class="header" href="#capacity-planning-framework">Capacity Planning Framework</a></h2>
+<h3 id="resource-sizing-methodology"><a class="header" href="#resource-sizing-methodology">Resource Sizing Methodology</a></h3>
+<p>AI coding assistants have unique resource patterns that differ from traditional web applications. Use these guidelines for initial sizing:</p>
+<p><strong>CPU Requirements</strong>: Scale based on concurrent requests rather than total users. Each active conversation thread consumes CPU for tool execution, code analysis, and real-time synchronization. Plan for 0.5-1 CPU cores per 10 concurrent conversations.</p>
+<p><strong>Memory Patterns</strong>: Memory usage scales with conversation context size and caching strategies. Plan for 4-8GB base memory plus 100-200MB per concurrent conversation for context and tool execution buffers.</p>
+<p><strong>Storage Growth</strong>: Conversation data grows linearly with usage. Estimate 1-5MB per conversation thread depending on code file attachments and tool outputs. Include 3x growth factor for indexes and metadata.</p>
+<p><strong>Network Bandwidth</strong>: Real-time features drive bandwidth requirements. Plan for 1-10KB/second per active user for synchronization plus burst capacity for file transfers and tool outputs.</p>
+<h3 id="scaling-triggers"><a class="header" href="#scaling-triggers">Scaling Triggers</a></h3>
+<p><strong>Horizontal Scaling Indicators</strong>:</p>
+<ul>
+<li>CPU utilization consistently above 70%</li>
+<li>Response latency P95 above target SLAs</li>
+<li>Queue depth for background tasks growing</li>
+<li>Connection pool utilization above 80%</li>
+</ul>
+<p><strong>Vertical Scaling Indicators</strong>:</p>
+<ul>
+<li>Memory pressure causing frequent garbage collection</li>
+<li>Disk I/O saturation affecting database performance</li>
+<li>Network bandwidth utilization above 70%</li>
+</ul>
+<h3 id="database-architecture-strategy"><a class="header" href="#database-architecture-strategy">Database Architecture Strategy</a></h3>
+<p><strong>Schema Design Principles</strong>:</p>
+<ul>
+<li>Partition conversation data by time or user ID for query performance</li>
+<li>Use separate read replicas for analytics and reporting queries</li>
+<li>Implement soft deletes for audit trails and data recovery</li>
+<li>Design indexes specifically for real-time synchronization queries</li>
+</ul>
+<p><strong>Performance Tuning Approach</strong>:</p>
+<ul>
+<li>Configure connection pooling based on application concurrency patterns</li>
+<li>Tune cache sizes based on working set size analysis</li>
+<li>Implement query timeout policies to prevent resource exhaustion</li>
+<li>Use prepared statements for frequently executed queries</li>
+</ul>
+<p><strong>Scaling Strategies</strong>:</p>
+<ul>
+<li>Start with read replicas for query performance improvement</li>
+<li>Move to sharding for write scaling when single database reaches limits</li>
+<li>Consider separate databases for different data types (conversations vs. analytics)</li>
+<li>Implement database connection pooling at the application layer</li>
+</ul>
+<h3 id="cache-layer-strategy"><a class="header" href="#cache-layer-strategy">Cache Layer Strategy</a></h3>
+<p><strong>Cache Architecture Patterns</strong>:</p>
+<ul>
+<li>Use distributed cache for session data and real-time state</li>
+<li>Implement local caching for frequently accessed configuration data</li>
+<li>Cache expensive computation results like code analysis outputs</li>
+<li>Design cache eviction policies based on data access patterns</li>
+</ul>
+<p><strong>Scaling Considerations</strong>:</p>
+<ul>
+<li>Plan for cache cluster failover and data consistency</li>
+<li>Monitor cache hit rates and adjust sizing accordingly</li>
+<li>Implement cache warming strategies for critical data</li>
+<li>Design applications to gracefully handle cache unavailability</li>
+</ul>
+<h2 id="security-architecture-principles"><a class="header" href="#security-architecture-principles">Security Architecture Principles</a></h2>
+<h3 id="transport-security-strategy"><a class="header" href="#transport-security-strategy">Transport Security Strategy</a></h3>
+<p><strong>TLS Configuration Standards</strong>:</p>
+<ul>
+<li>Use TLS 1.2 minimum, prefer TLS 1.3 for modern cipher suites</li>
+<li>Implement certificate management automation for rotation and renewal</li>
+<li>Configure HTTP Strict Transport Security (HSTS) with appropriate max-age</li>
+<li>Enable certificate transparency monitoring for unauthorized certificates</li>
+</ul>
+<p><strong>API Security Patterns</strong>:</p>
+<ul>
+<li>Implement comprehensive rate limiting at multiple layers (per-IP, per-user, per-endpoint)</li>
+<li>Use API keys or JWT tokens for authentication with short expiration times</li>
+<li>Design request signing for sensitive operations to prevent replay attacks</li>
+<li>Implement request size limits to prevent resource exhaustion</li>
+</ul>
+<p><strong>WebSocket Security</strong>:</p>
+<ul>
+<li>Authenticate WebSocket connections using same mechanisms as HTTP APIs</li>
+<li>Implement connection limits per user to prevent resource exhaustion</li>
+<li>Design message size limits and rate limiting for real-time communications</li>
+<li>Use secure WebSocket (WSS) for all production deployments</li>
+</ul>
+<h3 id="network-security-architecture"><a class="header" href="#network-security-architecture">Network Security Architecture</a></h3>
+<p><strong>Network Segmentation Strategy</strong>:</p>
+<ul>
+<li>Isolate database and cache layers in private subnets without internet access</li>
+<li>Use dedicated subnets for application servers with controlled internet egress</li>
+<li>Implement network access control lists (NACLs) for subnet-level security</li>
+<li>Design security group rules with principle of least privilege</li>
+</ul>
+<p><strong>Traffic Control Patterns</strong>:</p>
+<ul>
+<li>Route external traffic through web application firewalls (WAF)</li>
+<li>Implement DDoS protection at the network edge</li>
+<li>Use intrusion detection systems (IDS) for suspicious traffic monitoring</li>
+<li>Design logging for all network connections and security events</li>
+</ul>
+<p><strong>Service-to-Service Communication</strong>:</p>
+<ul>
+<li>Use mutual TLS (mTLS) for internal service communication</li>
+<li>Implement service mesh for encrypted service-to-service traffic</li>
+<li>Design API gateways for external service integration points</li>
+<li>Use private DNS resolution for internal service discovery</li>
+</ul>
+<h3 id="application-security-framework"><a class="header" href="#application-security-framework">Application Security Framework</a></h3>
+<p><strong>Authentication Strategy</strong>:</p>
+<ul>
+<li>Implement multi-factor authentication for administrative access</li>
+<li>Use identity provider integration (SAML/OIDC) for enterprise deployments</li>
+<li>Design session management with secure cookie attributes</li>
+<li>Implement account lockout policies for brute force protection</li>
+</ul>
+<p><strong>Authorization Patterns</strong>:</p>
+<ul>
+<li>Use role-based access control (RBAC) with fine-grained permissions</li>
+<li>Implement attribute-based access control (ABAC) for complex scenarios</li>
+<li>Design permission inheritance and delegation for team workflows</li>
+<li>Use principle of least privilege for all service accounts and users</li>
+</ul>
+<h2 id="observability-strategy"><a class="header" href="#observability-strategy">Observability Strategy</a></h2>
+<h3 id="metrics-architecture"><a class="header" href="#metrics-architecture">Metrics Architecture</a></h3>
+<p><strong>Application Metrics Framework</strong>:</p>
+<ul>
+<li>Implement comprehensive request/response metrics with proper labeling</li>
+<li>Track business metrics like active conversations, tool executions, and user engagement</li>
+<li>Monitor resource utilization patterns specific to AI workloads</li>
+<li>Design custom metrics for real-time synchronization performance</li>
+</ul>
+<p><strong>Infrastructure Metrics Coverage</strong>:</p>
+<ul>
+<li>Monitor traditional system metrics (CPU, memory, disk, network)</li>
+<li>Track database-specific metrics (connection pools, query performance, replication lag)</li>
+<li>Monitor cache hit rates and performance characteristics</li>
+<li>Implement external dependency monitoring (LLM APIs, external services)</li>
+</ul>
+<p><strong>Alerting Strategy Design</strong>:</p>
+<ul>
+<li>Define alert thresholds based on user experience impact, not arbitrary numbers</li>
+<li>Implement multi-level alerting (warning, critical) with appropriate escalation</li>
+<li>Design alerts that account for AI workload patterns (bursts, batch processing)</li>
+<li>Create runbooks for common alert scenarios and remediation steps</li>
+</ul>
+<h3 id="logging-strategy"><a class="header" href="#logging-strategy">Logging Strategy</a></h3>
+<p><strong>Structured Logging Standards</strong>:</p>
+<ul>
+<li>Use consistent log format across all services with proper correlation IDs</li>
+<li>Log business events (conversation starts, tool executions, errors) with context</li>
+<li>Implement log sampling for high-volume operations to control costs</li>
+<li>Design log retention policies based on compliance and debugging needs</li>
+</ul>
+<p><strong>Log Aggregation Patterns</strong>:</p>
+<ul>
+<li>Centralize logs from all services for correlation and search capabilities</li>
+<li>Implement log streaming for real-time monitoring and alerting</li>
+<li>Design log parsing and enrichment for automated analysis</li>
+<li>Create log-based metrics for operations that don't emit structured metrics</li>
+</ul>
+<p><strong>Security and Audit Logging</strong>:</p>
+<ul>
+<li>Log all authentication and authorization events with sufficient detail</li>
+<li>Implement audit trails for sensitive operations (admin actions, configuration changes)</li>
+<li>Design privacy-preserving logging that avoids capturing sensitive user data</li>
+<li>Create security event correlation and anomaly detection workflows</li>
+</ul>
+<h3 id="performance-monitoring"><a class="header" href="#performance-monitoring">Performance Monitoring</a></h3>
+<p><strong>Application Performance Management</strong>:</p>
+<ul>
+<li>Implement distributed tracing for complex multi-service operations</li>
+<li>Track performance of individual tool executions and LLM API calls</li>
+<li>Monitor real-time synchronization latency and message delivery rates</li>
+<li>Design performance baseline establishment and regression detection</li>
+</ul>
+<p><strong>User Experience Monitoring</strong>:</p>
+<ul>
+<li>Track end-to-end response times from user perspective</li>
+<li>Monitor real-time features (typing indicators, live collaboration) performance</li>
+<li>Implement synthetic monitoring for critical user workflows</li>
+<li>Design performance budgets and alerts for user-facing operations</li>
+</ul>
+<p><strong>Capacity Monitoring</strong>:</p>
+<ul>
+<li>Monitor queue depths and processing times for background operations</li>
+<li>Track resource usage trends for capacity planning purposes</li>
+<li>Implement growth rate monitoring and forecasting</li>
+<li>Design cost monitoring and optimization opportunities identification</li>
+</ul>
+<h2 id="business-continuity-planning"><a class="header" href="#business-continuity-planning">Business Continuity Planning</a></h2>
+<h3 id="backup-strategy-framework"><a class="header" href="#backup-strategy-framework">Backup Strategy Framework</a></h3>
+<p><strong>Data Classification and Protection</strong>:</p>
+<ul>
+<li>Classify data by criticality (conversation history, user settings, system configuration)</li>
+<li>Design backup frequency based on data change rate and business impact</li>
+<li>Implement point-in-time recovery capabilities for database systems</li>
+<li>Create offline backup copies for protection against ransomware and corruption</li>
+</ul>
+<p><strong>Backup Automation Principles</strong>:</p>
+<ul>
+<li>Automate all backup processes with comprehensive error handling and notification</li>
+<li>Implement backup validation and integrity checking as part of backup process</li>
+<li>Design backup rotation policies that balance storage costs with recovery requirements</li>
+<li>Create backup monitoring and alerting for failed or incomplete backups</li>
+</ul>
+<p><strong>Multi-Tier Backup Strategy</strong>:</p>
+<ul>
+<li>Local backups for fast recovery of recent data and quick development restore</li>
+<li>Regional backups for disaster recovery within the same geographic area</li>
+<li>Cross-region backups for protection against regional disasters</li>
+<li>Offline or air-gapped backups for protection against sophisticated attacks</li>
+</ul>
+<h3 id="disaster-recovery-architecture"><a class="header" href="#disaster-recovery-architecture">Disaster Recovery Architecture</a></h3>
+<p><strong>Recovery Time and Point Objectives</strong>:</p>
+<ul>
+<li>Define Recovery Time Objective (RTO) based on business impact of downtime</li>
+<li>Establish Recovery Point Objective (RPO) based on acceptable data loss tolerance</li>
+<li>Design recovery procedures that meet defined objectives within budget constraints</li>
+<li>Create tiered recovery strategies for different failure scenarios</li>
+</ul>
+<p><strong>Failover Strategy Design</strong>:</p>
+<ul>
+<li>Implement automated failover for infrastructure failures (database, cache, compute)</li>
+<li>Design manual failover procedures for complex failure scenarios requiring human judgment</li>
+<li>Create cross-region failover capabilities for protection against regional disasters</li>
+<li>Develop rollback procedures for failed deployments or recovery attempts</li>
+</ul>
+<p><strong>Recovery Testing Program</strong>:</p>
+<ul>
+<li>Conduct regular disaster recovery drills with defined scenarios and success criteria</li>
+<li>Test backup restoration procedures regularly to ensure data integrity and completeness</li>
+<li>Validate failover procedures under various failure conditions</li>
+<li>Document lessons learned and update procedures based on test results</li>
+</ul>
+<h3 id="high-availability-patterns"><a class="header" href="#high-availability-patterns">High Availability Patterns</a></h3>
+<p><strong>Infrastructure Redundancy</strong>:</p>
+<ul>
+<li>Deploy across multiple availability zones within regions for infrastructure failure protection</li>
+<li>Implement load balancing with health checks for automatic traffic routing</li>
+<li>Design stateless application architecture that supports horizontal scaling</li>
+<li>Use managed services with built-in high availability when available</li>
+</ul>
+<p><strong>Data Replication Strategy</strong>:</p>
+<ul>
+<li>Implement database replication with appropriate consistency guarantees</li>
+<li>Design cache replication for session data and real-time state</li>
+<li>Create file storage replication for user-uploaded content and system artifacts</li>
+<li>Plan for data consistency during failover scenarios and recovery operations</li>
+</ul>
+<h2 id="performance-optimization-strategies"><a class="header" href="#performance-optimization-strategies">Performance Optimization Strategies</a></h2>
+<h3 id="application-level-optimization"><a class="header" href="#application-level-optimization">Application-Level Optimization</a></h3>
+<p><strong>Concurrency Management</strong>:</p>
+<ul>
+<li>Configure worker processes and thread pools based on workload characteristics</li>
+<li>Implement connection pooling with appropriate sizing for database and external services</li>
+<li>Design queue management for background tasks with proper backpressure handling</li>
+<li>Use asynchronous processing patterns for I/O-bound operations</li>
+</ul>
+<p><strong>AI Workload Optimization</strong>:</p>
+<ul>
+<li>Implement request batching for LLM API calls to improve throughput</li>
+<li>Design context size management to balance performance with capability</li>
+<li>Use caching strategies for expensive AI operations (code analysis, embeddings)</li>
+<li>Implement request prioritization for interactive vs. background AI tasks</li>
+</ul>
+<p><strong>Real-Time Feature Optimization</strong>:</p>
+<ul>
+<li>Optimize WebSocket connection management and message routing</li>
+<li>Implement efficient data synchronization algorithms to minimize bandwidth</li>
+<li>Design client-side caching and optimistic updates for better user experience</li>
+<li>Use compression for large data transfers and real-time updates</li>
+</ul>
+<h3 id="system-level-optimization"><a class="header" href="#system-level-optimization">System-Level Optimization</a></h3>
+<p><strong>Operating System Tuning</strong>:</p>
+<ul>
+<li>Configure network stack parameters for high-concurrency workloads</li>
+<li>Optimize file descriptor limits for applications with many connections</li>
+<li>Tune memory management settings for application memory patterns</li>
+<li>Configure disk I/O schedulers and parameters for database workloads</li>
+</ul>
+<p><strong>Infrastructure Optimization</strong>:</p>
+<ul>
+<li>Select appropriate instance types based on workload characteristics (CPU vs. memory intensive)</li>
+<li>Configure auto-scaling policies based on application-specific metrics</li>
+<li>Optimize network configuration for low latency and high throughput</li>
+<li>Use appropriate storage types and configurations for different data patterns</li>
+</ul>
+<h3 id="health-check-architecture"><a class="header" href="#health-check-architecture">Health Check Architecture</a></h3>
+<p><strong>Multi-Layer Health Monitoring</strong>:</p>
+<ul>
+<li>Implement basic liveness checks for process health and responsiveness</li>
+<li>Design readiness checks that verify external dependency availability</li>
+<li>Create deep health checks that validate complex system functionality</li>
+<li>Implement health check endpoints with appropriate timeout and retry logic</li>
+</ul>
+<p><strong>Dependency Health Verification</strong>:</p>
+<ul>
+<li>Monitor database connectivity and query performance</li>
+<li>Verify external API availability and response times</li>
+<li>Check cache layer health and connectivity</li>
+<li>Validate file system and storage accessibility</li>
+</ul>
+<p><strong>Health Check Integration</strong>:</p>
+<ul>
+<li>Design health checks that integrate with load balancer and orchestration systems</li>
+<li>Implement health check results aggregation for complex multi-service deployments</li>
+<li>Create health check dashboards and alerting for operational visibility</li>
+<li>Use health check data for automated remediation and scaling decisions</li>
+</ul>
+<h2 id="deployment-process-framework"><a class="header" href="#deployment-process-framework">Deployment Process Framework</a></h2>
+<h3 id="pre-deployment-validation"><a class="header" href="#pre-deployment-validation">Pre-Deployment Validation</a></h3>
+<p><strong>Security Readiness</strong>:</p>
+<ul>
+<li>Conduct security assessment of new features and dependencies</li>
+<li>Verify certificate management and renewal processes</li>
+<li>Validate authentication and authorization implementations</li>
+<li>Complete penetration testing for security-critical changes</li>
+</ul>
+<p><strong>Infrastructure Readiness</strong>:</p>
+<ul>
+<li>Verify backup and recovery procedures through testing</li>
+<li>Validate monitoring and alerting coverage for new components</li>
+<li>Complete capacity planning analysis for expected load changes</li>
+<li>Test disaster recovery procedures and failover mechanisms</li>
+</ul>
+<p><strong>Application Readiness</strong>:</p>
+<ul>
+<li>Execute comprehensive test suite including integration and end-to-end tests</li>
+<li>Conduct performance testing under realistic load conditions</li>
+<li>Validate database schema changes and migration procedures</li>
+<li>Complete compatibility testing with existing client versions</li>
+</ul>
+<h3 id="deployment-strategy-selection"><a class="header" href="#deployment-strategy-selection">Deployment Strategy Selection</a></h3>
+<p><strong>Blue-Green Deployment</strong>:</p>
+<ul>
+<li>Suitable for applications that can run multiple versions simultaneously</li>
+<li>Provides immediate rollback capability with minimal downtime</li>
+<li>Requires double infrastructure capacity during deployment</li>
+<li>Best for critical systems where rollback speed is paramount</li>
+</ul>
+<p><strong>Rolling Deployment</strong>:</p>
+<ul>
+<li>Gradually replaces instances while maintaining service availability</li>
+<li>Requires careful attention to backward compatibility between versions</li>
+<li>Minimizes infrastructure overhead compared to blue-green approach</li>
+<li>Suitable for applications with good version compatibility design</li>
+</ul>
+<p><strong>Canary Deployment</strong>:</p>
+<ul>
+<li>Gradually routes traffic to new version while monitoring for issues</li>
+<li>Enables early detection of problems with minimal user impact</li>
+<li>Requires sophisticated traffic routing and monitoring capabilities</li>
+<li>Best for systems where gradual validation of changes is critical</li>
+</ul>
+<h3 id="post-deployment-validation"><a class="header" href="#post-deployment-validation">Post-Deployment Validation</a></h3>
+<p><strong>System Health Verification</strong>:</p>
+<ul>
+<li>Monitor error rates and performance metrics against established baselines</li>
+<li>Verify all external integrations and dependencies are functioning correctly</li>
+<li>Validate real-time features and synchronization mechanisms</li>
+<li>Check resource utilization patterns for unexpected changes</li>
+</ul>
+<p><strong>Business Function Validation</strong>:</p>
+<ul>
+<li>Execute critical user workflow testing to ensure functionality</li>
+<li>Verify data consistency and integrity across all systems</li>
+<li>Validate AI model performance and response quality</li>
+<li>Test collaboration features and multi-user scenarios</li>
+</ul>
+<p><strong>Rollback Readiness</strong>:</p>
+<ul>
+<li>Maintain deployment artifacts and configurations for quick rollback</li>
+<li>Document rollback procedures with clear decision criteria</li>
+<li>Verify rollback capability without disrupting user data</li>
+<li>Establish communication procedures for incident response</li>
+</ul>
+<p>This deployment framework provides principles and strategies for operating collaborative AI coding assistants at scale. Adapt these patterns to your specific technology choices, team structure, and operational requirements.</p>
+</main>
+</body>
+</html>

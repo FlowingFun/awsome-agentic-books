@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>API Reference - Amping Up an Agentic System</title></head>
+<body>
+<!-- Source: https://github.com/gerred/building-an-agentic-system/blob/eec7f0226fb0d0019c67dc6f209a80b61720117e/src/second-edition/appendices/appendix-a-api-reference.md -->
+<main>
+<h1 id="appendix-a-architecture-pattern-reference"><a class="header" href="#appendix-a-architecture-pattern-reference">Appendix A: Architecture Pattern Reference</a></h1>
+<p>This appendix provides design patterns and architectural principles for building collaborative AI coding assistants. Rather than specific API signatures, this reference focuses on core patterns that enable scalable, maintainable systems.</p>
+<h2 id="conversation-management-patterns"><a class="header" href="#conversation-management-patterns">Conversation Management Patterns</a></h2>
+<h3 id="core-operations-pattern"><a class="header" href="#core-operations-pattern">Core Operations Pattern</a></h3>
+<p>Conversation management systems typically expose these operation categories:</p>
+<pre><code class="language-typescript">// Lifecycle Management
+// - Creation with optional configuration
+// - Activation/deactivation for resource management
+// - Cleanup and deletion
+
+// State Access
+// - Individual conversation retrieval
+// - List/filter operations for discovery
+// - Efficient pagination for large datasets
+
+// Content Modification
+// - Atomic updates with versioning
+// - Message appending with validation
+// - Bulk operations for efficiency
+
+// Real-time Updates
+// - Observable streams for live updates
+// - Subscription management
+// - Event-driven state propagation
+
+// Configuration Strategy
+// Flexible initialization supporting:
+// - Identity management (auto-generated or explicit)
+// - Metadata capture (titles, descriptions)
+// - Context preservation (environment, settings)
+// - Relationship modeling (hierarchies, branches)
+// - Access control (sharing, permissions)
+
+// State Design Pattern
+// Core conversation entities should include:
+// - Unique identification and versioning
+// - Temporal tracking (creation, modification)
+// - Content organization (messages, artifacts)
+// - Environmental context capture
+// - Relationship mapping (parent/child, references)
+// - Extensible metadata storage
+
+// Message Design Pattern
+// Messages should capture:
+// - Identity and role-based typing
+// - Content with rich formatting support
+// - Temporal ordering and causality
+// - Action execution records
+// - Provenance tracking (model, parameters)
+// - Resource utilization metrics
+
+// This enables audit trails, replay functionality,
+// cost tracking, and debugging capabilities.
+</code></pre>
+<h3 id="synchronization-patterns"><a class="header" href="#synchronization-patterns">Synchronization Patterns</a></h3>
+<p>Multi-device synchronization requires these patterns:</p>
+<pre><code class="language-typescript">// Queue-Based Synchronization
+// - Asynchronous sync requests to avoid blocking
+// - Immediate sync for critical operations
+// - Batch sync for efficiency
+
+// Status Monitoring
+// - Observable sync state for UI feedback
+// - Pending operation tracking
+// - Error state management
+
+// Service Lifecycle
+// - Graceful startup/shutdown
+// - Resource cleanup on disposal
+// - Background task management
+
+// State Machine Pattern
+// Sync states provide clear progression:
+// unknown → pending → syncing → synced/error
+// This enables proper UI state handling and retry logic
+
+// Version Vector Protocol
+// Synchronization requests should include:
+// - Entity identifiers with version numbers
+// - Metadata summaries for conflict detection
+// - Incremental update capabilities
+
+// Action-Based Response Pattern
+// Responses specify required actions:
+// - Data transfer directions (upload/download)
+// - Metadata updates
+// - Conflict resolution strategies
+// - Cleanup operations
+</code></pre>
+<h2 id="tool-system-patterns"><a class="header" href="#tool-system-patterns">Tool System Patterns</a></h2>
+<h3 id="plugin-architecture-pattern"><a class="header" href="#plugin-architecture-pattern">Plugin Architecture Pattern</a></h3>
+<p>Extensible tool systems use these patterns:</p>
+<pre><code class="language-typescript">// Registry Pattern
+// - Dynamic tool registration/deregistration
+// - Type-safe tool definitions
+// - Lifecycle management
+
+// Discovery Pattern
+// - Tool enumeration and filtering
+// - Capability introspection
+// - Conditional availability
+
+// Execution Pattern
+// - Asynchronous tool invocation
+// - Streaming progress updates
+// - Context injection
+
+// Security Pattern
+// - Permission checking before execution
+// - Argument validation
+// - Sandboxed execution environments
+
+// Registration Strategy Pattern
+// Tool registrations should include:
+// - Declarative specifications (schema, metadata)
+// - Executable implementations (functions, services)
+// - Optional preprocessing (validation, transformation)
+
+// Specification Pattern
+// Tool specifications define:
+// - Identity and documentation
+// - Input/output schemas
+// - Source attribution (builtin, plugin, remote)
+// - Behavioral hints (network, readonly, cacheable)
+
+// This enables automatic UI generation, permission
+// checking, and optimization strategies.
+
+// Execution Context Pattern
+// Tool functions receive rich context including:
+// - File system access (current directory, allowed paths)
+// - Session state (conversation ID, configuration)
+// - Resource access (filesystem, network)
+// - State tracking (modified files, operations)
+// - Communication channels (progress, cancellation)
+// - Resource limits (timeouts, quotas)
+
+// This enables tools to integrate deeply with the
+// system while maintaining security boundaries.
+</code></pre>
+<h3 id="state-machine-patterns"><a class="header" href="#state-machine-patterns">State Machine Patterns</a></h3>
+<p>Tool execution follows a well-defined state machine:</p>
+<pre><code class="language-typescript">// State Progression
+// queued → blocked-on-user → in-progress → done/error
+//       ↘ rejected-by-user
+//       ↘ cancellation-requested → cancelled
+
+// State Design Principles:
+// - Clear progression through execution phases
+// - User interaction points (approval, rejection)
+// - Cancellation at any stage
+// - Rich progress reporting
+// - Comprehensive result capture
+// - Error state preservation
+
+// This enables sophisticated UI interactions,
+// audit trails, and operation recovery.
+</code></pre>
+<h2 id="identity-and-access-patterns"><a class="header" href="#identity-and-access-patterns">Identity and Access Patterns</a></h2>
+<h3 id="authentication-service-pattern"><a class="header" href="#authentication-service-pattern">Authentication Service Pattern</a></h3>
+<p>Modern AI systems require sophisticated auth handling:</p>
+<pre><code class="language-typescript">// Core Auth Operations
+// - OAuth/OIDC integration for secure login flows
+// - Automatic token refresh to maintain sessions
+// - Graceful logout with cleanup
+
+// Token Management
+// - Secure token storage (keychain, secure storage)
+// - Automatic renewal before expiration
+// - Token validation and revocation
+
+// Identity Resolution
+// - User profile and preference management
+// - Team/organization context switching
+// - Role-based capability discovery
+
+// State Observation
+// - Reactive auth state for UI updates
+// - Session timeout handling
+// - Multi-device session coordination
+
+// State Management Pattern
+// Authentication state should capture:
+// - Current authentication status
+// - Active user identity and profile
+// - Organizational context and permissions
+
+// User Identity Pattern
+// User entities should include:
+// - Stable identifiers (UUID, email)
+// - Display information (name, avatar)
+// - Temporal tracking (creation, last access)
+
+// Team Context Pattern
+// Team relationships should capture:
+// - Hierarchical organization structure
+// - Human-readable identifiers
+// - Role-based access levels
+// - Permission inheritance
+</code></pre>
+<h3 id="secure-storage-patterns"><a class="header" href="#secure-storage-patterns">Secure Storage Patterns</a></h3>
+<p>Credential management requires platform-specific security:</p>
+<pre><code class="language-typescript">// Scoped Storage Pattern
+// - Namespace secrets by application/team scope
+// - Support multiple credential types
+// - Secure deletion and rotation
+
+// Change Notification Pattern
+// - Observable credential updates
+// - Event-driven invalidation
+// - Multi-instance coordination
+
+// Platform Integration
+// - OS keychain integration (macOS, Windows)
+// - Encrypted storage for web applications
+// - Hardware security module support
+// - Zero-knowledge architecture options
+</code></pre>
+<h2 id="reactive-programming-patterns"><a class="header" href="#reactive-programming-patterns">Reactive Programming Patterns</a></h2>
+<h3 id="stream-based-architecture"><a class="header" href="#stream-based-architecture">Stream-Based Architecture</a></h3>
+<p>Reactive systems enable real-time collaboration:</p>
+<pre><code class="language-typescript">// Observer Pattern
+// - Subscription-based event handling
+// - Automatic cleanup and unsubscription
+// - Composable operator pipelines
+
+// Stream Creation Patterns
+// - Value emission (of, from)
+// - Time-based streams (interval, timer)
+// - Event aggregation (merge, combineLatest)
+// - Custom stream sources
+
+// Composition Patterns
+// - Functional operator chaining
+// - Stream transformation and filtering
+// - Error handling and recovery
+// - Resource management
+
+// Observer Protocol
+// Observers handle three event types:
+// - Data events (next) for normal values
+// - Error events for exceptional conditions
+// - Completion events for stream termination
+
+// Subscription Management
+// Subscriptions provide:
+// - Explicit cleanup mechanisms
+// - State inspection capabilities
+// - Resource leak prevention
+// - Automatic disposal patterns
+</code></pre>
+<h3 id="state-management-patterns"><a class="header" href="#state-management-patterns">State Management Patterns</a></h3>
+<p>Subjects enable bidirectional communication:</p>
+<pre><code class="language-typescript">// Event Bus Pattern (Subject)
+// - Manual event emission
+// - Multiple subscriber support
+// - Hot observable semantics
+
+// State Store Pattern (BehaviorSubject)
+// - Current value access
+// - Immediate value emission to new subscribers
+// - State synchronization across components
+
+// Event History Pattern (ReplaySubject)
+// - Configurable event replay buffer
+// - Time-based expiration
+// - Late subscriber catch-up
+</code></pre>
+<h3 id="stream-processing-patterns"><a class="header" href="#stream-processing-patterns">Stream Processing Patterns</a></h3>
+<p>Operators enable complex data flow handling:</p>
+<pre><code class="language-typescript">// Data Transformation
+// - map: Transform values
+// - switchMap: Replace inner observables
+// - mergeMap: Flatten concurrent observables
+
+// Data Filtering
+// - filter: Conditional value passing
+// - distinctUntilChanged: Duplicate elimination
+// - take: Limited value emission
+
+// Temporal Control
+// - debounceTime: Event rate limiting
+// - throttleTime: Periodic sampling
+// - delay: Timeline manipulation
+
+// Resilience Patterns
+// - catchError: Graceful error recovery
+// - retry: Automatic retry logic
+
+// Side Effects and Sharing
+// - tap: Non-intrusive side effects
+// - startWith: Initial value injection
+// - shareReplay: Multicast with replay
+</code></pre>
+<h2 id="file-system-abstraction-patterns"><a class="header" href="#file-system-abstraction-patterns">File System Abstraction Patterns</a></h2>
+<h3 id="virtual-file-system-pattern"><a class="header" href="#virtual-file-system-pattern">Virtual File System Pattern</a></h3>
+<p>Abstract file systems enable cross-platform support:</p>
+<pre><code class="language-typescript">// CRUD Operations
+// - Asynchronous file content manipulation
+// - Atomic write operations
+// - Safe deletion with confirmation
+
+// Directory Management
+// - Hierarchical directory traversal
+// - Recursive operations
+// - Batch operations for efficiency
+
+// Metadata Access
+// - File attributes and permissions
+// - Existence checking before operations
+// - Size and modification tracking
+
+// Change Detection
+// - File system event monitoring
+// - Debounced change notifications
+// - Disposable subscription management
+
+// Metadata Pattern
+// File statistics should capture:
+// - Size information for quota management
+// - Temporal data for synchronization
+// - Type classification for handling
+
+// Directory Entry Pattern
+// Directory listings should include:
+// - Human-readable names
+// - Absolute path resolution
+// - Type information for UI rendering
+// - Efficient traversal support
+</code></pre>
+<h3 id="change-tracking-patterns"><a class="header" href="#change-tracking-patterns">Change Tracking Patterns</a></h3>
+<p>Operational safety requires comprehensive tracking:</p>
+<pre><code class="language-typescript">// Transaction Pattern
+// - Scoped change tracking by operation
+// - Explicit start/stop boundaries
+// - Nested operation support
+
+// Audit Trail Pattern
+// - Complete change history capture
+// - Rollback capability for error recovery
+// - Operation correlation for debugging
+
+// Resource Management
+// - Automatic cleanup of old records
+// - Storage quota management
+// - Performance optimization
+
+// Change Record Pattern
+// File changes should capture:
+// - Unique identification for deduplication
+// - File path and operation type
+// - Temporal ordering for replay
+// - Backup information for rollback
+// - Content snapshots for diff generation
+// - Operation correlation for grouping
+
+// This enables sophisticated undo/redo,
+// diff visualization, and operation replay.
+</code></pre>
+<h2 id="configuration-management-patterns"><a class="header" href="#configuration-management-patterns">Configuration Management Patterns</a></h2>
+<h3 id="hierarchical-configuration-pattern"><a class="header" href="#hierarchical-configuration-pattern">Hierarchical Configuration Pattern</a></h3>
+<p>Flexible configuration supports multiple sources:</p>
+<pre><code class="language-typescript">// Type-Safe Access Pattern
+// - Strongly typed configuration keys
+// - Default value support
+// - Runtime type validation
+
+// Dynamic Updates Pattern
+// - Asynchronous configuration changes
+// - Validation before persistence
+// - Rollback on invalid values
+
+// Reactive Configuration Pattern
+// - Observable configuration streams
+// - Component auto-updates on changes
+// - Debounced change notifications
+
+// Configuration Schema Pattern
+// Organize settings into logical groups:
+// - Connection settings (URLs, timeouts)
+// - Tool management (allowlists, limits)
+// - AI model configuration (defaults, parameters)
+// - Feature toggles (experimental features)
+// - Performance tuning (concurrency, caching)
+
+// Naming Convention
+// Use hierarchical dot notation for:
+// - Logical grouping
+// - Easy filtering and search
+// - IDE autocompletion
+// - Validation rule application
+</code></pre>
+<h2 id="client-server-communication-patterns"><a class="header" href="#client-server-communication-patterns">Client-Server Communication Patterns</a></h2>
+<h3 id="restful-api-design-pattern"><a class="header" href="#restful-api-design-pattern">RESTful API Design Pattern</a></h3>
+<p>Modern APIs follow resource-oriented design:</p>
+<pre><code class="language-typescript">// Resource CRUD Pattern
+// - Individual resource fetch/create/update/delete
+// - Batch operations for efficiency
+// - Idempotent operations for reliability
+
+// Synchronization Pattern
+// - Incremental sync with version vectors
+// - Batch sync for initial loading
+// - Conflict resolution strategies
+
+// Identity and Access
+// - User profile and team management
+// - Permission-based resource access
+// - Context switching support
+
+// Observability Pattern
+// - Usage analytics and reporting
+// - Event tracking for optimization
+// - Performance monitoring
+
+// Analytics Schema Pattern
+// Usage statistics should capture:
+// - Temporal scope (period, timeframes)
+// - Resource consumption (tokens, costs)
+// - Operational breakdown by feature
+// - Trend analysis support
+
+// Event Tracking Pattern
+// Individual events should include:
+// - Operation classification
+// - Resource utilization metrics
+// - Temporal ordering
+// - Extensible metadata for analysis
+
+// This enables cost optimization, usage
+// forecasting, and feature analytics.
+</code></pre>
+<h2 id="error-handling-patterns"><a class="header" href="#error-handling-patterns">Error Handling Patterns</a></h2>
+<pre><code class="language-typescript">// Hierarchical Error Classification
+// Base error classes should provide:
+// - Human-readable messages
+// - Machine-readable error codes
+// - Structured diagnostic details
+
+// Domain-Specific Error Types
+// Authentication Errors:
+// - Invalid credentials, expired tokens
+// - Permission denied, insufficient scope
+
+// Network Errors:
+// - Connection failures, timeouts
+// - Rate limiting, service unavailable
+
+// Business Logic Errors:
+// - Quota exceeded, resource limits
+// - Invalid operations, state conflicts
+
+// Tool Execution Errors:
+// - Tool-specific error codes
+// - Execution context information
+// - Recovery suggestions
+
+// Error codes enable automated retry logic,
+// user-friendly error messages, and
+// structured error reporting.
+</code></pre>
+<h2 id="real-time-communication-patterns"><a class="header" href="#real-time-communication-patterns">Real-Time Communication Patterns</a></h2>
+<p>Live collaboration requires bidirectional messaging:</p>
+<pre><code class="language-typescript">// Message Protocol Pattern
+// All messages should include:
+// - Unique identifiers for correlation
+// - Type-based routing
+// - Structured payloads
+
+// Request/Response Pattern
+// Client messages enable:
+// - Resource subscription management
+// - State updates and mutations
+// - Connection health monitoring
+
+// Notification Pattern
+// Server messages provide:
+// - Real-time state updates
+// - Presence information
+// - Error conditions
+
+// Subscription Management
+// Resource subscriptions support:
+// - Selective resource monitoring
+// - Automatic cleanup on disconnect
+// - Permission-based filtering
+
+// This enables real-time collaboration
+// features like live cursors, shared
+// editing, and instant notifications.
+</code></pre>
+<p>These architectural patterns provide the foundation for building scalable, maintainable AI coding assistants. The specific implementation approaches and technology choices will vary based on your platform, scale, and requirements, but these patterns represent proven solutions to common challenges in collaborative AI systems.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Building Your Own Amp - Amping Up an Agentic System</title></head>
+<body>
+<!-- Source: https://github.com/gerred/building-an-agentic-system/blob/eec7f0226fb0d0019c67dc6f209a80b61720117e/src/second-edition/part-v-implementation/chapter-13-building-your-own-amp.md -->
+<main>
+<h1 id="chapter-13-building-your-own-collaborative-ai-assistant"><a class="header" href="#chapter-13-building-your-own-collaborative-ai-assistant">Chapter 13: Building Your Own Collaborative AI Assistant</a></h1>
+<p>So you want to build a collaborative AI coding assistant. Maybe you've been inspired by the architecture patterns we've explored, or perhaps your team has specific requirements that existing tools don't meet. This chapter provides a practical roadmap for building your own system, drawing from the lessons learned throughout this book.</p>
+<h2 id="starting-with-why"><a class="header" href="#starting-with-why">Starting with Why</a></h2>
+<p>Before diving into technology choices, clarify your goals. Are you building for:</p>
+<ul>
+<li>A small team that needs custom integrations?</li>
+<li>An enterprise with specific security requirements?</li>
+<li>A SaaS product for developers?</li>
+<li>An internal tool that needs to work with proprietary systems?</li>
+</ul>
+<p>Your answers shape every decision that follows. A system for five developers looks very different from one serving thousands.</p>
+<h2 id="architecture-decisions-checklist"><a class="header" href="#architecture-decisions-checklist">Architecture Decisions Checklist</a></h2>
+<p>Let's work through the key architectural decisions you'll face, organized by importance and dependency order.</p>
+<h3 id="1-deployment-model"><a class="header" href="#1-deployment-model">1. Deployment Model</a></h3>
+<p><strong>Decision</strong>: Where will your system run?</p>
+<p>Options:</p>
+<ul>
+<li><strong>Local-first with sync</strong>: Like Amp's original architecture. Each developer runs their own instance with optional cloud sync.</li>
+<li><strong>Cloud-native</strong>: Everything runs in the cloud, accessed via web or thin clients.</li>
+<li><strong>Hybrid</strong>: Local execution with cloud-based features (storage, collaboration, compute).</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>Local-first offers privacy and works offline but complicates collaboration</li>
+<li>Cloud-native simplifies deployment but requires reliable connectivity</li>
+<li>Hybrid balances both but increases complexity</li>
+</ul>
+<p>For MVP: Start local-first if privacy matters, cloud-native if collaboration is primary.</p>
+<h3 id="2-language-model-integration"><a class="header" href="#2-language-model-integration">2. Language Model Integration</a></h3>
+<p><strong>Decision</strong>: How will you integrate with LLMs?</p>
+<p>Options:</p>
+<ul>
+<li><strong>Direct API integration</strong>: Call OpenAI, Anthropic, etc. directly</li>
+<li><strong>Gateway service</strong>: Route through a unified API layer</li>
+<li><strong>Local models</strong>: Run open-source models on-premise</li>
+<li><strong>Mixed approach</strong>: Gateway with fallback options</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>Direct integration is simple but locks you to providers</li>
+<li>Gateway adds complexity but enables flexibility</li>
+<li>Local models offer control but require significant resources</li>
+</ul>
+<p>For MVP: Start with direct integration to one provider, design for abstraction.</p>
+<h3 id="3-tool-system-architecture"><a class="header" href="#3-tool-system-architecture">3. Tool System Architecture</a></h3>
+<p><strong>Decision</strong>: How will tools interact with the system?</p>
+<p>Options:</p>
+<ul>
+<li><strong>Built-in tools only</strong>: Fixed set of capabilities</li>
+<li><strong>Plugin architecture</strong>: Dynamic tool loading</li>
+<li><strong>Process-based isolation</strong>: Tools run in separate processes</li>
+<li><strong>Language-agnostic protocols</strong>: Support tools in any language</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>Built-in is fastest to implement but limits extensibility</li>
+<li>Plugins offer flexibility but require careful API design</li>
+<li>Process isolation improves security but adds overhead</li>
+<li>Language-agnostic maximizes flexibility but increases complexity</li>
+</ul>
+<p>For MVP: Start with built-in tools, design interfaces for future extensibility.</p>
+<h3 id="4-state-management"><a class="header" href="#4-state-management">4. State Management</a></h3>
+<p><strong>Decision</strong>: How will you manage conversation and system state?</p>
+<p>Options:</p>
+<ul>
+<li><strong>In-memory only</strong>: Simple but loses state on restart</li>
+<li><strong>File-based persistence</strong>: JSONLines, SQLite, or similar</li>
+<li><strong>Database-backed</strong>: PostgreSQL, MongoDB, etc.</li>
+<li><strong>Event sourcing</strong>: Full history with replay capability</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>In-memory is trivial but impractical for real use</li>
+<li>File-based works well for single-user scenarios</li>
+<li>Databases enable multi-user but add operational complexity</li>
+<li>Event sourcing provides audit trails but requires careful design</li>
+</ul>
+<p>For MVP: File-based for single-user, PostgreSQL for multi-user.</p>
+<h3 id="5-real-time-communication"><a class="header" href="#5-real-time-communication">5. Real-time Communication</a></h3>
+<p><strong>Decision</strong>: How will components communicate?</p>
+<p>Options:</p>
+<ul>
+<li><strong>REST APIs</strong>: Simple request-response</li>
+<li><strong>WebSockets</strong>: Bidirectional streaming</li>
+<li><strong>Server-Sent Events</strong>: One-way streaming</li>
+<li><strong>gRPC</strong>: High-performance RPC</li>
+<li><strong>Message queues</strong>: Async communication</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>REST is universally supported but not real-time</li>
+<li>WebSockets enable real-time but require connection management</li>
+<li>SSE is simpler than WebSockets but one-directional</li>
+<li>gRPC offers performance but less ecosystem support</li>
+<li>Message queues decouple components but add infrastructure</li>
+</ul>
+<p>For MVP: REST + SSE for streaming responses.</p>
+<h3 id="6-authentication-and-authorization"><a class="header" href="#6-authentication-and-authorization">6. Authentication and Authorization</a></h3>
+<p><strong>Decision</strong>: How will you handle identity and permissions?</p>
+<p>Options:</p>
+<ul>
+<li><strong>None</strong>: Single-user system</li>
+<li><strong>Basic auth</strong>: Simple username/password</li>
+<li><strong>OAuth/OIDC</strong>: Integrate with existing providers</li>
+<li><strong>API keys</strong>: For programmatic access</li>
+<li><strong>RBAC</strong>: Role-based access control</li>
+</ul>
+<p>Trade-offs:</p>
+<ul>
+<li>No auth only works for personal tools</li>
+<li>Basic auth is simple but less secure</li>
+<li>OAuth leverages existing identity but adds complexity</li>
+<li>API keys work well for automation</li>
+<li>RBAC scales but requires careful design</li>
+</ul>
+<p>For MVP: Start with API keys, add OAuth when needed.</p>
+<h2 id="technology-stack-recommendations"><a class="header" href="#technology-stack-recommendations">Technology Stack Recommendations</a></h2>
+<p>Based on your decisions above, here are recommended stacks for different scenarios.</p>
+<h3 id="for-a-small-team-1-10-developers"><a class="header" href="#for-a-small-team-1-10-developers">For a Small Team (1-10 developers)</a></h3>
+<p><strong>Backend Stack</strong>:</p>
+<pre><code>Language: TypeScript/Node.js or Python
+Framework: Express + Socket.io or FastAPI
+Database: SQLite or PostgreSQL
+Cache: In-memory or Redis
+Queue: Bull (Node) or Celery (Python)
+</code></pre>
+<p><strong>Frontend Stack</strong>:</p>
+<pre><code>CLI: Ink (React for terminals) or Click (Python)
+Web UI: React or Vue with Tailwind
+State: Zustand or Pinia
+Real-time: Socket.io client or native WebSocket
+</code></pre>
+<p><strong>Infrastructure</strong>:</p>
+<pre><code>Deployment: Docker Compose
+CI/CD: GitHub Actions
+Monitoring: Prometheus + Grafana
+Logging: Loki or ELK stack
+</code></pre>
+<h3 id="for-a-medium-organization-10-100-developers"><a class="header" href="#for-a-medium-organization-10-100-developers">For a Medium Organization (10-100 developers)</a></h3>
+<p><strong>Backend Stack</strong>:</p>
+<pre><code>Language: Go or Rust for performance
+Framework: Gin (Go) or Axum (Rust)
+Database: PostgreSQL with read replicas
+Cache: Redis cluster
+Queue: RabbitMQ or NATS
+Search: Elasticsearch
+</code></pre>
+<p><strong>Frontend Stack</strong>:</p>
+<pre><code>CLI: Distributed as binary
+Web UI: Next.js or SvelteKit
+State: Redux Toolkit or MobX
+Real-time: WebSocket with fallbacks
+Mobile: React Native or Flutter
+</code></pre>
+<p><strong>Infrastructure</strong>:</p>
+<pre><code>Orchestration: Kubernetes
+Service Mesh: Istio or Linkerd
+CI/CD: GitLab CI or Jenkins
+Monitoring: Datadog or New Relic
+Security: Vault for secrets
+</code></pre>
+<h3 id="for-a-saas-product-100-developers"><a class="header" href="#for-a-saas-product-100-developers">For a SaaS Product (100+ developers)</a></h3>
+<p><strong>Backend Stack</strong>:</p>
+<pre><code>Language: Multiple services in appropriate languages
+API Gateway: Kong or AWS API Gateway
+Database: PostgreSQL + DynamoDB
+Cache: Redis + CDN
+Queue: Kafka or AWS SQS
+Search: Algolia or Elasticsearch
+</code></pre>
+<p><strong>Frontend Stack</strong>:</p>
+<pre><code>CLI: Multiple platform builds
+Web UI: Micro-frontends architecture
+State: Service-specific stores
+Real-time: Managed WebSocket service
+SDKs: Multiple language clients
+</code></pre>
+<p><strong>Infrastructure</strong>:</p>
+<pre><code>Cloud: AWS, GCP, or Azure
+Orchestration: Managed Kubernetes (EKS, GKE, AKS)
+CI/CD: CircleCI or AWS CodePipeline
+Monitoring: Full APM solution
+Security: WAF, DDoS protection, SOC2 compliance
+</code></pre>
+<h2 id="mvp-feature-set"><a class="header" href="#mvp-feature-set">MVP Feature Set</a></h2>
+<p>Here's a pragmatic MVP that provides real value while keeping scope manageable.</p>
+<h3 id="core-features-week-1-4"><a class="header" href="#core-features-week-1-4">Core Features (Week 1-4)</a></h3>
+<ol>
+<li>
+<p><strong>Basic Chat Interface</strong></p>
+<ul>
+<li>Terminal UI with message history</li>
+<li>Markdown rendering for responses</li>
+<li>File path detection and validation</li>
+</ul>
+</li>
+<li>
+<p><strong>File Operations</strong></p>
+<ul>
+<li>Read files with line numbers</li>
+<li>Create new files</li>
+<li>Edit existing files (diff-based)</li>
+<li>List directory contents</li>
+</ul>
+</li>
+<li>
+<p><strong>Code Search</strong></p>
+<ul>
+<li>Grep functionality</li>
+<li>File pattern matching (glob)</li>
+<li>Basic context extraction</li>
+</ul>
+</li>
+<li>
+<p><strong>Shell Integration</strong></p>
+<ul>
+<li>Execute commands with approval</li>
+<li>Capture output</li>
+<li>Working directory management</li>
+</ul>
+</li>
+<li>
+<p><strong>Conversation Management</strong></p>
+<ul>
+<li>Save/load conversations</li>
+<li>Clear history</li>
+<li>Export transcripts</li>
+</ul>
+</li>
+</ol>
+<h3 id="authentication-week-5"><a class="header" href="#authentication-week-5">Authentication (Week 5)</a></h3>
+<ol>
+<li>
+<p><strong>API Key Management</strong></p>
+<ul>
+<li>Generate/revoke keys</li>
+<li>Usage tracking</li>
+<li>Rate limiting</li>
+</ul>
+</li>
+<li>
+<p><strong>LLM Configuration</strong></p>
+<ul>
+<li>Provider selection</li>
+<li>Model choice</li>
+<li>Temperature settings</li>
+</ul>
+</li>
+</ol>
+<h3 id="enhancement-features-week-6-8"><a class="header" href="#enhancement-features-week-6-8">Enhancement Features (Week 6-8)</a></h3>
+<ol>
+<li>
+<p><strong>Context Awareness</strong></p>
+<ul>
+<li>Git integration (status, diff)</li>
+<li>Project type detection</li>
+<li>Ignore file handling</li>
+</ul>
+</li>
+<li>
+<p><strong>Tool Extensions</strong></p>
+<ul>
+<li>Web search capability</li>
+<li>Documentation lookup</li>
+<li>Package manager integration</li>
+</ul>
+</li>
+<li>
+<p><strong>Quality of Life</strong></p>
+<ul>
+<li>Syntax highlighting</li>
+<li>Auto-save conversations</li>
+<li>Keyboard shortcuts</li>
+<li>Command history</li>
+</ul>
+</li>
+</ol>
+<h3 id="collaboration-features-week-9-12"><a class="header" href="#collaboration-features-week-9-12">Collaboration Features (Week 9-12)</a></h3>
+<ol>
+<li>
+<p><strong>Sharing</strong></p>
+<ul>
+<li>Share conversations via links</li>
+<li>Public/private visibility</li>
+<li>Expiration controls</li>
+</ul>
+</li>
+<li>
+<p><strong>Team Features</strong></p>
+<ul>
+<li>Shared conversation library</li>
+<li>Team member permissions</li>
+<li>Usage analytics</li>
+</ul>
+</li>
+<li>
+<p><strong>Integrations</strong></p>
+<ul>
+<li>Slack notifications</li>
+<li>GitHub integration</li>
+<li>IDE extensions</li>
+</ul>
+</li>
+</ol>
+<h2 id="implementation-roadmap"><a class="header" href="#implementation-roadmap">Implementation Roadmap</a></h2>
+<h3 id="phase-1-foundation-weeks-1-4"><a class="header" href="#phase-1-foundation-weeks-1-4">Phase 1: Foundation (Weeks 1-4)</a></h3>
+<p>Focus on getting a working system that can assist with real coding tasks.</p>
+<pre><code class="language-typescript">// Start with a simple tool interface
+interface Tool {
+  name: string;
+  description: string;
+  parameters: JSONSchema;
+  execute(params: any): Promise&lt;ToolResult&gt;;
+}
+
+// Basic tools to implement first
+const readFile: Tool = {
+  name: "read_file",
+  description: "Read contents of a file",
+  parameters: {
+    type: "object",
+    properties: {
+      path: { type: "string" }
+    },
+    required: ["path"]
+  },
+  async execute({ path }) {
+    // Implementation
+  }
+};
+</code></pre>
+<p>Key milestones:</p>
+<ul>
+<li>Week 1: Basic chat loop with LLM integration</li>
+<li>Week 2: File operations working</li>
+<li>Week 3: Search and shell commands</li>
+<li>Week 4: Persistence and error handling</li>
+</ul>
+<h3 id="phase-2-usability-weeks-5-8"><a class="header" href="#phase-2-usability-weeks-5-8">Phase 2: Usability (Weeks 5-8)</a></h3>
+<p>Make the system pleasant to use daily.</p>
+<ul>
+<li>Improve response streaming</li>
+<li>Add progress indicators</li>
+<li>Implement undo/redo for edits</li>
+<li>Polish error messages</li>
+<li>Add configuration options</li>
+</ul>
+<h3 id="phase-3-collaboration-weeks-9-12"><a class="header" href="#phase-3-collaboration-weeks-9-12">Phase 3: Collaboration (Weeks 9-12)</a></h3>
+<p>Enable team usage.</p>
+<ul>
+<li>Build sharing infrastructure</li>
+<li>Add access controls</li>
+<li>Implement usage tracking</li>
+<li>Create admin interfaces</li>
+<li>Document deployment</li>
+</ul>
+<h3 id="phase-4-scale-months-4-6"><a class="header" href="#phase-4-scale-months-4-6">Phase 4: Scale (Months 4-6)</a></h3>
+<p>Prepare for growth.</p>
+<ul>
+<li>Performance optimization</li>
+<li>Horizontal scaling</li>
+<li>Monitoring and alerting</li>
+<li>Security hardening</li>
+<li>Compliance features</li>
+</ul>
+<h2 id="scaling-considerations"><a class="header" href="#scaling-considerations">Scaling Considerations</a></h2>
+<p>Design for scale from day one, even if you don't need it immediately.</p>
+<h3 id="data-architecture"><a class="header" href="#data-architecture">Data Architecture</a></h3>
+<p><strong>Conversation Storage</strong>:</p>
+<ul>
+<li>Partition by user/team from the start</li>
+<li>Use UUIDs, not auto-increment IDs</li>
+<li>Design for eventual sharding</li>
+<li>Keep hot data separate from cold</li>
+</ul>
+<p><strong>File Handling</strong>:</p>
+<ul>
+<li>Stream large files, don't load into memory</li>
+<li>Cache frequently accessed content</li>
+<li>Use CDN for shared resources</li>
+<li>Implement progressive loading</li>
+</ul>
+<h3 id="performance-patterns"><a class="header" href="#performance-patterns">Performance Patterns</a></h3>
+<p><strong>Tool Execution</strong>:</p>
+<pre><code class="language-typescript">// Design for parallel execution from the start
+class ToolExecutor {
+  async executeBatch(tools: ToolCall[]): Promise&lt;ToolResult[]&gt; {
+    // Group by dependency
+    const groups = this.groupByDependency(tools);
+    
+    const results: ToolResult[] = [];
+    for (const group of groups) {
+      // Execute independent tools in parallel
+      const groupResults = await Promise.all(
+        group.map(tool =&gt; this.execute(tool))
+      );
+      results.push(...groupResults);
+    }
+    
+    return results;
+  }
+}
+</code></pre>
+<p><strong>Response Streaming</strong>:</p>
+<ul>
+<li>Use server-sent events or WebSocket</li>
+<li>Stream tokens as they arrive</li>
+<li>Buffer for optimal chunk sizes</li>
+<li>Handle connection interruptions</li>
+</ul>
+<h3 id="security-considerations"><a class="header" href="#security-considerations">Security Considerations</a></h3>
+<p><strong>Input Validation</strong>:</p>
+<ul>
+<li>Sanitize all file paths</li>
+<li>Validate command inputs</li>
+<li>Rate limit by user and endpoint</li>
+<li>Implement request signing</li>
+</ul>
+<p><strong>Isolation</strong>:</p>
+<ul>
+<li>Run tools in sandboxed environments</li>
+<li>Use separate service accounts</li>
+<li>Implement principle of least privilege</li>
+<li>Audit all operations</li>
+</ul>
+<h3 id="operational-excellence"><a class="header" href="#operational-excellence">Operational Excellence</a></h3>
+<p><strong>Monitoring</strong>:</p>
+<pre><code class="language-yaml"># Key metrics to track from day one
+metrics:
+  - api_request_duration
+  - llm_token_usage
+  - tool_execution_time
+  - error_rates
+  - active_users
+  - conversation_length
+</code></pre>
+<p><strong>Deployment</strong>:</p>
+<ul>
+<li>Automate everything</li>
+<li>Use feature flags</li>
+<li>Implement gradual rollouts</li>
+<li>Plan for rollback</li>
+<li>Document runbooks</li>
+</ul>
+<h2 id="common-pitfalls-to-avoid"><a class="header" href="#common-pitfalls-to-avoid">Common Pitfalls to Avoid</a></h2>
+<ol>
+<li>
+<p><strong>Over-engineering the MVP</strong>: Resist adding features before core functionality works well.</p>
+</li>
+<li>
+<p><strong>Ignoring operational concerns</strong>: Logging, monitoring, and deployment automation pay dividends.</p>
+</li>
+<li>
+<p><strong>Tight coupling to LLM providers</strong>: Abstract early, even if you use just one provider.</p>
+</li>
+<li>
+<p><strong>Underestimating UI/UX</strong>: Developer tools need good design too.</p>
+</li>
+<li>
+<p><strong>Skipping tests</strong>: Integration tests for tools save debugging time.</p>
+</li>
+<li>
+<p><strong>Premature optimization</strong>: Profile first, optimize what matters.</p>
+</li>
+<li>
+<p><strong>Ignoring security</strong>: Build security in from the start, not as an afterthought.</p>
+</li>
+</ol>
+<h2 id="getting-started-checklist"><a class="header" href="#getting-started-checklist">Getting Started Checklist</a></h2>
+<p>Ready to build? Here's your week one checklist:</p>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Set up repository with CI/CD pipeline</li>
+<li><input disabled="" type="checkbox"/>
+Choose and configure LLM provider</li>
+<li><input disabled="" type="checkbox"/>
+Implement basic chat loop</li>
+<li><input disabled="" type="checkbox"/>
+Add file reading capability</li>
+<li><input disabled="" type="checkbox"/>
+Create simple CLI interface</li>
+<li><input disabled="" type="checkbox"/>
+Set up development environment</li>
+<li><input disabled="" type="checkbox"/>
+Write first integration test</li>
+<li><input disabled="" type="checkbox"/>
+Deploy hello world version</li>
+<li><input disabled="" type="checkbox"/>
+Document setup process</li>
+<li><input disabled="" type="checkbox"/>
+Get first user feedback</li>
+</ul>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Building a collaborative AI coding assistant is an ambitious undertaking, but the patterns and lessons in this book provide a solid foundation. Start simple, focus on core value, and iterate based on user feedback.</p>
+<p>Remember: the goal isn't to rebuild any existing system exactly, but to create something that serves your specific needs. Use these patterns as inspiration, not prescription. The best system is one that your team actually uses and that fits naturally into your development workflows.</p>
+<p>The future of software development involves AI collaboration. By building your own system, you're not just creating a tool—you're shaping how your team will work in that future. Whether you're building for a small team or an enterprise organization, these architectural patterns provide a foundation for creating AI coding assistants that truly enhance developer productivity.</p>
+</main>
+</body>
+</html>
